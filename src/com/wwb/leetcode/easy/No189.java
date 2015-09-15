@@ -24,6 +24,8 @@ public class No189 {
         for(int i = 0; i < nums.length; i++) {
             nums[i] = newNums[nums.length - k + i];
         }
+
+        System.arraycopy(newNums, nums.length - k, nums, 0, nums.length);
     }
 
     private void solution1(int[] nums, int k) {
