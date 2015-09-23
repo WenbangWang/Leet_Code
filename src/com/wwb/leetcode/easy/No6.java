@@ -20,7 +20,6 @@ public class No6 {
             return null;
         }
 
-        int a = new Integer(new StringBuilder("1").toString());
         char[] charArray = s.toCharArray();
         int length = charArray.length;
         StringBuilder[] stringBuilder = new StringBuilder[numRows];

@@ -13,11 +13,6 @@ import java.util.List;
  */
 public class No46 {
 
-    public static void main(String[] args) {
-        No46 no46 = new No46();
-        System.out.println(no46.permute(new int[]{1,2,3,4}).size());
-    }
-
     public List<List<Integer>> permute(int[] nums) {
         return getPerm(nums, 0);
     }

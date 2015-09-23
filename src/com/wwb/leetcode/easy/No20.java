@@ -10,12 +10,6 @@ import java.util.Stack;
  */
 public class No20 {
 
-    public static void main(String[] args) {
-        No20 no20 = new No20();
-
-        System.out.println(no20.isValid("([])"));
-    }
-
     public boolean isValid(String s) {
         if(s == null || s.length() == 0) {
             return true;
