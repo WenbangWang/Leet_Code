@@ -10,10 +10,9 @@ import java.util.Set;
 public class main {
 
     public static void main(String[] args) {
-        int n = 5;
+        int[] array = {5,9,3,2,1,0,2,3,3,1,0,0};
+        No45 no45 = new No45();
 
-        n &= -n;
-
-        System.out.println(n);
+        System.out.println(no45.jump(array));
     }
 }
