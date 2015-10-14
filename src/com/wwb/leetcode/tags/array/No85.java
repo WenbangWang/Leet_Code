@@ -1,4 +1,4 @@
-package com.wwb.leetcode.hard;
+package com.wwb.leetcode.tags.array;
 
 import java.util.Arrays;
 
