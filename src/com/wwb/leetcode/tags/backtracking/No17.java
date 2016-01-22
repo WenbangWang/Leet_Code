@@ -1,5 +1,7 @@
 package com.wwb.leetcode.tags.backtracking;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,24 +18,57 @@ import java.util.List;
 public class No17 {
 
     public List<String> letterCombinations(String digits) {
-        LinkedList<String> result = new LinkedList<>();
+//        return solution1(digits);
+        return solution2(digits);
+    }
 
-        if(digits == null || digits.length() == 0) {
-            return result;
+    private List<String> solution1(String digits) {
+        if(digits == null || digits.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        String[] map = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-        char[] digitArray = digits.toCharArray();
+        final String[] LETTERS = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        int length = digits.length();
+        List<List<String>> dp = new ArrayList<>(length + 1);
+
+        for(int i = 0; i <= length; i++) {
+            dp.add(new ArrayList<String>());
+        }
+
+        dp.get(0).add("");
+
+        for(int i = 1; i <= length; i++) {
+            int digit = digits.charAt(i - 1) - '0';
+
+            for(String s : dp.get(i - 1)) {
+                for(char letter : LETTERS[digit].toCharArray()) {
+                    dp.get(i).add(s + letter);
+                }
+            }
+        }
+
+        return dp.get(length);
+    }
+
+    private List<String> solution2(String digits) {
+        if(digits == null || digits.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final String[] LETTERS = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        int length = digits.length();
+        LinkedList<String> result = new LinkedList<>();
+
         result.add("");
 
-        for(int i = 0; i < digitArray.length; i++) {
-            int index = Character.getNumericValue(digitArray[i]);
+        for(int i = 0; i < length; i++) {
+            int digit = Character.getNumericValue(digits.charAt(i));
 
             while(result.peek().length() == i) {
                 String subResult = result.remove();
 
-                for(char c : map[index].toCharArray()) {
-                    result.add(subResult + c);
+                for(char letter : LETTERS[digit].toCharArray()) {
+                    result.add(subResult + letter);
                 }
             }
         }

@@ -20,49 +20,38 @@ public class No34 {
             return result;
         }
 
-        int index = binarySearch(nums, 0, nums.length - 1, target);
-        int start = index;
-        int end = index;
+        int start = 0;
+        int end = nums.length - 1;
 
-        if(index == -1) {
+        while(start < end) {
+            int mid = start + (end - start) / 2;
+
+            if(target > nums[mid]) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+
+        if(nums[start] != target) {
             return result;
         }
 
-        for(int i = index; i < nums.length; i++) {
-            if(nums[i] == target) {
-                end = i;
-            }
-        }
-
-        for(int i = index; i >= 0; i--) {
-            if(nums[i] == target) {
-                start = i;
-            }
-        }
-
         result[0] = start;
+        end = nums.length - 1;
+
+        while(start < end) {
+            int mid = start + (end - start) / 2 + 1;
+
+            if(target < nums[mid]) {
+                end = mid - 1;
+            } else {
+                start = mid;
+            }
+        }
+
         result[1] = end;
 
         return result;
-    }
-
-    private int binarySearch(int[] array, int start, int end, int target) {
-        if(start > end) {
-            return -1;
-        }
-
-        int mid = (start + end) / 2;
-
-        if(start == end && array[mid] != target) {
-            return -1;
-        }
-
-        if(array[mid] == target) {
-            return mid;
-        } else if(array[mid] < target) {
-            return binarySearch(array, mid + 1, end, target);
-        } else {
-            return binarySearch(array, start, mid - 1, target);
-        }
     }
 }

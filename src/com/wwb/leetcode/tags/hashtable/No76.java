@@ -27,7 +27,7 @@ public class No76 {
 
         int sLength = s.length();
         int tLength = t.length();
-        int minLength = sLength;
+        int minLength = Integer.MAX_VALUE;
         int minStart = 0;
         int minEnd = sLength - 1;
         int count = tLength;
@@ -45,33 +45,27 @@ public class No76 {
                 if(map.get(endChar) > 0) {
                     count--;
                 }
-
                 map.put(endChar, map.get(endChar) - 1);
             }
 
-            if(count == 0) {
+            while(count == 0) {
                 char startChar = s.charAt(start);
-
-                while(!map.containsKey(startChar) || map.get(startChar) < 0) {
-                    if(map.containsKey(startChar)) {
-                        map.put(startChar, map.get(startChar) + 1);
-                    }
-
-                    startChar = s.charAt(++start);
-                }
-
                 if(minLength > end - start + 1) {
-                    minStart = start;
                     minEnd = end;
+                    minStart = start;
                     minLength = end - start + 1;
                 }
+
+                if(map.containsKey(startChar)) {
+                    if(map.get(startChar) == 0) {
+                        count++;
+                    }
+                    map.put(startChar, map.get(startChar) + 1);
+                }
+                start++;
             }
         }
 
-        if(count != 0) {
-            return "";
-        }
-
-        return s.substring(minStart, minEnd + 1);
+        return minLength == Integer.MAX_VALUE ? "" : s.substring(minStart, minEnd + 1);
     }
 }

@@ -43,7 +43,7 @@ public abstract class Heap {
     }
 
     public int size() {
-        return this.currentIndex + 1;
+        return this.currentIndex;
     }
 
     abstract void trickleUp(int index);
