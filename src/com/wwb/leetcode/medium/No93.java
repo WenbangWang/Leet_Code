@@ -23,10 +23,10 @@ public class No93 {
         int length = s.length();
 
         for(int i = 1; i < 4 && i < length - 2; i++) {
+            String firstDomain = s.substring(0, i);
             for(int j = i + 1; j < i + 4 && j < length - 1; j++) {
+                String secondDomain = s.substring(i, j);
                 for(int k = j + 1; k < j + 4 && k < length; k++) {
-                    String firstDomain = s.substring(0, i);
-                    String secondDomain = s.substring(i, j);
                     String thirdDomain = s.substring(j, k);
                     String forthDomain = s.substring(k, length);
 

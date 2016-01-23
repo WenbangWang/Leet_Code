@@ -13,21 +13,20 @@ import com.wwb.leetcode.utils.TreeNode;
 public class No99 {
 
     public void recoverTree(TreeNode root) {
-        TreeNode temp = null;
         TreeNode pre = null;
         TreeNode first = null;
         TreeNode second = null;
 
         while(root != null) {
             if(root.left != null) {
-                temp = root.left;
+                TreeNode left  = root.left;
 
-                while(temp.right != null && temp.right != root) {
-                    temp = temp.right;
+                while(left.right != null && left.right != root) {
+                    left = left.right;
                 }
 
-                if(temp.right != null) {
-                    temp.right = null;
+                if(left.right != null) {
+                    left.right = null;
                     if(pre != null && pre.val > root.val) {
                         second = root;
                         if(first == null) {
@@ -39,7 +38,7 @@ public class No99 {
 
                     root = root.right;
                 } else {
-                    temp.right = root;
+                    left.right = root;
                     root = root.left;
                 }
             } else {
@@ -55,7 +54,7 @@ public class No99 {
             }
         }
 
-        if(first != null && second != null) {
+        if(first != null) {
             int t = first.val;
             first.val = second.val;
             second.val = t;

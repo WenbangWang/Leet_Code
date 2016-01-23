@@ -2,9 +2,6 @@ package com.wwb.leetcode.tags.tree;
 
 import com.wwb.leetcode.utils.TreeLinkNode;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
  * Follow up for problem "Populating Next Right Pointers in Each Node".
  *
@@ -30,41 +27,69 @@ import java.util.Queue;
 public class No117 {
 
     public void connect(TreeLinkNode root) {
+//        solution1(root);
+        solution2(root);
+    }
+
+    private void solution1(TreeLinkNode root) {
         if(root == null) {
             return;
         }
 
-        Queue<TreeLinkNode> queue = new LinkedList<>();
+        TreeLinkNode node = root;
 
-        queue.offer(root);
+        while(node != null) {
+            TreeLinkNode current = node;
+            TreeLinkNode pre = null;
+            node = null;
 
-        while(!queue.isEmpty()) {
-            TreeLinkNode node = queue.poll();
-            TreeLinkNode next=  node.next;
-            TreeLinkNode nextLevelNode;
+            while(current != null) {
+                if(current.left != null) {
+                    if(pre == null) {
+                        node = current.left;
+                    } else {
+                        pre.next = current.left;
+                    }
 
-            if(node.left != null) {
-                queue.offer(node.left);
-            }
-
-            if(node.right != null) {
-                queue.offer(node.right);
-            }
-
-            if(node.left != null && node.right != null) {
-                node.left.next = node.right;
-                nextLevelNode = node.right;
-            } else {
-                nextLevelNode = node.left != null ? node.left : node.right;
-            }
-
-            while(next != null) {
-                if((next.left != null || next.right != null) && nextLevelNode != null) {
-                    nextLevelNode.next = next.left != null ? next.left : next.right;
-                    break;
+                    pre = current.left;
                 }
 
-                next = next.next;
+                if(current.right != null) {
+                    if(pre == null) {
+                        node = current.right;
+                    } else {
+                        pre.next = current.right;
+                    }
+
+                    pre = current.right;
+                }
+
+                current = current.next;
+            }
+        }
+    }
+
+    private void solution2(TreeLinkNode root) {
+        TreeLinkNode dummyHead = new TreeLinkNode(0);
+        TreeLinkNode pre = dummyHead;
+
+        while(root != null) {
+            if(root.left != null) {
+                pre.next = root.left;
+                pre = root.left;
+            }
+
+            if(root.right != null) {
+                pre.next = root.right;
+                pre = root.right;
+            }
+
+            root = root.next;
+
+            if(root == null) {
+                pre = dummyHead;
+                root = dummyHead.next;
+                dummyHead.next = null;
             }
         }
     }
