@@ -11,24 +11,25 @@ package com.wwb.leetcode.hard;
 public class No132 {
 
     public int minCut(String s) {
-        int[] dp = new int[s.length() + 1];
+        int length = s.length();
+        int[] dp = new int[length + 1];
 
-        for(int i = 0; i < s.length(); i++) {
+        for(int i = 1; i <= length; i++) {
             dp[i] = Integer.MAX_VALUE;
         }
 
-        dp[s.length()] = -1;
+        dp[0] = -1;
 
-        for(int i = s.length() - 1; i >= 0; i--) {
-            for(int start = i, end = i; start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end); start--, end++) {
-                dp[start] = Math.min(dp[start], dp[end + 1] + 1);
+        for(int i = 0; i < length; i++) {
+            for(int j = 0, start, end; (start = i - j) >= 0 && (end = i + j) < length && s.charAt(start) == s.charAt(end); j++) {
+                dp[end + 1] = Math.min(dp[end + 1], dp[start] + 1);
             }
 
-            for(int start = i, end = i + 1; start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end); start--, end++) {
-                dp[start] = Math.min(dp[start], dp[end + 1] + 1);
+            for(int j = 1, start, end; (start = i - j + 1) >= 0 && (end = i + j) < length && s.charAt(start) == s.charAt(end); j++) {
+                dp[end + 1] = Math.min(dp[end + 1], dp[start] + 1);
             }
         }
 
-        return dp[0];
+        return dp[length];
     }
 }
