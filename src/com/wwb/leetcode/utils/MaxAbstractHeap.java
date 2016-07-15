@@ -1,6 +1,6 @@
 package com.wwb.leetcode.utils;
 
-public class MaxHeap extends Heap {
+public class MaxAbstractHeap extends AbstractHeap implements Heap {
 
     @Override
     void trickleUp(int index) {

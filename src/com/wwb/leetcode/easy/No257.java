@@ -33,7 +33,7 @@ public class No257 {
         }
 
         if(node.left == null && node.right == null) {
-            return Arrays.asList(Integer.toString(node.val));
+            return Collections.singletonList(Integer.toString(node.val));
         }
 
         List<String> leftPaths = solution1(node.left);

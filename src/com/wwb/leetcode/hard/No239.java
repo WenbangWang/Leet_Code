@@ -30,7 +30,7 @@ public class No239 {
 
     public int[] maxSlidingWindow(int[] nums, int k) {
         if(nums == null || k <= 0) {
-            return null;
+            return new int[]{};
         }
 
         int length = nums.length;

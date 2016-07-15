@@ -21,7 +21,7 @@ public class No278 {
             int start = 1;
             int end = n;
 
-            while(start < end) {
+            while(start <= end) {
                 int mid = (end - start) / 2 + start;
 
                 if(!isBadVersion(mid)) {

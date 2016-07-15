@@ -28,13 +28,13 @@ public class No284 {
             // initialize any member here.
             this.iterator = iterator;
             if(this.iterator.hasNext()) {
-                next = this.iterator.next();
+                this.next = this.iterator.next();
             }
         }
 
         // Returns the next element in the iteration without advancing the iterator.
         public Integer peek() {
-            return next;
+            return this.next;
         }
 
         // hasNext() and next() should behave the same as in the Iterator interface.
@@ -49,7 +49,7 @@ public class No284 {
 
         @Override
         public boolean hasNext() {
-            return next != null;
+            return this.next != null;
         }
 
         @Override

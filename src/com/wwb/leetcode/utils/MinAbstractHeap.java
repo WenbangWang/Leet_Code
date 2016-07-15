@@ -1,6 +1,6 @@
 package com.wwb.leetcode.utils;
 
-public class MinHeap extends Heap {
+public class MinAbstractHeap extends AbstractHeap implements Heap {
 
     @Override
     void trickleUp(int index) {

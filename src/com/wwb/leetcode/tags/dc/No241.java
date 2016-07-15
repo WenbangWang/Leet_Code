@@ -37,6 +37,10 @@ public class No241 {
             return Collections.emptyList();
         }
 
+        if(input.length() == 1 && Character.isDigit(input.charAt(0))) {
+            return Collections.singletonList(Integer.parseInt(input));
+        }
+
         List<Integer> result = new ArrayList<>();
 
         for(int i = 0, length = input.length(); i < length; i++) {
@@ -56,7 +60,7 @@ public class No241 {
             }
         }
 
-        return result.isEmpty() ? Arrays.asList(Integer.parseInt(input)) : result;
+        return result.isEmpty() ? Collections.singletonList(Integer.parseInt(input)) : result;
     }
 
     private List<Integer> solution2(String input) {
@@ -93,7 +97,7 @@ public class No241 {
             }
         }
 
-        map.put(input, result.isEmpty() ? Arrays.asList(Integer.parseInt(input)) : result);
+        map.put(input, result.isEmpty() ? Collections.singletonList(Integer.parseInt(input)) : result);
 
         return map.get(input);
     }

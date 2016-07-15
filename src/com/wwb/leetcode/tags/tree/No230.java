@@ -17,28 +17,21 @@ import java.util.Stack;
 public class No230 {
 
     public int kthSmallest(TreeNode root, int k) {
-        if(root == null) {
+        int count = countNodes(root.left);
+        if (k <= count) {
+            return kthSmallest(root.left, k);
+        } else if (k > count + 1) {
+            return kthSmallest(root.right, k - 1 - count); // 1 is counted as current node
+        }
+
+        return root.val;
+    }
+
+    public int countNodes(TreeNode n) {
+        if (n == null) {
             return 0;
         }
 
-        Stack<TreeNode> stack = new Stack<>();
-        inorder(root, stack);
-        int size = stack.size();
-
-        for(int i = size - k; i < size; i++) {
-            stack.pop();
-        }
-
-        return stack.peek().val;
-    }
-
-    private void inorder(TreeNode node, Stack<TreeNode> stack) {
-        if(node == null) {
-            return;
-        }
-
-        inorder(node.left, stack);
-        stack.push(node);
-        inorder(node.right, stack);
+        return 1 + countNodes(n.left) + countNodes(n.right);
     }
 }

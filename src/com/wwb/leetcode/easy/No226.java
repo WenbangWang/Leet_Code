@@ -2,6 +2,9 @@ package com.wwb.leetcode.easy;
 
 import com.wwb.leetcode.utils.TreeNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Invert a binary tree.
  *
@@ -20,20 +23,30 @@ import com.wwb.leetcode.utils.TreeNode;
 public class No226 {
 
     public TreeNode invertTree(TreeNode root) {
-        invertTree(root);
-        return root;
-    }
-
-    private void insertTree(TreeNode node) {
-        if(node == null || (node.left == null && node.right == null)) {
-            return;
+        if(root == null) {
+            return null;
         }
 
-        invertTree(node.left);
-        invertTree(node.right);
+        Queue<TreeNode> queue = new LinkedList<>();
 
-        TreeNode temp = node.left;
-        node.left = node.right;
-        node.right = temp;
+        queue.add(root);
+
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+
+            TreeNode temp = node.left;
+            node.left = node.right;
+            node.right = temp;
+
+            if(node.left != null) {
+                queue.offer(node.left);
+            }
+
+            if(node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+
+        return root;
     }
 }
