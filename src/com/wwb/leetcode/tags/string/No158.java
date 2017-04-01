@@ -21,29 +21,43 @@ public class No158 {
      * @return    The number of characters read
      */
     public int read(char[] buf, int n) {
-        int pointer = 0;
+        int[] pointer = new int[1];
 
-        while(pointer < n) {
-            if(tempBufferPointer == 0) {
-                numberOfCharactersRead = read4(tempBuffer);
-            }
+        while(pointer[0] < n) {
+            this.ensureBuffer();
 
-            while(pointer < n && tempBufferPointer < numberOfCharactersRead) {
-                buf[pointer++] = tempBuffer[tempBufferPointer++];
-            }
+            this.copyInto(buf, pointer, n);
 
-            // consumed all chars read.
-            if(tempBufferPointer == numberOfCharactersRead) {
-                tempBufferPointer = 0;
-            }
+            this.resetBufferPointerIfAllConsumed();
 
-            // end of file.
-            if(numberOfCharactersRead < 4) {
+            if(this.isEOF()) {
                 break;
             }
         }
 
-        return pointer;
+        return pointer[0];
+    }
+
+    private void ensureBuffer() {
+        if (this.tempBufferPointer == 0) {
+            this.numberOfCharactersRead = this.read4(this.tempBuffer);
+        }
+    }
+
+    private boolean isEOF () {
+        return this.numberOfCharactersRead < 4;
+    }
+
+    private void resetBufferPointerIfAllConsumed () {
+        if(this.tempBufferPointer == this.numberOfCharactersRead) {
+            this.tempBufferPointer = 0;
+        }
+    }
+
+    private void copyInto(char [] buf, int[] pointer, int numberOfCharsNeeded) {
+        while (pointer[0] < numberOfCharsNeeded && this.tempBufferPointer < this.numberOfCharactersRead) {
+            buf[pointer[0]++] = this.tempBuffer[this.tempBufferPointer++];
+        }
     }
 
     private int read4(char[] buf) {
