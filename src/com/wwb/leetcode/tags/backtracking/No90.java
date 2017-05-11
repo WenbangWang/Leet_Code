@@ -72,4 +72,28 @@ public class No90 {
 
         return lists;
     }
+
+    private List<List<Integer>> solution3(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+
+        result.add(new ArrayList<>());
+
+        int startIndex = 0;
+        int size = 0;
+
+        for(int i = 0; i < nums.length; i++) {
+            startIndex = i > 0 && nums[i] == nums[i - 1] ? size : 0;
+
+            size = result.size();
+
+            for(int j = startIndex; j < size; j++) {
+                List<Integer> subset = new ArrayList<>(result.get(j));
+                subset.add(nums[i]);
+                result.add(subset);
+            }
+        }
+
+        return result;
+    }
 }
