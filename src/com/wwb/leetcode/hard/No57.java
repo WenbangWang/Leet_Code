@@ -1,9 +1,9 @@
 package com.wwb.leetcode.hard;
 
-import com.wwb.leetcode.utils.Interval;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wwb.leetcode.utils.Interval;
 
 /**
  * Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
@@ -36,7 +36,7 @@ public class No57 {
 
         result.add(newInterval);
 
-        while(i < intervals.size() && intervals.get(i).start > newInterval.end) {
+        while(i < intervals.size()) {
             result.add(intervals.get(i++));
         }
 

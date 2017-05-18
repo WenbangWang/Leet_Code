@@ -68,12 +68,9 @@ public class No314 {
             return Collections.emptyList();
         }
 
-        List<List<Integer>> result = new ArrayList<>();
         Queue<TreeNode> nodeQueue = new LinkedList<>();
         Queue<Integer> columnQueue = new LinkedList<>();
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        int min = 0;
-        int max = 0;
+        Map<Integer, List<Integer>> map = new TreeMap<>();
 
         nodeQueue.add(root);
         columnQueue.add(0);
@@ -83,7 +80,7 @@ public class No314 {
             int column = columnQueue.poll();
 
             if(!map.containsKey(column)) {
-                map.put(column, new ArrayList<Integer>());
+                map.put(column, new ArrayList<>());
             }
 
             map.get(column).add(node.val);
@@ -91,20 +88,14 @@ public class No314 {
             if(node.left != null) {
                 nodeQueue.add(node.left);
                 columnQueue.add(column - 1);
-                min = Math.min(min, column - 1);
             }
 
             if(node.right != null) {
                 nodeQueue.add(node.right);
                 columnQueue.add(column + 1);
-                max = Math.max(max, column + 1);
             }
         }
 
-        for(int i = min; i <= max; i++) {
-            result.add(map.get(i));
-        }
-
-        return result;
+        return new ArrayList<>(map.values());
     }
 }
