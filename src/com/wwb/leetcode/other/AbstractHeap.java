@@ -1,4 +1,4 @@
-package com.wwb.leetcode.utils;
+package com.wwb.leetcode.other;
 
 public abstract class AbstractHeap implements Heap {
 

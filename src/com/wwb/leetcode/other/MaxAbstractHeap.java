@@ -1,6 +1,6 @@
-package com.wwb.leetcode.utils;
+package com.wwb.leetcode.other;
 
-public class MinAbstractHeap extends AbstractHeap implements Heap {
+public class MaxAbstractHeap extends AbstractHeap implements Heap {
 
     @Override
     void trickleUp(int index) {
@@ -8,7 +8,7 @@ public class MinAbstractHeap extends AbstractHeap implements Heap {
         int parentIndex = this.parentIndex(index);
         int parent = this.heap[parentIndex];
 
-        while(index > 0 && value < parent) {
+        while(index > 0 && value > parent) {
             this.heap[index] = parent;
             index = parentIndex;
             parentIndex = this.parentIndex(parentIndex);
@@ -21,27 +21,27 @@ public class MinAbstractHeap extends AbstractHeap implements Heap {
     @Override
     void trickleDown(int index) {
         int value = this.heap[index];
-        int smallerIndex;
-        int smallerValue;
+        int largerIndex;
+        int largerValue;
 
         while(index < this.currentIndex / 2) {
             int leftChildIndex = this.leftChildIndex(index);
             int rightChildIndex = this.rightChildIndex(index);
 
             if(rightChildIndex < this.currentIndex && this.heap[leftChildIndex] < this.heap[rightChildIndex]) {
-                smallerIndex = leftChildIndex;
+                largerIndex = rightChildIndex;
             } else {
-                smallerIndex = rightChildIndex;
+                largerIndex = leftChildIndex;
             }
 
-            smallerValue = this.heap[smallerIndex];
+            largerValue = this.heap[largerIndex];
 
-            if(value < smallerValue) {
+            if(value > largerValue) {
                 break;
             }
 
-            this.heap[index] = smallerValue;
-            index = smallerIndex;
+            this.heap[index] = largerValue;
+            index = largerIndex;
         }
 
         this.heap[index] = value;
