@@ -1,6 +1,9 @@
 package com.wwb.leetcode.medium;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Given a digit string, return all possible letter combinations that the number could represent.
@@ -41,6 +44,10 @@ public class No17 {
                 for(char letter : LETTERS[digit].toCharArray()) {
                     dp.get(i).add(s + letter);
                 }
+
+                if(dp.get(i).isEmpty()) {
+                    dp.get(i).add("");
+                }
             }
         }
 
@@ -55,13 +62,19 @@ public class No17 {
         final String[] LETTERS = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
         int length = digits.length();
         LinkedList<String> result = new LinkedList<>();
+        int notCounted = 0;
 
         result.add("");
 
         for(int i = 0; i < length; i++) {
             int digit = Character.getNumericValue(digits.charAt(i));
 
-            while(result.peek().length() == i) {
+            if(digit == 0 || digit == 1) {
+                notCounted++;
+                continue;
+            }
+
+            while(result.peek().length() + notCounted == i) {
                 String subResult = result.remove();
 
                 for(char letter : LETTERS[digit].toCharArray()) {

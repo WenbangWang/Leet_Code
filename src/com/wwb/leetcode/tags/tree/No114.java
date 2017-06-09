@@ -62,6 +62,41 @@ public class No114 {
         }
     }
 
+    private void solution3(TreeNode root) {
+        this.flattenn(root);
+    }
+
+    private TreeNode flattenn(TreeNode node) {
+        if(node == null) {
+            return null;
+        }
+
+        if(node.left == null && node.right == null) {
+            return node;
+        }
+
+        if(node.left == null) {
+            return flattenn(node.right);
+        }
+
+        if(node.right == null) {
+            TreeNode lastNodeOnLeft = flattenn(node.left);
+            node.right = node.left;
+            node.left = null;
+            return lastNodeOnLeft;
+        }
+
+        TreeNode lastNodeOnLeft = flattenn(node.left);
+        TreeNode lastNodeOnRight = flattenn(node.right);
+
+        lastNodeOnLeft.right = node.right;
+
+        node.right = node.left;
+        node.left = null;
+
+        return lastNodeOnRight;
+    }
+
     private void flatten(TreeNode node, TreeNode pre) {
         if(node == null) {
             return;
@@ -74,3 +109,4 @@ public class No114 {
         pre = node;
     }
 }
+
