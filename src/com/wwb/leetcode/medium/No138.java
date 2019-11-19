@@ -1,4 +1,4 @@
-package com.wwb.leetcode.tags.hashtable;
+package com.wwb.leetcode.medium;
 
 import com.wwb.leetcode.utils.RandomListNode;
 
@@ -14,6 +14,7 @@ public class No138 {
 
     public RandomListNode copyRandomList(RandomListNode head) {
         return solution1(head);
+        // return solution2(head);
     }
 
     private RandomListNode solution1(RandomListNode head) {

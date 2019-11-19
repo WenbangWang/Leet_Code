@@ -13,6 +13,10 @@ import java.util.Map;
 public class No138 {
 
     public RandomListNode copyRandomList(RandomListNode head) {
+        return solution1(head);
+    }
+
+    private RandomListNode solution1(RandomListNode head) {
         Map<RandomListNode, RandomListNode> map = new HashMap<>();
 
         return copyRandomList(head, map);
@@ -33,5 +37,57 @@ public class No138 {
         newNode.random = copyRandomList(node.random, map);
 
         return newNode;
+    }
+
+    private RandomListNode solution2(RandomListNode head) {
+        RandomListNode current = head;
+
+        if(head == null) {
+            return null;
+        }
+
+        /* Step 1. create clones of each node and
+            insert them next to the original node.
+            List [1,2,3] will look like [1,1,2,2,3,3]
+        */
+        while(current != null){
+            /*create node. */
+            RandomListNode newNode = new RandomListNode(current.label);
+
+            /*Insert to the next of current */
+            newNode.next = current.next;
+            current.next = newNode;
+
+            current = newNode.next;
+        }
+
+        /* Step 2. Copy the random pointers.
+        Cloned nodes random will point to the next of the
+        original node.
+        */
+        current = head;
+        while(current != null){
+            if(current.random != null){
+                /* current.next is cloned node. its random points
+                to next of current nodes random. */
+                current.next.random = current.random.next;
+            }
+            current = current.next.next;
+        }
+
+        current = head;
+        RandomListNode newHead = head.next;
+        /* Step 3 : Detach the cloned list from the original list */
+        while(current != null){
+            RandomListNode node = current.next;
+            current.next = current.next.next;
+            /* IMPORTANT: Check for the last node. */
+            if(current.next != null){
+                node.next = current.next.next;
+            }
+            current = current.next;
+        }
+
+        return newHead;
     }
 }
