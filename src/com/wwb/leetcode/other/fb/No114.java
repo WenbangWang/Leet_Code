@@ -1,4 +1,4 @@
-package com.wwb.leetcode.tags.tree;
+package com.wwb.leetcode.other.fb;
 
 import com.wwb.leetcode.utils.TreeNode;
 

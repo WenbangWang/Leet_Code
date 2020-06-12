@@ -1,4 +1,4 @@
-package com.wwb.leetcode.tags.hashtable;
+package com.wwb.leetcode.other.fb;
 
 import com.wwb.leetcode.utils.RandomListNode;
 
@@ -39,6 +39,7 @@ public class No138 {
         return newNode;
     }
 
+    // O(1) space solution. Not considering the space reserved for the result.
     private RandomListNode solution2(RandomListNode head) {
         RandomListNode current = head;
 
