@@ -10,14 +10,30 @@ import java.util.stream.Collectors;
 
 /**
  * Description
- * Given a DAG and write a scheduler to decide the order of scheduling DAG.
+ * Given a DAG (Directed acyclic graph) and write a scheduler to decide the order of scheduling DAG.
  * <p>
  * Question Statement
  * A DAG is used to represent a workflow or a query plan. The node in the DAG is a stage of a computation. The edge in the DAG represents the dependency between stages. If there is a directed edge from stage x to stage y, it means the stage y can be scheduled only after the stage x is done. In a DAG, each stage is marked by a unique integer.
  * This question is to implement a scheduler class to do DAG scheduling. It consists of 3 sub-questions:
- * The Constructor for Scheduler class: The DAG is represented as a hash map. The key of the hash map is the id of a stage and the value is a list of stages depending on this stage. We need to say the input DAG is immutable.
- * List<Integer> getStagesToRun(int cap): return a list of runnable stages and the size of the list is capped by cap. The requirement of this function is to return a runnable stage only once. By runnable, it means the stage doesn't depend on any stage or all the stages depended by this stage have been marked as done stage.
+ * The Constructor for Scheduler class: The DAG is represented as a hash map. The key of the hash map is the id of a stage and the value is a list of stages depending on this stage. Input DAG is immutable.
+ * List<Integer> getStagesToRun(int cap): return a list of runnable stages and the size of the list is capped by cap. The requirement of this function is to return a runnable stage ONLY ONCE. By runnable, it means the stage doesn't depend on any stage or all the stages depended by this stage have been marked as done stage.
  * void markStageDone(int stageId): use this function to notify the scheduler a returned stage is done, so the stages depending on this stage may become runnable.
+ *       1
+ *      / \
+ *     2   5
+ *    / \ /
+ *   3   4
+ *   Input: {1: [2, 5], 2: [3, 4], 5: [4]} (Didn't include 3 and 4 since they don't have any dependents)
+ *
+ *   One Potential order of execution: 1 -> 2 -> 5 -> 3 -> 4
+ *
+ *   Manager:
+ *    Create a DagScheduler
+ *    for each stageId in getStagesToRun()
+ *      schedule stage with stageId
+ *
+ *    for each stageId scheduled AND completed
+ *      markStageDone(stageId)
  * <p>
  * A couple of points we need to pay attention to when asking this question:
  * Time and space complexity analysis of the solution.
