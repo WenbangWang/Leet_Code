@@ -30,8 +30,7 @@ public class No16 {
                 int sub = Math.abs(target - sum);
 
                 if(sum == target) {
-                    record = sum;
-                    return record;
+                    return target;
                 } else if(sum > target) {
                     if(sub < diff) {
                         diff = sub;

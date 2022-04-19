@@ -31,7 +31,7 @@ public class No95 {
         }
 
         List<List<TreeNode>> result = new ArrayList<>(n + 1);
-        result.add(new ArrayList<TreeNode>());
+        result.add(new ArrayList<>());
         result.get(0).add(null);
 
         for(int i = 1; i <= n; i++) {

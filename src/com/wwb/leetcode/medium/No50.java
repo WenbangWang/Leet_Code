@@ -15,12 +15,12 @@ public class No50 {
 
         if(n % 2 == 0) {
             return result;
-        } else {
-            if(n > 0) {
-                return x * result;
-            } else {
-                return result / x;
-            }
         }
+
+        if(n > 0) {
+            return x * result;
+        }
+
+        return result / x;
     }
 }

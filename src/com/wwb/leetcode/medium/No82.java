@@ -55,9 +55,9 @@ public class No82 {
             }
 
             return solution2(head.next);
-        } else {
-            head.next = solution2(head.next);
         }
+
+        head.next = solution2(head.next);
 
         return head;
     }

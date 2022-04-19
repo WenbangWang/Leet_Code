@@ -25,7 +25,6 @@ public class No49 {
         }
 
         Arrays.sort(strs);
-        List<List<String>> result = new ArrayList<>();
         Map<String, List<String>> sortedStrs = new HashMap<>();
 
         for(String str : strs) {
@@ -43,11 +42,7 @@ public class No49 {
             }
         }
 
-        for(List<String> anagrams : sortedStrs.values()) {
-            result.add(anagrams);
-        }
-
-        return result;
+        return new ArrayList<>(sortedStrs.values());
     }
 
     public List<String> anagrams(String[] strs) {

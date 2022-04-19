@@ -18,13 +18,15 @@ public class No3 {
         HashMap<Character, Integer> map = new HashMap<>();
         int maxLength = 1;
 
-        for(int i = 0, j = 0; i < charArray.length; i++) {
-            if(map.containsKey(charArray[i])) {
-                j = Math.max(j, map.get(charArray[i]) + 1);
+        for(int end = 0, start = 0; end < charArray.length; end++) {
+            // Reset the start of the window to the index of current char
+            // as it is duplicated in the original substring
+            if(map.containsKey(charArray[end])) {
+                start = Math.max(start, map.get(charArray[end]) + 1);
             }
 
-            map.put(charArray[i], i);
-            maxLength = Math.max(maxLength, i - j + 1);
+            map.put(charArray[end], end);
+            maxLength = Math.max(maxLength, end - start + 1);
         }
 
         return maxLength;

@@ -46,19 +46,19 @@ public class No103 {
             for(int i = size - 1; i >= 0; i--) {
                 TreeNode node = linkedList.get(i);
 
-                if(level % 2 != 0) {
-                    if(node.left != null) {
-                        linkedList.offer(node.left);
-                    }
-                    if(node.right != null) {
+                if (level % 2 == 0) {
+                    if (node.right != null) {
                         linkedList.offer(node.right);
+                    }
+                    if (node.left != null) {
+                        linkedList.offer(node.left);
                     }
                 } else {
-                    if(node.right != null) {
-                        linkedList.offer(node.right);
-                    }
-                    if(node.left != null) {
+                    if (node.left != null) {
                         linkedList.offer(node.left);
+                    }
+                    if (node.right != null) {
+                        linkedList.offer(node.right);
                     }
                 }
 

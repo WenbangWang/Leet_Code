@@ -29,7 +29,7 @@ public class No15 {
         Arrays.sort(num);
 
         for (int i = 0; i < num.length; i++) {
-            int target = 0 - num[i];
+            int target = -num[i];
             int start = i + 1;
             int end = num.length - 1;
 

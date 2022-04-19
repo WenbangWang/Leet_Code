@@ -24,23 +24,24 @@ public class No90 {
 
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         // return solution1(nums);
-        return solution2(nums);
+//        return solution2(nums);
+        return solution3(nums);
     }
 
     private List<List<Integer>> solution1(int[] nums) {
         List<List<Integer>> lists = new ArrayList<>();
-        lists.add(new ArrayList<Integer>());
+        lists.add(new ArrayList<>());
         Arrays.sort(nums);
-        Map<List<Integer>, Boolean> map = new HashMap<>();
+        Set<List<Integer>> sets = new HashSet<>();
 
         for(int num : nums) {
             List<List<Integer>> subsets = new ArrayList<>(lists);
             for(List<Integer> list : lists) {
                 List<Integer> subset = new ArrayList<>(list);
                 subset.add(num);
-                if(!map.containsKey(subset)) {
+
+                if(sets.add(subset)) {
                     subsets.add(subset);
-                    map.put(subset, true);
                 }
             }
 
@@ -53,10 +54,10 @@ public class No90 {
     private List<List<Integer>> solution2(int[] nums) {
         List<List<Integer>> lists = new ArrayList<>();
         Arrays.sort(nums);
-        Map<List<Integer>, Boolean> map = new HashMap<>();
-        int numberofSets = 1 << nums.length;
+        Set<List<Integer>> sets = new HashSet<>();
+        int numberOfSets = 1 << nums.length;
 
-        for(int i = 0; i < numberofSets; i++) {
+        for(int i = 0; i < numberOfSets; i++) {
             List<Integer> subset = new ArrayList<>();
             for(int j = 0; j < nums.length; j++) {
                 if((i & (1 << j)) > 0) {
@@ -64,8 +65,7 @@ public class No90 {
                 }
             }
 
-            if(!map.containsKey(subset)) {
-                map.put(subset, true);
+            if(sets.add(subset)) {
                 lists.add(subset);
             }
         }
@@ -79,15 +79,14 @@ public class No90 {
 
         result.add(new ArrayList<>());
 
-        int startIndex = 0;
-        int size = 0;
+        int lastResultSize = 0;
 
         for(int i = 0; i < nums.length; i++) {
-            startIndex = i > 0 && nums[i] == nums[i - 1] ? size : 0;
+            int startIndex = i > 0 && nums[i] == nums[i - 1] ? lastResultSize : 0;
 
-            size = result.size();
+            lastResultSize = result.size();
 
-            for(int j = startIndex; j < size; j++) {
+            for(int j = startIndex; j < lastResultSize; j++) {
                 List<Integer> subset = new ArrayList<>(result.get(j));
                 subset.add(nums[i]);
                 result.add(subset);

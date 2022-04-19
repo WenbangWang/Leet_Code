@@ -23,7 +23,9 @@ public class No81 {
 
         if(nums[mid] == target) {
             return true;
-        } else if(nums[mid] < nums[start]) {
+        }
+
+        if(nums[mid] < nums[start]) {
             if(target > nums[end] || target < nums[mid]) {
                 end = mid - 1;
             } else {
@@ -36,26 +38,26 @@ public class No81 {
                 start = mid + 1;
             }
         } else {
-            if(nums[mid] != nums[end]) {
-                start = mid + 1;
-            } else {
+            if (nums[mid] == nums[end]) {
                 boolean flag = true;
 
-                for(int i = 1; mid - i >= start && mid + i <= end; i++) {
-                    if(nums[mid] != nums[mid - i]) {
+                for (int i = 1; mid - i >= start && mid + i <= end; i++) {
+                    if (nums[mid] != nums[mid - i]) {
                         end = mid - i;
                         flag = false;
                         break;
-                    } else if(nums[mid] != nums[mid + i]) {
+                    } else if (nums[mid] != nums[mid + i]) {
                         start = mid + i;
                         flag = false;
                         break;
                     }
                 }
 
-                if(flag) {
+                if (flag) {
                     return false;
                 }
+            } else {
+                start = mid + 1;
             }
         }
 

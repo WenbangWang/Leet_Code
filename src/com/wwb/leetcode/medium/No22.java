@@ -14,8 +14,8 @@ import java.util.List;
 public class No22 {
 
     public List<String> generateParenthesis(int n) {
+//        return solution1(n);
         return solution2(n);
-//        return solution2(n);
     }
 
     private List<String> solution1(int n) {

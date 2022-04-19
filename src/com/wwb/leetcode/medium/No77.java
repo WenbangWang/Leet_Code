@@ -60,11 +60,10 @@ public class No77 {
             current.add(Collections.singletonList(allCombine(i)));
 
             for(int j = i + 1; j <= n; j++) {
-                List<List<Integer>> list = new ArrayList<>();
                 int size = current.size();
 
                 //c(i, j - 1)
-                list.addAll(current.get(size - 1));
+                List<List<Integer>> list = new ArrayList<>(current.get(size - 1));
 
                 //c(i - 1, j - 1)
                 for(List<Integer> item : previous.get(size)) {

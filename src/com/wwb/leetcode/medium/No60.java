@@ -1,6 +1,5 @@
 package com.wwb.leetcode.medium;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class No60 {
         List<String> numbers = new LinkedList<>();
 
         for(int i = 1; i <= n; i++) {
-            numbers.add(i + "");
+            numbers.add(String.valueOf(i));
         }
 
         return numbers;

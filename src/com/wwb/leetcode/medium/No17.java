@@ -74,7 +74,7 @@ public class No17 {
                 continue;
             }
 
-            while(result.peek().length() + notCounted == i) {
+            while(!result.isEmpty() && result.peek().length() + notCounted == i) {
                 String subResult = result.remove();
 
                 for(char letter : LETTERS[digit].toCharArray()) {

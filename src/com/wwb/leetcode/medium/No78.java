@@ -34,7 +34,7 @@ public class No78 {
 
     private List<List<Integer>> solution1(int[] nums) {
         List<List<Integer>> lists = new ArrayList<>();
-        lists.add(new ArrayList<Integer>());
+        lists.add(new ArrayList<>());
 
         for(int num : nums) {
             List<List<Integer>> subsets = new ArrayList<>(lists);
@@ -53,7 +53,7 @@ public class No78 {
     private List<List<Integer>> solution2(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         int length = nums.length;
-        for(int i = 0; i < Math.pow(2, length); i++) {
+        for(int i = 0; i < StrictMath.pow(2, length); i++) {
             List<Integer> subset = new ArrayList<>();
             for(int j = 0; j < length; j++) {
                 if(((i >> j) & 1) != 0) {

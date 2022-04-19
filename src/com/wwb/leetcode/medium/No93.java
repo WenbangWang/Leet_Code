@@ -41,6 +41,6 @@ public class No93 {
     }
 
     private boolean isValid(String s) {
-        return !(s == null || s.length() == 0 || s.length() > 3 || (s.charAt(0) == '0' && s.length() > 1) || Integer.parseInt(s) > 255);
+        return !(s == null || s.isEmpty() || s.length() > 3 || (s.charAt(0) == '0' && s.length() > 1) || Integer.parseInt(s) > 255);
     }
 }

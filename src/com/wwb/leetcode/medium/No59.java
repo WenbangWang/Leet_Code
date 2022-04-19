@@ -1,7 +1,7 @@
 package com.wwb.leetcode.medium;
 
 /**
- * Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+ * Given an integer n, generate a square matrix filled with elements from 1 to n^2 in spiral order.
  *
  * For example,
  * Given n = 3,
@@ -24,20 +24,24 @@ public class No59 {
         int value = 1;
 
         while(x1 <= x2 && y1 <= y2) {
+            // top
             for(int i = y1; i <= y2; i++) {
                 matrix[x1][i] = value++;
             }
 
+            // right
             for(int i = x1 + 1; i <= x2; i++) {
                 matrix[i][y2] = value++;
             }
 
+            // bottom
             if(x1 != x2) {
                 for(int i = y2 - 1; i >= y1; i--) {
                     matrix[x2][i] = value++;
                 }
             }
 
+            // left
             if(y1 != y2) {
                 for(int i = x2 - 1; i > x1; i--) {
                     matrix[i][y1] = value++;
