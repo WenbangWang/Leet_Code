@@ -19,7 +19,7 @@ import java.util.Stack;
 public class No224 {
 
     public int calculate(String s) {
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return 0;
         }
         int result = 0;
@@ -46,8 +46,8 @@ public class No224 {
             } else if(c == ')') {
                 result += sign * number;
                 number = 0;
-                result *= stack.pop();
-                result += stack.pop();
+                result *= stack.pop(); // last sign
+                result += stack.pop(); // last result
             }
         }
 

@@ -28,20 +28,25 @@ public class No306 {
 
         int length = num.length();
 
-        for(int i = 1; i <= length / 2; i++) {
-            if(num.charAt(0) == '0' && i > 1) {
+        for(int first = 1; first <= length / 2; first++) {
+            // the number can be just ZERO but cannot be
+            // more than 1 digit but start from ZERO.
+            if(num.charAt(0) == '0' && first > 1) {
                 break;
             }
 
-            for(int j = i + 1; Math.max(j - i, i) <= length - j; j++) {
-                if(num.charAt(i) == '0' && j - i > 1) {
+            // the length of sum of first and second is at least max(first, second)
+            // and what's left for the sum is length - first - second
+            // so we should stop when max(first, second) is greater than length - first - second
+            for(int second = 1; Math.max(first, second) <= length - first - second; second++) {
+                if(num.charAt(first) == '0' && second > 1) {
                     break;
                 }
 
-                long num1 = Long.parseLong(num.substring(0, i));
-                long num2 = Long.parseLong(num.substring(i, j));
+                long num1 = Long.parseLong(num.substring(0, first));
+                long num2 = Long.parseLong(num.substring(first, first + second));
 
-                if(isValid(num1, num2, num.substring(j))) {
+                if(isValid(num1, num2, num.substring(first + second))) {
                     return true;
                 }
             }

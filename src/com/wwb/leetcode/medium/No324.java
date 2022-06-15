@@ -22,17 +22,28 @@ public class No324 {
         int pointer = 0;
         int end = length - 1;
 
+        // numbers at odd index are greater than median
+        // numbers at even index are less than median
         while (pointer <= end) {
-            if (nums[remappedIndex(length, pointer)] > median) {
-                swap(nums, remappedIndex(length, start++), remappedIndex(length, pointer++));
-            } else if (nums[remappedIndex(length, pointer)] < median) {
-                swap(nums, remappedIndex(length, pointer), remappedIndex(length, end--));
+            int pivotIndex = remappedIndex(length, pointer);
+            int pivot = nums[pivotIndex];
+
+            // Odd index
+            if (pivot > median) {
+                swap(nums, remappedIndex(length, start), pivotIndex);
+                pointer++;
+                start++;
+            } else if (pivot < median) { // even index
+                swap(nums, pivotIndex, remappedIndex(length, end));
+                end--;
             } else {
                 pointer++;
             }
         }
     }
 
+    // first half of the remapped index is mapped to odd index
+    // second half is mapped to even index
     private int remappedIndex(int n, int i) {
         return (2 * i + 1) % (n | 1);
     }

@@ -18,12 +18,7 @@ public class No56 {
             return Collections.emptyList();
         }
 
-        Collections.sort(intervals, new Comparator<Interval>() {
-            @Override
-            public int compare(Interval o1, Interval o2) {
-                return Integer.compare(o1.start, o2.start);
-            }
-        });
+        intervals.sort(Comparator.comparingInt(o -> o.start));
 
         List<Interval> result = new ArrayList<>();
         int start = intervals.get(0).start;

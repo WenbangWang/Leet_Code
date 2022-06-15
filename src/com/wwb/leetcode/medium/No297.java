@@ -60,12 +60,11 @@ public class Codec {
         if (val.equals(NN)) {
             return null;
         }
-        else {
-            TreeNode node = new TreeNode(Integer.valueOf(val));
-            node.left = this.buildTree(nodes);
-            node.right = this.buildTree(nodes);
-            return node;
-        }
+
+        TreeNode node = new TreeNode(Integer.parseInt(val));
+        node.left = this.buildTree(nodes);
+        node.right = this.buildTree(nodes);
+        return node;
     }
 }
 }

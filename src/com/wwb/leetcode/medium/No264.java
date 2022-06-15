@@ -27,11 +27,9 @@ public class No264 {
 
             if(minFactor == factorOfTwo) {
                 factorOfTwo = 2 * uglyNumbers[++indexOfTwo];
-            }
-            if(minFactor == factorOfThree) {
+            } else if(minFactor == factorOfThree) {
                 factorOfThree = 3 * uglyNumbers[++indexOfThree];
-            }
-            if(minFactor == factorOfFive) {
+            } else { // minFactor == factorOfFive
                 factorOfFive = 5 * uglyNumbers[++indexOfFive];
             }
         }

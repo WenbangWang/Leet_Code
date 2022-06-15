@@ -44,7 +44,10 @@ public class No399 {
         for (int i = 0; i < queries.length; i++) {
             String[] query = queries[i];
             result[i] = dfs(query[0], query[1], pairs, valuesPair, new HashSet<>(), 1.0);
-            if (result[i] == 0.0) result[i] = -1.0;
+
+            if (result[i] == 0.0) {
+                result[i] = -1.0;
+            }
         }
         return result;
     }
@@ -53,7 +56,9 @@ public class No399 {
         if (visited.contains(start) || !pairs.containsKey(start)) {
             return 0.0;
         }
-        if (start.equals(end)) return value;
+        if (start.equals(end)) {
+            return value;
+        }
         visited.add(start);
 
         List<String> strList = pairs.get(start);

@@ -36,16 +36,21 @@ public class No162 {
             return end;
         }
 
-        int mid = (start + end) / 2;
+        int mid = (end - start) / 2 + start;
         int pre = mid - 1;
         int next = mid + 1;
 
+        // mid is the peak
         if(nums[mid] > nums[pre] && nums[mid] > nums[next]) {
             return mid;
-        } else if(nums[mid] < nums[pre] && nums[mid] > nums[next]) {
-            return binarySearch(nums, start, pre);
-        } else {
-            return binarySearch(nums, next, end);
         }
+
+        // peak on the left
+        if(nums[mid] < nums[pre] && nums[mid] > nums[next]) {
+            return binarySearch(nums, start, pre);
+        }
+
+        // peak on the right
+        return binarySearch(nums, next, end);
     }
 }

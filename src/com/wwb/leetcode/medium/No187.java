@@ -24,10 +24,11 @@ public class No187 {
         int length = s.length();
         char[] map = new char[26];
 
-        map['A' - 'A'] = 0;
-        map['C' - 'A'] = 1;
-        map['G' - 'A'] = 2;
-        map['T' - 'A'] = 3;
+        // 'A' - 'A'
+        map[0] = 0; // 00
+        map['C' - 'A'] = 1; // 01
+        map['G' - 'A'] = 2; // 10
+        map['T' - 'A'] = 3; // 11
 
         for(int i = 0; i < length - 9; i++) {
             int vector = 0;
@@ -37,6 +38,7 @@ public class No187 {
                 vector |= map[s.charAt(j) - 'A'];
             }
 
+            // repeated once AND NOT twice
             if(!once.add(vector) && twice.add(vector)) {
                 result.add(s.substring(i, i + 10));
             }

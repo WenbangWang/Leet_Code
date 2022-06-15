@@ -16,9 +16,9 @@ public class No285 {
 
         if(root.val <= p.val) {
             return inorderSuccessor(root.right, p);
-        } else {
-            TreeNode left = inorderSuccessor(root.left, p);
-            return left != null ? left: root;
         }
+
+        TreeNode left = inorderSuccessor(root.left, p);
+        return left != null ? left: root;
     }
 }

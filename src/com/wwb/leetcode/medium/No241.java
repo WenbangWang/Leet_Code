@@ -33,7 +33,7 @@ public class No241 {
     }
 
     private List<Integer> solution1(String input) {
-        if(input == null || input.length() == 0) {
+        if(input == null || input.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -74,7 +74,7 @@ public class No241 {
             return map.get(input);
         }
 
-        if(input == null || input.length() == 0) {
+        if(input == null || input.isEmpty()) {
             return Collections.emptyList();
         }
 

@@ -19,9 +19,7 @@ public class No173 {
 
         public BSTIterator(TreeNode root) {
             this.stack = new Stack<>();
-            TreeNode current = root;
-
-            this.pushLeft(current);
+            this.pushLeft(root);
         }
 
         /** @return whether we have a next smallest number */
@@ -31,15 +29,13 @@ public class No173 {
 
         /** @return the next smallest number */
         public int next() {
-            TreeNode node = this.stack.pop();
-            TreeNode current = node;
+            TreeNode current = this.stack.pop();
 
             if(current.right != null) {
-                current = current.right;
-                this.pushLeft(current);
+                this.pushLeft(current.right);
             }
 
-            return node.val;
+            return current.val;
         }
 
         private void pushLeft(TreeNode node) {

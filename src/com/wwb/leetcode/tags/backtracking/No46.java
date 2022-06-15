@@ -1,6 +1,6 @@
 package com.wwb.leetcode.tags.backtracking;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,12 +12,6 @@ import java.util.List;
  * [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
  */
 public class No46 {
-
-    public static void main(String[] args) {
-        No46 no46 = new No46();
-        System.out.println(no46.permute(new int[]{1,2,3,4}).size());
-    }
-
     public List<List<Integer>> permute(int[] nums) {
         return getPerm(nums, 0);
     }
@@ -25,7 +19,7 @@ public class No46 {
     private List<List<Integer>> getPerm(int[] nums, int level) {
         List<List<Integer>> perms = new LinkedList<>();
         if(level == nums.length - 1) {
-            perms.add(Arrays.asList(nums[level]));
+            perms.add(Collections.singletonList(nums[level]));
             return perms;
         }
 

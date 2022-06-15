@@ -1,8 +1,5 @@
 package com.wwb.leetcode.easy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
  *
@@ -18,6 +15,10 @@ import java.util.List;
 public class No125 {
 
     public boolean isPalindrome(String s) {
+        return solution1(s);
+    }
+
+    private boolean solution1(String s) {
         if(s == null || s.isEmpty()) {
             return true;
         }
@@ -28,6 +29,32 @@ public class No125 {
         for(int i = 0, length = chars.length; i < length / 2; i++) {
             if(chars[i] != chars[length - 1 - i]) {
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean solution2(String s) {
+        if(s == null || s.isEmpty()) {
+            return true;
+        }
+
+        s = s.toLowerCase();
+
+        int start = 0;
+        int end = s.length() - 1;
+
+        while (start <= end) {
+            if (!Character.isLetterOrDigit(s.charAt(start))) {
+                start++;
+            } else if (!Character.isLetterOrDigit(s.charAt(end))) {
+                end--;
+            } else if (s.charAt(start) != s.charAt(end)) {
+                return false;
+            } else {
+                start++;
+                end--;
             }
         }
 

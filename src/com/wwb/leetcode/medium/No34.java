@@ -20,33 +20,37 @@ public class No34 {
             return result;
         }
 
+        if (nums.length == 0) {
+            return result;
+        }
+
         int start = 0;
         int end = nums.length - 1;
 
-        while(start < end) {
+        while(start <= end) {
             int mid = start + (end - start) / 2;
 
             if(target > nums[mid]) {
                 start = mid + 1;
             } else {
-                end = mid;
+                end = mid - 1;
             }
         }
 
-        if(nums[start] != target) {
+        if(start == nums.length || nums[start] != target) {
             return result;
         }
 
         result[0] = start;
         end = nums.length - 1;
 
-        while(start < end) {
-            int mid = start + (end - start) / 2 + 1;
+        while(start <= end) {
+            int mid = start + (end - start) / 2;
 
             if(target < nums[mid]) {
                 end = mid - 1;
             } else {
-                start = mid;
+                start = mid + 1;
             }
         }
 

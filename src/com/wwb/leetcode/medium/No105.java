@@ -27,10 +27,10 @@ public class No105 {
             inorderMap.put(inorder[i], i);
         }
 
-        return buildTree(preorder, inorder, inorderMap, 0, 0, inorder.length - 1);
+        return buildTree(preorder, inorderMap, 0, 0, inorder.length - 1);
     }
 
-    private TreeNode buildTree(int[] preorder, int[] inorder, Map<Integer, Integer> inorderMap, int preorderIndex, int start, int end) {
+    private TreeNode buildTree(int[] preorder, Map<Integer, Integer> inorderMap, int preorderIndex, int start, int end) {
         if(start > end) {
             return null;
         }
@@ -39,8 +39,8 @@ public class No105 {
         int inorderIndex = inorderMap.get(preorder[preorderIndex]);
         int leftTreeSize = inorderIndex - start;
 
-        node.left = buildTree(preorder, inorder, inorderMap, preorderIndex + 1, start, inorderIndex - 1);
-        node.right = buildTree(preorder, inorder, inorderMap, preorderIndex + leftTreeSize + 1, inorderIndex + 1, end);
+        node.left = buildTree(preorder, inorderMap, preorderIndex + 1, start, inorderIndex - 1);
+        node.right = buildTree(preorder, inorderMap, preorderIndex + leftTreeSize + 1, inorderIndex + 1, end);
 
         return node;
     }

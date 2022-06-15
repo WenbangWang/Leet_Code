@@ -33,7 +33,7 @@ public class No129 {
         int currentSum = 10 * lastSum + node.val;
 
         if(node.left == null && node.right == null) {
-            return 10 * lastSum + node.val;
+            return currentSum;
         }
 
         return sumNumbers(node.left, currentSum) + sumNumbers(node.right, currentSum);

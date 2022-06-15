@@ -26,16 +26,16 @@ public class No236 {
         return solution1(root, p, q);
     }
 
-    private TreeNode solution1(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null || root == p || root == q) {
-            return root;
+    private TreeNode solution1(TreeNode node, TreeNode p, TreeNode q) {
+        if(node == null || node == p || node == q) {
+            return node;
         }
 
-        TreeNode left = solution1(root.left, p, q);
-        TreeNode right = solution1(root.right, p, q);
+        TreeNode left = solution1(node.left, p, q);
+        TreeNode right = solution1(node.right, p, q);
 
         if(left != null && right != null) {
-            return root;
+            return node;
         }
 
         return left != null ? left : right;
@@ -50,35 +50,35 @@ public class No236 {
         return null;
     }
 
-    private Result getAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null) {
+    private Result getAncestor(TreeNode node, TreeNode p, TreeNode q) {
+        if(node == null) {
             return new Result(null, false);
         }
 
-        if(root == p && root == q) {
-            return new Result(root, true);
+        if(node == p && node == q) {
+            return new Result(node, true);
         }
 
-        Result left = getAncestor(root.left, p, q);
+        Result left = getAncestor(node.left, p, q);
         if(left.isAncestor) {
             return left;
         }
-        Result right = getAncestor(root.right, p, q);
+        Result right = getAncestor(node.right, p, q);
         if(right.isAncestor) {
             return right;
         }
 
         if(left.node != null && right.node != null) {
-            return new Result(root, true);
-        } else if(root == p || root == q) {
+            return new Result(node, true);
+        } else if(node == p || node == q) {
             boolean isAncestor = left.node != null || right.node != null;
-            return new Result(root, isAncestor);
+            return new Result(node, isAncestor);
         } else {
             return new Result(left.node != null ? left.node : right.node, false);
         }
     }
 
-    private class Result {
+    private static class Result {
         boolean isAncestor;
         TreeNode node;
 

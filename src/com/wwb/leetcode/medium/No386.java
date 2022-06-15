@@ -23,10 +23,14 @@ public class No386 {
             } else if (current % 10 != 9 && current + 1 <= n) {
                 current++;
             } else {
+                // when the number is x9...9, move the number
+                // back to single digit and make it to x+1
+                // which is the next number in lexicographical order
                 while ((current / 10) % 10 == 9) {
                     current /= 10;
                 }
 
+                // the above condition would fail at x9
                 current /= 10;
                 current++;
             }

@@ -56,7 +56,14 @@ public class No120 {
 
         for(int i = totalRows - 1; i >= 0; i--) {
             for(int j = 0; j <= i; j++) {
-                triangle.get(i).set(j, triangle.get(i).get(j) + Math.min(triangle.get(i + 1).get(j), triangle.get(i + 1).get(j + 1)));
+                List<Integer> lastRow = triangle.get(i + 1);
+                List<Integer> thisRow = triangle.get(i);
+
+                int lastRowSamePosition = lastRow.get(j);
+                int lastRowNextPosition = lastRow.get(j + 1);
+                int originalValue = thisRow.get(j);
+
+                thisRow.set(j, originalValue + Math.min(lastRowSamePosition, lastRowNextPosition));
             }
         }
 

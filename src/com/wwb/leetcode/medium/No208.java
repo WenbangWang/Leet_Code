@@ -8,7 +8,7 @@ package com.wwb.leetcode.medium;
  */
 public class No208 {
 
-class TrieNode {
+static class TrieNode {
     private boolean isWord;
     private TrieNode[] children;
     private char value;
@@ -44,7 +44,7 @@ class TrieNode {
     }
 }
 
-public class Trie {
+public static class Trie {
     private TrieNode root;
 
     public Trie() {

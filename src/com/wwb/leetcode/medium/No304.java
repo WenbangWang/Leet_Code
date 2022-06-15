@@ -27,7 +27,7 @@ package com.wwb.leetcode.medium;
  */
 public class No304 {
 
-    public class NumMatrix {
+    public static class NumMatrix {
 
         private int[][] matrix;
         public NumMatrix(int[][] matrix) {

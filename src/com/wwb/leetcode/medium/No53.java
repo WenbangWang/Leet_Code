@@ -20,13 +20,8 @@ public class No53 {
         for(int num : nums) {
             sum += num;
 
-            if(sum > maxSum) {
-                maxSum = sum;
-            }
-
-            if(sum < 0) {
-                sum = 0;
-            }
+            maxSum = Math.max(maxSum, sum);
+            sum = Math.max(sum, 0);
         }
 
         return maxSum;
@@ -43,5 +38,17 @@ public class No53 {
         }
 
         return max;
+    }
+
+    private int solution3(int[] nums) {
+        int maxSum = Integer.MIN_VALUE;
+        int previousSum = 0;
+
+        for(int num : nums) {
+            previousSum = num + Math.max(previousSum, 0);
+            maxSum = Math.max(previousSum, maxSum);
+        }
+
+        return maxSum;
     }
 }

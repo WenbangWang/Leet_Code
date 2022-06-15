@@ -64,12 +64,12 @@ public class No5 {
 
     private boolean isPalindrome(String str, int start, int end) {
         while(start <= end) {
-            if(str.charAt(start) != str.charAt(end)) {
+            if (str.charAt(start) != str.charAt(end)) {
                 return false;
-            } else {
-                start++;
-                end--;
             }
+
+            start++;
+            end--;
         }
 
         return true;

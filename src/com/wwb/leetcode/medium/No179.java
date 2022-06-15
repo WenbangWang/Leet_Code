@@ -17,18 +17,16 @@ public class No179 {
             return "";
         }
         String[] numStrings = new String[nums.length];
-        Comparator<String> comparator = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                String string1 = o1 + o2;
-                String string2 = o2 + o1;
+        // Desc
+        Comparator<String> comparator = (o1, o2) -> {
+            String string1 = o1 + o2;
+            String string2 = o2 + o1;
 
-                return string2.compareTo(string1);
-            }
+            return string2.compareTo(string1);
         };
 
         for(int i = 0; i < numStrings.length; i++) {
-            numStrings[i] = nums[i] + "";
+            numStrings[i] = String.valueOf(nums[i]);
         }
 
         Arrays.sort(numStrings, comparator);
@@ -37,7 +35,7 @@ public class No179 {
             return "0";
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder(numStrings.length);
 
         for(String num : numStrings) {
             stringBuilder.append(num);

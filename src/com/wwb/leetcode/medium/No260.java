@@ -22,6 +22,14 @@ public class No260 {
             diff ^= num;
         }
 
+        // at this point, diff is the XOR of
+        // the two single occurrence numbers.
+
+        // Get the rightmost significant bit
+        // to separate numbers into two groups.
+        // When this bit is set, it means the XOR
+        // of the two single occurrence numbers (a, b)
+        // these two numbers at this position is different.
         diff &= -diff;
         int[] result = new int[2];
 

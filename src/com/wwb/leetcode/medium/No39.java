@@ -32,10 +32,6 @@ public class No39 {
     }
 
     private void getCombinations(int[] candidates, int target, int sum, int level, List<Integer> combination, List<List<Integer>> result) {
-        if(sum > target) {
-            return;
-        }
-
         if(sum == target) {
             result.add(new ArrayList<>(combination));
             return;
@@ -44,6 +40,11 @@ public class No39 {
         for(int i = level; i < candidates.length; i++) {
             int candidate = candidates[i];
             sum += candidate;
+
+            if(sum > target) {
+                return;
+            }
+
             combination.add(candidate);
             getCombinations(candidates, target, sum, i, combination, result);
             combination.remove(combination.size() - 1);

@@ -30,25 +30,28 @@ public class No295 {
 
 class MedianFinder {
 
-    private Queue<Integer> minQueue;
-    private Queue<Integer> maxQueue;
-    private Queue<Integer> temp;
+    private Queue<Integer> minHeap;
+    private Queue<Integer> maxHeap;
     private Queue<Integer> reference;
 
     public MedianFinder() {
-        this.minQueue = new PriorityQueue<>();
-        this.maxQueue = new PriorityQueue<>(11, Collections.reverseOrder());
-        this.reference = this.minQueue;
+        this.minHeap = new PriorityQueue<>();
+        this.maxHeap = new PriorityQueue<>(11, Collections.reverseOrder());
+        this.reference = this.minHeap;
     }
     // Adds a number into the data structure.
     public void addNum(int num) {
-        (this.temp = this.maxQueue).offer(num);
-        (this.maxQueue = this.minQueue).offer((this.minQueue = this.temp).poll());
+        Queue<Integer> temp = this.maxHeap;
+
+        temp.offer(num);
+        this.minHeap.offer(temp.poll());
+        this.maxHeap = this.minHeap;
+        this.minHeap = temp;
     }
 
     // Returns the median of current data stream
     public double findMedian() {
-        return (this.reference.peek() + this.maxQueue.peek()) / 2.0;
+        return (this.reference.peek() + this.maxHeap.peek()) / 2.0;
     }
 }
 }

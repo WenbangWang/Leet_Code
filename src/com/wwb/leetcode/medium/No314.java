@@ -1,8 +1,8 @@
 package com.wwb.leetcode.medium;
 
-import java.util.*;
-
 import com.wwb.leetcode.utils.TreeNode;
+
+import java.util.*;
 
 /**
  * Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
@@ -70,6 +70,8 @@ public class No314 {
 
         Queue<TreeNode> nodeQueue = new LinkedList<>();
         Queue<Integer> columnQueue = new LinkedList<>();
+        // key is the column index and
+        // value is the list of values in this column
         Map<Integer, List<Integer>> map = new TreeMap<>();
 
         nodeQueue.add(root);

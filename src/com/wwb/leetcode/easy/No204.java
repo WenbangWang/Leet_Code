@@ -6,26 +6,27 @@ package com.wwb.leetcode.easy;
 public class No204 {
 
     public int countPrimes(int n) {
-        if(n == 0 || n == 1) {
+        if (n < 2) {
             return 0;
         }
 
-        int result = 0;
-        boolean[] table = new boolean[n];
+        boolean[] nonPrime = new boolean[n];
+        nonPrime[1] = true;
 
-        for(int i = 2; i < n; i++) {
-            int j = 1;
-
-            if(!table[i]) {
-                result++;
+        int numNonPrimes = 1;
+        for (int i = 2; i < Math.sqrt(n); i++) { // O(sqrt(n))
+            if (nonPrime[i]) {
+                continue;
             }
 
-            while(i * j < n) {
-                table[i * j] = true;
-                j++;
+            // O(log(log(n)))
+            for (int j = i * 2; j < n; j += i) {
+                if (!nonPrime[j]) {
+                    nonPrime[j] = true;
+                    numNonPrimes++;
+                }
             }
         }
-
-        return result;
+        return (n - 1) - numNonPrimes;
     }
 }

@@ -52,8 +52,6 @@ public class No12 {
     }
 
     private void appendToStringBuilder(StringBuilder stringBuilder, int count, String single) {
-        for(int i = 0; i < count; i++) {
-            stringBuilder.append(single);
-        }
+        stringBuilder.append(single.repeat(count));
     }
 }

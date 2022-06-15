@@ -57,7 +57,7 @@ public class No310 {
         List<Integer> leaves = new ArrayList<>();
 
         for(int i = 0; i < n; i++) {
-            graph.add(new HashSet<Integer>());
+            graph.add(new HashSet<>());
         }
 
         for(int[] edge : edges) {

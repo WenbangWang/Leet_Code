@@ -13,12 +13,7 @@ public class No23 {
             return null;
         }
 
-        Queue<ListNode> queue = new PriorityQueue<>(lists.length, new Comparator<ListNode>() {
-            @Override
-            public int compare(ListNode o1, ListNode o2) {
-                return Integer.compare(o1.val, o2.val);
-            }
-        });
+        Queue<ListNode> queue = new PriorityQueue<>(lists.length, Comparator.comparingInt(o -> o.val));
 
         for (ListNode list : lists) {
             if (list != null) {

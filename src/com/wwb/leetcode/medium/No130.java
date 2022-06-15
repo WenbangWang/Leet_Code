@@ -23,7 +23,7 @@ import java.util.Stack;
 public class No130 {
 
     public void solve(char[][] board) {
-        if(board == null || board[0] == null || board.length == 0 || board[0].length == 0) {
+        if(board == null || board[0] == null || board[0].length == 0) {
             return;
         }
 

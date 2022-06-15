@@ -20,7 +20,7 @@ import java.util.List;
  * As an added challenge, try to code it using only iterators in C++ or iterators in Java.
  */
 public class No251 {
-    public class Vector2D implements Iterator<Integer> {
+    public static class Vector2D implements Iterator<Integer> {
         private Iterator<List<Integer>> vectorIterator;
         private Iterator<Integer> currentIterator;
 

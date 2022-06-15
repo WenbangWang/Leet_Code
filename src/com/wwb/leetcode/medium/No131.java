@@ -2,8 +2,8 @@ package com.wwb.leetcode.medium;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Given a string s, partition s such that every substring of the partition is a palindrome.
@@ -27,12 +27,12 @@ public class No131 {
     private List<List<String>> solution1(String s) {
         List<List<String>> palindromesList = new ArrayList<>();
 
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return palindromesList;
         }
 
         if(s.length() == 1) {
-            palindromesList.add(Arrays.asList(s));
+            palindromesList.add(Collections.singletonList(s));
             return palindromesList;
         }
 
@@ -48,9 +48,8 @@ public class No131 {
                 for(List<String> nextPalindromes : nextPalindromesList) {
                     List<String> palindromes = new ArrayList<>();
                     palindromes.add(currentString);
-                    for(String nextPalindrome : nextPalindromes) {
-                        palindromes.add(nextPalindrome);
-                    }
+                    palindromes.addAll(nextPalindromes);
+
                     palindromesList.add(palindromes);
                 }
             }
@@ -60,7 +59,7 @@ public class No131 {
     }
 
     private boolean isPalindrome(String s) {
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return false;
         }
 

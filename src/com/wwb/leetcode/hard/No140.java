@@ -21,7 +21,7 @@ public class No140 {
         }
 
 
-        return wordBreak(s, wordDict, new HashMap<String, List<String>>());
+        return wordBreak(s, wordDict, new HashMap<>());
     }
 
     private List<String> wordBreak(String s, Set<String> wordDict, Map<String, List<String>> map) {

@@ -35,16 +35,6 @@ public class No494 {
     }
 
     private int subsetSum(int[] nums, int target) {
-//        int[] dp = new int[target + 1];
-//        dp[0] = 1;
-//
-//        for (int num : nums) {
-//            for (int i = target; i >= num; i--) {
-//                dp[i] += dp[i - num];
-//            }
-//        }
-//
-//        return dp[target];
         int[][] dp = new int[nums.length + 1][target + 1];
         dp[0][0] = 1;
         for(int i = 1; i <= nums.length; i++) {

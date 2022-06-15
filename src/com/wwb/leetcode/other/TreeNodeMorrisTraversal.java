@@ -38,7 +38,7 @@ public class TreeNodeMorrisTraversal<T> implements TreeNodeTraversal<T> {
                 current = current.right;
             }
 
-            // Put root to current node's left so we can
+            // Put root to current node's right so we can
             // keep the reference in later iteration.
             if (current.right == null) {
                 current.right = root;
@@ -87,7 +87,7 @@ public class TreeNodeMorrisTraversal<T> implements TreeNodeTraversal<T> {
                 current = current.right;
             }
 
-            // Put root to current node's left so we can
+            // Put root to current node's right so we can
             // keep the reference in later iteration.
             // We should visit the current node then
             // move on to traverse the left sub-tree.
@@ -143,7 +143,7 @@ public class TreeNodeMorrisTraversal<T> implements TreeNodeTraversal<T> {
                 current = current.left;
             }
 
-            // Put root to current node's right so we can
+            // Put root to current node's left so we can
             // keep the reference in later iteration.
             // We should visit the current node then
             // move on to traverse the right sub-tree.

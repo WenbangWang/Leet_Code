@@ -32,6 +32,8 @@ public class No477 {
                 bitCount += (num >>> i) & 1;
             }
 
+            // count of numbers with bit set * count of numbers without bit set
+            // is the difference for all numbers at this bit.
             result += bitCount * (nums.length - bitCount);
         }
 

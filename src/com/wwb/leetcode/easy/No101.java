@@ -43,7 +43,9 @@ public class No101 {
     private boolean solution2(TreeNode root) {
         if(root == null || (root.left == null && root.right == null)) {
             return true;
-        } else if(root.left == null || root.right == null) {
+        }
+
+        if(root.left == null || root.right == null) {
             return false;
         }
 

@@ -1,7 +1,6 @@
 package com.wwb.leetcode.medium;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Set;
 public class No127 {
 
     public int ladderLength(String beginWord, String endWord, Set<String> wordDict) {
-        if(beginWord == null || endWord == null || wordDict == null || beginWord.length() == 0 || endWord.length() == 0) {
+        if(beginWord == null || endWord == null || wordDict == null || beginWord.isEmpty() || endWord.isEmpty()) {
             return 0;
         }
 
@@ -35,7 +34,6 @@ public class No127 {
         int step = 0;
 
         queue.add(beginWord);
-        wordDict.add(endWord);
 
         while(!queue.isEmpty()) {
             LinkedList<String> level = new LinkedList<>();

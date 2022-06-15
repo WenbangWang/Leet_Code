@@ -1,16 +1,12 @@
 package com.wwb.leetcode.utils;
 
-import com.wwb.leetcode.hard.No99;
+import com.wwb.leetcode.medium.No1462;
 
 public class main {
 
     public static void main(String[] args) {
-        No99 a = new No99();
+        var a = new No1462();
 
-        TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(3);
-        root.left.right = new TreeNode(2);
-
-        a.solution1(root);
+        System.out.println(a.checkIfPrerequisite(5, new int[][]{{3,4},{2,3},{1,2},{0,1}}, new int[][]{{0,4},{4,0},{1,3},{3,0}}));
     }
 }

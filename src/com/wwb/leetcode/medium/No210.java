@@ -88,7 +88,7 @@ public class No210 {
         List<List<Integer>> graph = new ArrayList<>();
 
         for(int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
 
         return graph;

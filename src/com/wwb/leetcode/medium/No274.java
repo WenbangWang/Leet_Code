@@ -31,9 +31,9 @@ public class No274 {
 
         Arrays.sort(citations);
 
-        for(int i = 0, length = citations.length; i < length; i++) {
-            if(citations[i] >= length - i) {
-                return length - i;
+        for(int paperIndex = 0, length = citations.length; paperIndex < length; paperIndex++) {
+            if(citations[paperIndex] >= length - paperIndex) {
+                return length - paperIndex;
             }
         }
 
@@ -46,10 +46,14 @@ public class No274 {
         }
 
         int length = citations.length;
-        int total = 0;
+        int numberOfPapers = 0;
+        // index is number of citations
+        // value is number of papers has
+        // this number of citations.
         int[] table = new int[length + 1];
 
         for(int citation : citations) {
+            // citation bigger than number of papers
             if(citation > length) {
                 table[length]++;
             } else {
@@ -58,11 +62,13 @@ public class No274 {
         }
 
 
-        for(int i = length; i >= 0; i--) {
-            total += table[i];
+        for(int citation = length; citation >= 0; citation--) {
+            numberOfPapers += table[citation];
 
-            if(total >= i) {
-                return i;
+            // number of papers with at least
+            // this number of citations.
+            if(numberOfPapers >= citation) {
+                return citation;
             }
         }
 

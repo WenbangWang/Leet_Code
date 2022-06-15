@@ -42,23 +42,25 @@ public class No554 {
             return 0;
         }
 
-        int maxGaps = 0;
+        int maxVerticalGaps = 0;
         Map<Integer, Integer> map = new HashMap<>();
 
         for(List<Integer> row : wall) {
             int position = 0;
 
+            // we consider the sum only upto the second last brick,
+            // since the last boundary isn't a valid boundary for the solution
             for(int i = 0; i < row.size() - 1; i++) {
                 position += row.get(i);
                 map.put(position, map.getOrDefault(position, 0) + 1);
-                maxGaps = Math.max(maxGaps, map.get(position));
+                maxVerticalGaps = Math.max(maxVerticalGaps, map.get(position));
 
-                if(maxGaps == wall.size()) {
+                if(maxVerticalGaps == wall.size()) {
                     return 0;
                 }
             }
         }
 
-        return wall.size() - maxGaps;
+        return wall.size() - maxVerticalGaps;
     }
 }

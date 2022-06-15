@@ -25,6 +25,10 @@ import com.wwb.leetcode.utils.ListNode;
 public class No160 {
 
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        return solution1(headA, headB);
+    }
+
+    private ListNode solution1(ListNode headA, ListNode headB) {
         int lengthA = getLength(headA);
         int lengthB = getLength(headB);
 
@@ -56,5 +60,17 @@ public class No160 {
         }
 
         return length;
+    }
+
+    private ListNode solution2(ListNode headA, ListNode headB) {
+        ListNode first = headA;
+        ListNode second = headB;
+
+        while (first != second) {
+            first = first == null ? headB : first.next;
+            second = second == null ? headA : second.next;
+        }
+
+        return first;
     }
 }

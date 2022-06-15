@@ -55,16 +55,15 @@ public class No68 {
             StringBuilder stringBuilder = new StringBuilder();
             int slots = last - index - 1;
 
+            // last row or a single word consists a row
             if(last == length || slots == 0) {
                 for(int i = index; i < last; i++) {
-                    stringBuilder.append(words[i] + " ");
+                    stringBuilder.append(words[i]).append(" ");
                 }
 
                 stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
-                for(int i = stringBuilder.length(); i < maxWidth; i++) {
-                    stringBuilder.append(" ");
-                }
+                stringBuilder.append(" ".repeat(maxWidth - stringBuilder.length()));
             } else {
                 int numberOfSpaces = (maxWidth - currentLength) / slots;
                 int numberOfExtraSpaces = (maxWidth - currentLength) % slots;
@@ -73,9 +72,9 @@ public class No68 {
                     stringBuilder.append(words[i]);
 
                     if(i < last - 1) {
-                        for(int j = 0; j <= (numberOfSpaces + ((i - index) < numberOfExtraSpaces ? 1 : 0)); j++) {
-                            stringBuilder.append(" ");
-                        }
+                        boolean shouldAppendOneMoreSpace = (i - index) < numberOfExtraSpaces;
+
+                        stringBuilder.append(" ".repeat(numberOfSpaces + (shouldAppendOneMoreSpace ? 1 : 0) + 1));
                     }
                 }
             }

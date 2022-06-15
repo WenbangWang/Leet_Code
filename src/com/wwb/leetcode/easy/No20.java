@@ -11,7 +11,7 @@ import java.util.Stack;
 public class No20 {
 
     public boolean isValid(String s) {
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return true;
         }
 
@@ -45,7 +45,7 @@ public class No20 {
             }
         }
 
-        return leftStack.isEmpty() && rightStack.isEmpty();
+        return rightStack.isEmpty();
     }
 
     private boolean solution2(String s) {

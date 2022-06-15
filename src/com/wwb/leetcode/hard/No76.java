@@ -35,7 +35,7 @@ public class No76 {
         Map<Character, Integer> map = new HashMap<>();
 
         for(char c : t.toCharArray()) {
-            map.put(c, map.containsKey(c) ? map.get(c) + 1 : 1);
+            map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
         for(int end = 0; end < sLength; end++) {

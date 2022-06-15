@@ -55,13 +55,21 @@ public class No240 {
 
         if(matrix[midY][midX] == target) {
             return true;
-        } else if(target >= matrix[y1][x1] && target < matrix[midY][midX]) {
+        }
+
+        if(target >= matrix[y1][x1] && target < matrix[midY][midX]) {
             return binarySearch(matrix, target, x1, y1, midX, midY);
-        } else if(target >= matrix[midY][x1] && target <= matrix[y2][midX]) {
+        }
+
+        if(target >= matrix[midY][x1] && target <= matrix[y2][midX]) {
             return binarySearch(matrix, target, x1, midY, midX, y2);
-        } else if(target >= matrix[y1][midX] && target <= matrix[midY][x2]) {
+        }
+
+        if(target >= matrix[y1][midX] && target <= matrix[midY][x2]) {
             return binarySearch(matrix, target, midX, y1, x2, midY);
-        } else if(target > matrix[midY][midX] && target <= matrix[y2][x2]) {
+        }
+
+        if(target > matrix[midY][midX] && target <= matrix[y2][x2]) {
             return binarySearch(matrix, target, midX, midY, x2, y2);
         }
 

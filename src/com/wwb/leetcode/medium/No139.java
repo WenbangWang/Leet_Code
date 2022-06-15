@@ -1,7 +1,5 @@
 package com.wwb.leetcode.medium;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -34,5 +32,26 @@ public class No139 {
         }
 
         return results[length];
+    }
+
+    private boolean solution2(String s, Set<String> wordDict) {
+        if (s == null) {
+            return false;
+        }
+
+        if (wordDict.contains(s)) {
+            return true;
+        }
+
+        for (int i = 1; i < s.length(); i++) {
+            String firstHalf = s.substring(0, i);
+            String secondHalf = s.substring(i, s.length());
+
+            if (wordDict.contains(firstHalf) && solution2(secondHalf, wordDict)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

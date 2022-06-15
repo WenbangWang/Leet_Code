@@ -1,9 +1,6 @@
 package com.wwb.leetcode.medium;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * There are a total of n courses you have to take, labeled from 0 to n - 1.
@@ -28,7 +25,7 @@ import java.util.Queue;
 public class No207 {
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        return solution1(numCourses, prerequisites);
+        return solution3(numCourses, prerequisites);
     }
 
     private boolean solution1(int numCourses, int[][] prerequisites) {
@@ -38,7 +35,7 @@ public class No207 {
         Queue<Integer> queue = new LinkedList<>();
 
         for(int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
 
         for(int i = 0; i < prerequisites.length; i++) {
@@ -76,7 +73,7 @@ public class No207 {
         boolean[] visited = new boolean[numCourses];
 
         for(int i = 0; i < numCourses; i++) {
-            graph.add(new ArrayList<Integer>());
+            graph.add(new ArrayList<>());
         }
 
         for(int i = 0; i < prerequisites.length; i++) {
@@ -92,12 +89,47 @@ public class No207 {
         return true;
     }
 
+    private boolean solution3(int numCourses, int[][] prerequisites) {
+        int[] inDegrees = new int[numCourses];
+        Map<Integer, List<Integer>> courseToDependents = new HashMap<>();
+
+        for(int[] p : prerequisites) {
+            inDegrees[p[0]]++;
+            courseToDependents.putIfAbsent(p[1], new ArrayList<>());
+            courseToDependents.get(p[1]).add(p[0]);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+
+        for (int i = 0; i < inDegrees.length; i++) {
+            if (inDegrees[i] == 0) {
+                queue.add(i);
+                numCourses--;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int course = queue.poll();
+            List<Integer> dependents = courseToDependents.getOrDefault(course, Collections.emptyList());
+
+            for (var dependent : dependents) {
+                inDegrees[dependent]--;
+
+                if (inDegrees[dependent] == 0) {
+                    queue.add(dependent);
+                    numCourses--;
+                }
+            }
+        }
+
+        return numCourses == 0;
+    }
+
     private boolean dfs(List<List<Integer>> graph, boolean[] visited, int course) {
         if(visited[course]) {
             return false;
-        } else {
-            visited[course] = true;
         }
+
+        visited[course] = true;
 
         List<Integer> prerequisiteList = graph.get(course);
 

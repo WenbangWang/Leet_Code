@@ -31,39 +31,39 @@ import java.util.*;
 public class No133 {
 
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
-        Map<Integer, UndirectedGraphNode> map = new HashMap<>();
-//        return dfs(node, map);
-        return bfs(node, map);
+        Map<Integer, UndirectedGraphNode> visited = new HashMap<>();
+//        return dfs(node, visited);
+        return bfs(node, visited);
     }
 
-    private UndirectedGraphNode dfs(UndirectedGraphNode node, Map<Integer, UndirectedGraphNode> map) {
+    private UndirectedGraphNode dfs(UndirectedGraphNode node, Map<Integer, UndirectedGraphNode> visited) {
         if(node == null) {
             return null;
         }
 
-        if(map.containsKey(node.label)) {
-            return map.get(node.label);
+        if(visited.containsKey(node.label)) {
+            return visited.get(node.label);
         }
 
         UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
-        map.put(newNode.label, newNode);
+        visited.put(newNode.label, newNode);
 
         for(UndirectedGraphNode neighbor : node.neighbors) {
-            UndirectedGraphNode newNeighbor = dfs(neighbor, map);
+            UndirectedGraphNode newNeighbor = dfs(neighbor, visited);
             newNode.neighbors.add(newNeighbor);
         }
 
         return newNode;
     }
 
-    private UndirectedGraphNode bfs(UndirectedGraphNode node, Map<Integer, UndirectedGraphNode> map) {
+    private UndirectedGraphNode bfs(UndirectedGraphNode node, Map<Integer, UndirectedGraphNode> visited) {
         if(node == null) {
             return null;
         }
 
         Queue<UndirectedGraphNode> queue = new LinkedList<>();
         UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
-        map.put(newNode.label, newNode);
+        visited.put(newNode.label, newNode);
         queue.add(node);
 
         while(!queue.isEmpty()) {
@@ -71,12 +71,12 @@ public class No133 {
 
             for(UndirectedGraphNode neighbor : currentNode.neighbors) {
 
-                if(!map.containsKey(neighbor.label)) {
-                    map.put(neighbor.label, new UndirectedGraphNode(neighbor.label));
+                if(!visited.containsKey(neighbor.label)) {
+                    visited.put(neighbor.label, new UndirectedGraphNode(neighbor.label));
                     queue.add(neighbor);
                 }
 
-                map.get(currentNode.label).neighbors.add(map.get(neighbor.label));
+                visited.get(currentNode.label).neighbors.add(visited.get(neighbor.label));
             }
         }
 

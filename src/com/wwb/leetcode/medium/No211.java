@@ -27,10 +27,10 @@ import java.util.Set;
  */
 public class No211 {
 
-public class WordDictionary {
+public static class WordDictionary {
 
 
-    class TrieNode {
+    static class TrieNode {
         private boolean isWord;
         private TrieNode[] children;
         private char value;

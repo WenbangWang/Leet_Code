@@ -28,15 +28,19 @@ package com.wwb.leetcode.medium;
  */
 public class No413 {
     public int numberOfArithmeticSlices(int[] A) {
-        if (A == null || A.length < 2) {
+        return solution2(A);
+    }
+
+    private int solution2(int[] a) {
+        if (a == null || a.length < 2) {
             return 0;
         }
 
         int result = 0;
         int count = 0;
 
-        for(int i = 1; i < A.length - 1; i++) {
-            if (A[i] - A[i - 1] == A[i + 1] - A[i]) {
+        for(int i = 1; i < a.length - 1; i++) {
+            if (a[i] - a[i - 1] == a[i + 1] - a[i]) {
                 count++;
                 result += count;
             } else {
@@ -45,5 +49,34 @@ public class No413 {
         }
 
         return result;
+    }
+
+    private int solution1(int[] A) {
+        var sum = new int[1];
+        solution1(A, A.length - 1, sum);
+
+        return sum[0];
+    }
+
+    private int solution1(int[]A, int index, int[] sum) {
+        if (index < 2) {
+            return 0;
+        }
+
+        int count = 0;
+
+        if (A[index] - A[index - 1] == A[index - 1] - A[index - 2]) {
+            count = 1 + solution1(A, index - 1, sum);
+            sum[0] += count;
+        } else {
+            solution1(A, index - 1, sum);
+        }
+
+        return count;
+    }
+
+    private static class ArithmeticSlices {
+        int sum;
+        int count;
     }
 }

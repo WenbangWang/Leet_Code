@@ -1,5 +1,9 @@
 package com.wwb.leetcode.medium;
 
+import java.util.Arrays;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 /**
  * Given an input string, reverse the string word by word.
  *
@@ -14,14 +18,16 @@ public class No151 {
             return s;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String[] words = s.split("\\s+");
-        int length = words.length;
+        var words = Arrays.stream(s.split("\\s+"))
+                .filter(Predicate.not(String::isEmpty))
+                .collect(Collectors.toList());
 
-        for(int i = length - 1; i >= 0; i--) {
-            stringBuilder.append(words[i]).append(" ");
+        for (int i = 0; i < words.size() / 2; i++) {
+            String temp = words.get(i);
+            words.set(i, words.get(words.size() - 1 - i));
+            words.set(words.size() - 1 - i, temp);
         }
 
-        return stringBuilder.toString().trim();
+        return String.join(" ", words);
     }
 }

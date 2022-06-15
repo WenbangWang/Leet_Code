@@ -16,7 +16,7 @@ package com.wwb.leetcode.medium;
  */
 public class No307 {
 
-    public class NumArray {
+    public static class NumArray {
 
         private SegmentTreeNode root;
 
@@ -44,7 +44,7 @@ public class No307 {
                     int mid = start + (end - start) / 2;
 
                     node.left = this.buildTree(nums, start, mid);
-                    node.right = this.buildTree(nums, mid + 1, end);
+                        node.right = this.buildTree(nums, mid + 1, end);
                     node.value = node.left.value + node.right.value;
                 }
 
@@ -84,7 +84,7 @@ public class No307 {
             }
         }
 
-        private class SegmentTreeNode {
+        private static class SegmentTreeNode {
             int start;
             int end;
             int value;

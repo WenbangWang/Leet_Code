@@ -29,30 +29,39 @@ public class No368 {
 
         Arrays.sort(nums);
 
-        List<Integer> result = new ArrayList<>();
         int length = nums.length;
         int[] count = new int[length];
-        int[] parent = new int[length];
-        int max = 0;
+        // previous element of subset ending at ith index
+        int[] predecessors = new int[length];
         int maxIndex = 0;
 
-        for (int i = length - 1; i >= 0; i--) {
-            for (int j = i; j < length; j++) {
-                if (nums[j] % nums[i] == 0 && count[i] < 1 + count[j]) {
+        // initially count[i]=1 since we can always form subset of size=1 ending at i.
+        Arrays.fill(count, 1);
+        // predecessors[i]=-1 because we haven't found any predecessors for any subset yet
+        Arrays.fill(predecessors, -1);
+
+        for (int i = 1; i < length; i++) {
+            for (int j = 0; j < i; j++) {
+                // nums[i] should divide nums[j] if it is to be included in its subset (i.e count[j])
+                // only include nums[i] in subset ending at j
+                // if resultant subset size (count[j]+1) is larger than already possible (count[i])
+                if (nums[i] % nums[j] == 0 && count[i] < 1 + count[j]) {
                     count[i] = 1 + count[j];
-                    parent[i] = j;
+                    // jth element will be predecessor to subset ending at ith element
+                    predecessors[i] = j;
                 }
             }
 
-            if (count[i] > max) {
-                max = count[i];
+            if (count[i] > count[maxIndex]) {
                 maxIndex = i;
             }
         }
 
-        for (int i = 0; i < max; i++) {
+        List<Integer> result = new ArrayList<>();
+
+        // start with index where largest subset ended. Reconstruct from that point to the start
+        for (; maxIndex >= 0; maxIndex = predecessors[maxIndex]) {
             result.add(nums[maxIndex]);
-            maxIndex = parent[maxIndex];
         }
 
         return result;
