@@ -14,9 +14,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Arrays;
 
 public class BookmarkSyncer {
@@ -24,15 +28,35 @@ public class BookmarkSyncer {
     private static final String MAC_PATH = "";
 
     public static void main(String[] args) {
-        String path = System.getProperty("os.name").toLowerCase().contains("windows") ? WINDOWS_PATH : MAC_PATH;
-        System.out.println(path + getProjectId() + ".xml");
+        writeToFile();
+    }
 
-       printNode(getCurrentBookmarksNode());
+    private static void writeToFile() {
+        try {
+            //Whatever the file path is.
+            File statText = new File("bookmarks.xml");
+            FileOutputStream is = new FileOutputStream(statText);
+            OutputStreamWriter osw = new OutputStreamWriter(is);
+            Writer w = new BufferedWriter(osw);
+            // wipe
+            w.write("");
+
+            printNode(getCurrentBookmarksNode(), is);
+
+            w.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getIdeaPath() {
+        String userDirectory = System.getProperty("user.dir");
+
+        return String.join(File.separator, Arrays.asList(userDirectory, ".idea"));
     }
 
     private static String getProjectId() {
-        String userDirectory = System.getProperty("user.dir");
-        String workspaceFileName = String.join(File.separator, Arrays.asList(userDirectory, ".idea", "workspace.xml"));
+        String workspaceFileName = String.join(File.separator, Arrays.asList(getIdeaPath(), "workspace.xml"));
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -87,18 +111,6 @@ public class BookmarkSyncer {
 
                 if (bookmarksManagerComponent.getTextContent().equals("BookmarksManager")) {
                     return component;
-//                    var options = component.getno();
-//                    System.out.println(options.getLength());
-//
-//                    for (int j = 0; j < options.getLength(); j++) {
-//                        var option = options.item(j);
-//                        var bookmarksOptionComponent = option.getAttributes().getNamedItem("name");
-//
-//                        if (bookmarksOptionComponent.getTextContent().equals("groups")) {
-//                            return option;
-//                        }
-
-//                    }
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -108,9 +120,9 @@ public class BookmarkSyncer {
         throw new RuntimeException("No bookmarks found");
     }
 
-    private static void printNode(Node node) {
+    private static void printNode(Node node, OutputStream output) {
         try {
-            StreamResult result = new StreamResult(new StringWriter());
+            StreamResult result = new StreamResult(output);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 
@@ -118,8 +130,6 @@ public class BookmarkSyncer {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
             transformer.transform(new DOMSource(node), result);
-
-            System.out.println(result.getWriter());
         } catch (TransformerException e) {
             e.printStackTrace();
         }
