@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 public class BookmarkSyncer {
     private static final String WINDOWS_PATH = "C:\\Users\\Wenbang Wang\\AppData\\Roaming\\JetBrains\\IdeaIC2022.1\\workspace\\";
-    private static final String MAC_PATH = "";
+    private static final String MAC_PATH = "/Users/wenbangwang/Library/Application Support/JetBrains/IdeaIC2022.1/workspace/";
 
     public static void main(String[] args) {
         writeToFile();
@@ -89,7 +89,11 @@ public class BookmarkSyncer {
 
     private static Node getCurrentBookmarksNode() {
         String path = System.getProperty("os.name").toLowerCase().contains("windows") ? WINDOWS_PATH : MAC_PATH;
-        String workspaceFileName = path + getProjectId() + ".xml";
+        System.out.println("Current path: " + path);
+        String projectId = getProjectId();
+        System.out.println("Current project id: " + projectId);
+
+        String workspaceFileName = path + projectId + ".xml";
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
