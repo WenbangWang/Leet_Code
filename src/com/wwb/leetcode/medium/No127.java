@@ -1,6 +1,9 @@
 package com.wwb.leetcode.medium;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -25,21 +28,23 @@ import java.util.Set;
  */
 public class No127 {
 
-    public int ladderLength(String beginWord, String endWord, Set<String> wordDict) {
-        if(beginWord == null || endWord == null || wordDict == null || beginWord.isEmpty() || endWord.isEmpty()) {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if(beginWord == null || endWord == null || wordList == null || beginWord.isEmpty() || endWord.isEmpty()) {
             return 0;
         }
 
-        LinkedList<String> queue = new LinkedList<>();
+        Queue<String> queue = new LinkedList<>();
+        Set<String> wordDict = new HashSet<>(wordList);
         int step = 0;
 
         queue.add(beginWord);
 
         while(!queue.isEmpty()) {
-            LinkedList<String> level = new LinkedList<>();
             step++;
-            while(!queue.isEmpty()) {
-                String currentWord = queue.pollFirst();
+            var size = queue.size();
+
+            for (int i = 0; i < size; i++) {
+                String currentWord = queue.poll();
                 char[] currentWordArray = currentWord.toCharArray();
                 int currentWordLength = currentWordArray.length;
 
@@ -47,22 +52,20 @@ public class No127 {
                     return step;
                 }
 
-                for(int i = 0; i < currentWordLength; i++) {
+                for(int j = 0; j < currentWordLength; j++) {
                     for(char c = 'a'; c <= 'z'; c++) {
-                        char tempChar = currentWordArray[i];
-                        currentWordArray[i] = c;
+                        char tempChar = currentWordArray[j];
+                        currentWordArray[j] = c;
                         String tempWord = new String(currentWordArray);
-                        currentWordArray[i] = tempChar;
+                        currentWordArray[j] = tempChar;
 
                         if(wordDict.contains(tempWord)) {
-                            level.add(tempWord);
+                            queue.add(tempWord);
                             wordDict.remove(tempWord);
                         }
                     }
                 }
             }
-
-            queue = level;
         }
 
         return 0;

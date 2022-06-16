@@ -87,7 +87,7 @@ public class No271 {
         // Encodes string length to bytes string
         private String intToString(int x) {
             char[] bytes = new char[2];
-            int mask = (1 << 8) - 1;
+            int mask = (1 << 16) - 1;
 
             for(int i = 1; i >= 0; i--) {
                 bytes[1 - i] = (char) (x >> (i * 16) & mask);

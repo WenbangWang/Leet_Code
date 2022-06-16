@@ -44,9 +44,7 @@ public class No244 {
             for (int index = 0; index < wordsDict.length; index++) {
                 var word = wordsDict[index];
 
-                if (!wordToIndexes.containsKey(word)) {
-                    wordToIndexes.put(word, new ArrayList<>());
-                }
+                wordToIndexes.putIfAbsent(word, new ArrayList<>());
 
                 wordToIndexes.get(word).add(index);
             }

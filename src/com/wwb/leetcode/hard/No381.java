@@ -49,22 +49,20 @@ import java.util.*;
  */
 public class No381 {
     public class RandomizedCollection {
-        private List<Integer> list;
-        private Map<Integer, Set<Integer>> indexes;
+        private LinkedList<Integer> list;
+        private Map<Integer, LinkedHashSet<Integer>> indexes;
         private Random random;
         /** Initialize your data structure here. */
 
         public RandomizedCollection() {
-            this.list = new ArrayList<>();
+            this.list = new LinkedList<>();
             this.indexes = new HashMap<>();
             this.random = new Random();
         }
 
         /** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
         public boolean insert(int val) {
-            if (!this.indexes.containsKey(val)) {
-                this.indexes.put(val, new LinkedHashSet<>());
-            }
+            this.indexes.putIfAbsent(val, new LinkedHashSet<>());
 
             this.indexes.get(val).add(this.list.size());
             this.list.add(val);
@@ -81,11 +79,11 @@ public class No381 {
             int nextIndex = this.indexes.get(val).iterator().next();
 
             this.indexes.get(val).remove(nextIndex);
-            int lastVal = this.list.get(this.list.size() - 1);
+            int lastVal = this.list.getLast();
             this.list.set(nextIndex, lastVal);
             this.indexes.get(lastVal).add(nextIndex);
             this.indexes.get(lastVal).remove(this.list.size() - 1);
-            this.list.remove(this.list.size() - 1);
+            this.list.removeLast();
 
             return true;
         }
