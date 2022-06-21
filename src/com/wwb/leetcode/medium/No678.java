@@ -43,37 +43,38 @@ public class No678 {
     }
 
     private boolean solution2(String s) {
-        // open parentheses count in range [cmin, cmax]
-        int cmin = 0, cmax = 0;
+        // open parentheses count in range [minOpenParen, maxOpenParen]
+        int minOpenParen = 0;
+        int maxOpenParen = 0;
 
         for (char c : s.toCharArray()) {
             if (c == '(') {
-                cmax++;
-                cmin++;
+                maxOpenParen++;
+                minOpenParen++;
             } else if (c == ')') {
-                cmax--;
-                cmin--;
+                maxOpenParen--;
+                minOpenParen--;
             } else if (c == '*') {
                 // if `*` become `(` then openCount++
-                cmax++;
+                maxOpenParen++;
                 // if `*` become `)` then openCount--
-                cmin--;
+                minOpenParen--;
                 // if `*` become `` then nothing happens
-                // So openCount will be in new range [cmin-1, cmax+1]
+                // So openCount will be in new range [minOpenParen-1, maxOpenParen+1]
             }
 
             // Currently, don't have enough open parentheses to match close parentheses-> Invalid
             // For example: ())(
-            if (cmax < 0) {
+            if (maxOpenParen < 0) {
                 return false;
             }
 
-            // It's invalid if open parentheses count < 0 that's why cmin can't be negative
-            cmin = Math.max(cmin, 0);
+            // It's invalid if open parentheses count < 0 that's why minOpenParen can't be negative
+            minOpenParen = Math.max(minOpenParen, 0);
         }
 
-        // Return true if can found `openCount == 0` in range [cmin, cmax]
-        return cmin == 0;
+        // Return true if can found `openCount == 0` in range [minOpenParen, maxOpenParen]
+        return minOpenParen == 0;
     }
 
     private boolean checkValidString(char[] chars, int index, Stack<Character> stack) {

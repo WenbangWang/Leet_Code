@@ -9,6 +9,6 @@ package com.wwb.leetcode.easy;
 public class No326 {
 
     public boolean isPowerOfThree(int n) {
-        return n >= 0 && Integer.toString(n, 3).matches("/10*/");
+        return n >= 0 && Integer.toString(n, 3).matches("^10*$");
     }
 }

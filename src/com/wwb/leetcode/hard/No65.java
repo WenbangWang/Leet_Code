@@ -48,14 +48,14 @@ import java.util.Set;
 public class No65 {
     // This is the DFA we have designed above
     private static final List<Map<CharType, Integer>> dfa = List.of(
-            Map.of(CharType.DIGIT, 1, CharType.SIGN, 2, CharType.DOT, 3),
-            Map.of(CharType.DIGIT, 1, CharType.DOT, 4, CharType.EXPONENT, 5),
-            Map.of(CharType.DIGIT, 1, CharType.DOT, 3),
-            Map.of(CharType.DIGIT, 4),
-            Map.of(CharType.DIGIT, 4, CharType.EXPONENT, 5),
-            Map.of(CharType.SIGN, 6, CharType.DIGIT, 7),
-            Map.of(CharType.DIGIT, 7),
-            Map.of(CharType.DIGIT, 7)
+            Map.of(CharType.DIGIT, 1, CharType.SIGN, 2, CharType.DOT, 3), // 0
+            Map.of(CharType.DIGIT, 1, CharType.DOT, 4, CharType.EXPONENT, 5), // 1
+            Map.of(CharType.DIGIT, 1, CharType.DOT, 3), // 2
+            Map.of(CharType.DIGIT, 4), // 3
+            Map.of(CharType.DIGIT, 4, CharType.EXPONENT, 5), // 4
+            Map.of(CharType.SIGN, 6, CharType.DIGIT, 7), // 5
+            Map.of(CharType.DIGIT, 7), // 6
+            Map.of(CharType.DIGIT, 7) // 7
     );
 
     // These are all of the valid finishing states for our DFA.

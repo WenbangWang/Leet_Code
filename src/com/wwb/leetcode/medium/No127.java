@@ -28,6 +28,7 @@ import java.util.Set;
  */
 public class No127 {
 
+    // O(M^2 * N) where M is the length of the word and N is the size of the list
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if(beginWord == null || endWord == null || wordList == null || beginWord.isEmpty() || endWord.isEmpty()) {
             return 0;

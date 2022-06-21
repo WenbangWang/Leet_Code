@@ -17,7 +17,7 @@ public class No215 {
         int end = nums.length - 1;
         int targetIndex = nums.length - k;
 
-        while(start < end) {
+        while(start <= end) {
             int pivot = partition(nums, start, end);
 
             if(pivot < targetIndex) {

@@ -1,6 +1,6 @@
 package com.wwb.leetcode.hard;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -36,7 +36,7 @@ class MedianFinder {
 
     public MedianFinder() {
         this.minHeap = new PriorityQueue<>();
-        this.maxHeap = new PriorityQueue<>(11, Collections.reverseOrder());
+        this.maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
         this.reference = this.minHeap;
     }
     // Adds a number into the data structure.

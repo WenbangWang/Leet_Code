@@ -72,11 +72,11 @@ public class No528 {
             int start = 0;
             int end = this.sums.length - 1;
 
-            while(start < end) {
+            while(start <= end) {
                 int mid = start + (end - start) / 2;
 
                 if (this.sums[mid] > target) {
-                    end = mid;
+                    end = mid - 1;
                 } else if (this.sums[mid] < target) {
                     start = mid + 1;
                 } else {
@@ -84,7 +84,7 @@ public class No528 {
                 }
             }
 
-            return end;
+            return start;
         }
     }
 

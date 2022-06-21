@@ -114,6 +114,7 @@ public class BookmarkSyncer {
                 var bookmarksManagerComponent = component.getAttributes().getNamedItem("name");
 
                 if (bookmarksManagerComponent.getTextContent().equals("BookmarksManager")) {
+                    component.normalize();
                     return component;
                 }
             }
