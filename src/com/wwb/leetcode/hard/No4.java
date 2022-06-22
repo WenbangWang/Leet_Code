@@ -23,6 +23,12 @@ public class No4 {
         int start = 0;
         int end = shorterLength * 2;
 
+        // If we have longerLeft > shorterRight, it means there are too many large numbers on the left half of longerArray,
+        // then we must move longer cut to the left (i.e. move shorter cut to the right);
+        // If shorterLeft > longerRight, then there are too many large numbers on the left half of shorterArray,
+        // and we must move shorter cut to the left.
+        // Otherwise, this cut is the right one.
+        // After we find the cut, the medium can be computed as (max(longerLeft, shorterLeft) + min(longerRight, shorterRight)) / 2;
         while(start <= end) {
             int shorterMid = (end - start) / 2 + start;
             int longerMid = longerLength + shorterLength - shorterMid;

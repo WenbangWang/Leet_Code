@@ -23,7 +23,7 @@ public class No125 {
             return true;
         }
 
-        s = s.toLowerCase().replaceAll("[^0-9a-z]", "");
+        s = s.toLowerCase().replaceAll("[^\\da-z]", "");
         char[] chars = s.toCharArray();
 
         for(int i = 0, length = chars.length; i < length / 2; i++) {

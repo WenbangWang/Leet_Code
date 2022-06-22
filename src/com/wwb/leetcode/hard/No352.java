@@ -42,9 +42,8 @@ import java.util.TreeMap;
 public class No352 {
     public class SummaryRanges {
         // key is the smallest value and
-        // value is a size 2 array which are
-        // start and the end of the internal respectively
-        TreeMap<Integer, int[]> map;
+        // value is the higher bound of the interval
+        TreeMap<Integer, Integer> map;
 
         public SummaryRanges() {
             map = new TreeMap<>();
@@ -59,20 +58,20 @@ public class No352 {
             Integer higherKey = map.higherKey(val);
 
             // by adding the new value we can merge the two intervals.
-            if (lowerKey != null && higherKey != null && val == map.get(lowerKey)[1] + 1 && val == map.get(higherKey)[0] - 1) {
-                map.get(lowerKey)[1] = map.get(higherKey)[1];
+            if (lowerKey != null && higherKey != null && val == map.get(lowerKey) + 1 && val == higherKey - 1) {
+                map.put(lowerKey, map.get(higherKey));
 
                 map.remove(higherKey);
-            } else if (lowerKey != null && val <= map.get(lowerKey)[1] + 1) {
+            } else if (lowerKey != null && val <= map.get(lowerKey) + 1) {
                 // we can potentially extend the lower internal
-                map.get(lowerKey)[1] = Math.max(val, map.get(lowerKey)[1]);
-            } else if (higherKey != null && val == map.get(higherKey)[0] - 1) {
+                map.put(lowerKey, Math.max(val, map.get(lowerKey)));
+            } else if (higherKey != null && val == higherKey - 1) {
                 // we can potentially extend the higher internal
-                map.put(val, new int[]{val, map.get(higherKey)[1]});
+                map.put(val, map.get(higherKey));
 
                 map.remove(higherKey);
             } else {
-                map.put(val, new int[]{val, val});
+                map.put(val, val);
             }
         }
 
@@ -80,8 +79,8 @@ public class No352 {
             int[][] res = new int[map.size()][2];
 
             int i = 0;
-            for (int[] a : map.values()) {
-                res[i++] = a;
+            for (var entry : this.map.entrySet()) {
+                res[i++] = new int[]{entry.getKey(), entry.getValue()};
             }
 
             return res;

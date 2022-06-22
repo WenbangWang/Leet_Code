@@ -64,9 +64,8 @@ public class No366 {
     }
 
     private int getHeight(TreeNode node, List<List<Integer>> result) {
-        // return -1 for null nodes
         if (node == null) {
-            return -1;
+            return 0;
         }
 
         // first calculate the height of the left and right children
@@ -75,11 +74,12 @@ public class No366 {
 
         int currHeight = Math.max(leftHeight, rightHeight) + 1;
 
-        if (result.size() == currHeight) {
+        // height it 1-based and array index is 0-based
+        if (result.size() == currHeight - 1) {
             result.add(new ArrayList<>());
         }
 
-        result.get(currHeight).add(node.val);
+        result.get(currHeight - 1).add(node.val);
 
         return currHeight;
     }

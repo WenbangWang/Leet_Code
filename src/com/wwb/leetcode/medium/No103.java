@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Given a binary tree, return the zigzag level order traversal of its nodes' values.
@@ -85,25 +86,25 @@ public class No103 {
         }
 
         List<List<Integer>> result = new ArrayList<>();
-        LinkedList<TreeNode> linkedList = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         int level = 0;
 
-        linkedList.offer(root);
+        queue.offer(root);
 
-        while(!linkedList.isEmpty()) {
+        while(!queue.isEmpty()) {
             List<Integer> currentLevel = new ArrayList<>();
-            int size = linkedList.size();
+            int size = queue.size();
 
             for (int i = 0; i < size; i++){
-                TreeNode node = linkedList.poll();
+                TreeNode node = queue.poll();
                 currentLevel.add(node.val);
 
                 if (node.left != null) {
-                    linkedList.offer(node.left);
+                    queue.offer(node.left);
                 }
 
                 if (node.right != null) {
-                    linkedList.offer(node.right);
+                    queue.offer(node.right);
                 }
             }
 

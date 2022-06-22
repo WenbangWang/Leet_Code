@@ -22,6 +22,10 @@ import java.util.List;
 public class No39 {
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        return solution1(candidates, target);
+    }
+
+    private List<List<Integer>> solution1(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
         List<Integer> combination = new ArrayList<>();
         Arrays.sort(candidates);
@@ -29,6 +33,28 @@ public class No39 {
         getCombinations(candidates, target, 0, 0, combination, result);
 
         return result;
+    }
+
+    private List<List<Integer>> solution2(int[] candidates, int target) {
+        List<List<List<Integer>>> dp = new ArrayList<>(target + 1);
+
+        for (int i = 0; i <= target; i++) {
+            dp.add(new ArrayList<>());
+        }
+
+        dp.get(0).add(new ArrayList<>());
+
+        for (int candidate: candidates) {
+            for (int j = candidate; j <= target; j++) {
+                for (List<Integer> comb: dp.get(j - candidate)) {
+                    List<Integer> newComb = new ArrayList<>(comb);
+                    newComb.add(candidate);
+                    dp.get(j).add(newComb);
+                }
+            }
+        }
+
+        return dp.get(target);
     }
 
     private void getCombinations(int[] candidates, int target, int sum, int level, List<Integer> combination, List<List<Integer>> result) {

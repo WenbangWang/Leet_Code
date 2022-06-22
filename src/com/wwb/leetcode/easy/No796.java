@@ -48,6 +48,7 @@ public class No796 {
         return s.length() == goal.length() && (s + s).contains(goal);
     }
 
+    // KMP (Knuth-Morris-Pratt) O(N)
     private boolean solution3(String s, String goal) {
         if (s.length() != goal.length()) {
             return false;

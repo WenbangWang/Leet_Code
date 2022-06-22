@@ -21,18 +21,12 @@ public class No149 {
         int length = points.length;
 
         for(int i = 0; i < length; i++) {
-            int overlap = 0;
             int currentMax = 0;
             Map<String, Integer> map = new HashMap<>();
 
             for(int j = i + 1; j < length; j++) {
                 int x = points[j][0] - points[i][0];
                 int y = points[j][1] - points[i][1];
-
-                if (x == 0 && y == 0) {
-                    overlap++;
-                    continue;
-                }
 
                 int gcd = generateGCD(x, y);
 
@@ -48,7 +42,7 @@ public class No149 {
                 currentMax = Math.max(currentMax, map.get(key));
             }
 
-            result = Math.max(result, currentMax + overlap + 1);
+            result = Math.max(result, currentMax + 1);
         }
 
         return result;

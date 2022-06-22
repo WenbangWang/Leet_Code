@@ -34,10 +34,10 @@ import com.wwb.leetcode.utils.TreeNode;
  * Constraints:
  *
  * The number of nodes in the tree is in the range [0, 104].
- * -105 <= Node.val <= 105
+ * -10^5 <= Node.val <= 10^5
  * Each node has a unique value.
  * root is a valid binary search tree.
- * -105 <= key <= 105
+ * -10^5 <= key <= 10^5
  */
 public class No450 {
     public TreeNode deleteNode(TreeNode root, int key) {

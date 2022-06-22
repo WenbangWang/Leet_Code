@@ -46,19 +46,11 @@ public class No339 {
         int sum = 0;
 
         for (var nestedInteger : nestedList) {
-            sum += calculateSum(nestedInteger, depth);
-        }
-
-        return sum;
-    }
-
-    private int calculateSum(NestedInteger nestedInteger, int depth) {
-        int sum = 0;
-
-        if (nestedInteger.isInteger()) {
-            sum += nestedInteger.getInteger() * depth;
-        } else {
-            sum += calculateSum(nestedInteger.getList(), depth + 1);
+            if (nestedInteger.isInteger()) {
+                sum += nestedInteger.getInteger() * depth;
+            } else {
+                sum += calculateSum(nestedInteger.getList(), depth + 1);
+            }
         }
 
         return sum;

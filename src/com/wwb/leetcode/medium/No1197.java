@@ -75,8 +75,8 @@ public class No1197 {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof Pair)) return false;
-            Pair pair = (Pair) o;
+            if (!(o instanceof Pair pair)) return false;
+
             return x == pair.x &&
                     y == pair.y;
         }

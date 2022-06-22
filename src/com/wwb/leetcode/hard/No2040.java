@@ -49,11 +49,11 @@ public class No2040 {
         long start = -INF - 1;
         long end = INF + 1;
 
-        while (start < end) {
+        while (start <= end) {
             long mid = start + (end - start) / 2;
 
             if (countNumbersSmallerThanOrEqualTo(mid, nums1, nums2) >= k) {
-                end = mid;
+                end = mid - 1;
             } else {
                 start = mid + 1;
             }

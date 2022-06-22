@@ -45,10 +45,11 @@ public class No68 {
 
             while(last < length) {
                 int lastLength = words[last].length();
-                if(currentLength + lastLength + 1 > maxWidth) {
+                int slots = last - index;
+                if(currentLength + lastLength + slots > maxWidth) {
                     break;
                 }
-                currentLength += lastLength + 1;
+                currentLength += lastLength;
                 last++;
             }
 
@@ -74,7 +75,7 @@ public class No68 {
                     if(i < last - 1) {
                         boolean shouldAppendOneMoreSpace = (i - index) < numberOfExtraSpaces;
 
-                        stringBuilder.append(" ".repeat(numberOfSpaces + (shouldAppendOneMoreSpace ? 1 : 0) + 1));
+                        stringBuilder.append(" ".repeat(numberOfSpaces + (shouldAppendOneMoreSpace ? 1 : 0)));
                     }
                 }
             }

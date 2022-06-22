@@ -30,7 +30,7 @@ import java.util.LinkedList;
 public class No297 {
 
 public class Codec {
-    private static final String spliter = ",";
+    private static final String SPLITTER = ",";
     private static final String NN = "X";
 
     // Encodes a tree to a single string.
@@ -42,16 +42,16 @@ public class Codec {
 
     private void buildString(TreeNode node, StringBuilder sb) {
         if (node == null) {
-            sb.append(NN).append(spliter);
+            sb.append(NN).append(SPLITTER);
         } else {
-            sb.append(node.val).append(spliter);
+            sb.append(node.val).append(SPLITTER);
             this.buildString(node.left, sb);
             this.buildString(node.right,sb);
         }
     }
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        Deque<String> nodes = new LinkedList<>(Arrays.asList(data.split(spliter)));
+        Deque<String> nodes = new LinkedList<>(Arrays.asList(data.split(SPLITTER)));
         return this.buildTree(nodes);
     }
 
