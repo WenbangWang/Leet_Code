@@ -40,6 +40,10 @@ import java.util.List;
  */
 public class No364 {
     public int depthSumInverse(List<NestedInteger> nestedList) {
+        return solution1(nestedList);
+    }
+
+    private int solution1(List<NestedInteger> nestedList) {
         MaxDepth maxDepth = new MaxDepth();
         int depth = 1;
         int result = 0;
@@ -51,6 +55,32 @@ public class No364 {
         }
 
         return result;
+    }
+
+    private int solution2(List<NestedInteger> nestedList) {
+        var weightedSum = solution2(nestedList, 1);
+
+        return (weightedSum.maxDepth + 1) * weightedSum.sum - weightedSum.product;
+    }
+
+    private WeightedSum solution2(List<NestedInteger> nestedList, int depth) {
+        WeightedSum weightedSum = new WeightedSum();
+
+        for (var nestedInteger : nestedList) {
+            if (nestedInteger.isInteger()) {
+                weightedSum.sum += nestedInteger.getInteger();
+                weightedSum.product += nestedInteger.getInteger() * depth;
+                weightedSum.maxDepth = Math.max(weightedSum.maxDepth, depth);
+            } else {
+                var nestedWeightedSum = solution2(nestedInteger.getList(), depth + 1);
+
+                weightedSum.sum += nestedWeightedSum.sum;
+                weightedSum.product += nestedWeightedSum.product;
+                weightedSum.maxDepth = Math.max(weightedSum.maxDepth, nestedWeightedSum.maxDepth);
+            }
+        }
+
+        return weightedSum;
     }
 
     private List<WeightedInteger> flattenList(List<NestedInteger> nestedList, MaxDepth maxDepth, int depth) {
@@ -87,5 +117,11 @@ public class No364 {
         int getWeight() {
             return this.maxDepth.value - depth + 1;
         }
+    }
+
+    private static class WeightedSum {
+        int sum;
+        int product;
+        int maxDepth;
     }
 }

@@ -15,34 +15,23 @@ package com.wwb.leetcode.medium;
 public class No35 {
 
     public int searchInsert(int[] nums, int target) {
-        return findTarget(nums, 0, nums.length - 1, target);
-    }
+        int start = 0;
+        int end = nums.length - 1;
 
-    private int findTarget(int[] nums, int start, int end, int target) {
-        if(start > end) {
-            if(nums[start] > target) {
-                return start;
-            } else {
-                return start + 1;
-            }
-        }
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
 
-        int mid = (start + end) / 2;
-
-        if(start == end && nums[mid] != target) {
-            if(nums[mid] > target) {
+            if (nums[mid] == target) {
                 return mid;
+            }
+
+            if (nums[mid] < target) {
+                start = mid + 1;
             } else {
-                return mid + 1;
+                end = mid - 1;
             }
         }
 
-        if(nums[mid] == target) {
-            return mid;
-        } else if(nums[mid] < target) {
-            return findTarget(nums, mid + 1, end, target);
-        } else {
-            return findTarget(nums, start, mid - 1, target);
-        }
+        return start;
     }
 }

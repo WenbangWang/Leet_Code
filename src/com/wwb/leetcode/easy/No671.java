@@ -35,6 +35,10 @@ import com.wwb.leetcode.utils.TreeNode;
  */
 public class No671 {
     public int findSecondMinimumValue(TreeNode root) {
+        return solution1(root);
+    }
+
+    private int solution1(TreeNode root) {
         var minimum = root.val;
 
         var potentialSecondMinimumNode = findSecondMinimumNode(root, minimum);
@@ -44,6 +48,35 @@ public class No671 {
         }
 
         return potentialSecondMinimumNode.val;
+    }
+
+    private int solution2(TreeNode root) {
+        TreeNode[] secondMinimumNode = new TreeNode[1];
+
+        findSecondMinimumNode(root, root.val, secondMinimumNode);
+
+        return secondMinimumNode[0] == null ? -1 : secondMinimumNode[0].val;
+    }
+
+    private void findSecondMinimumNode(TreeNode node, int minimum, TreeNode[] secondMinimumNode) {
+        if (node == null) {
+            return;
+        }
+
+        if (node.val == minimum) {
+            findSecondMinimumNode(node.left, minimum, secondMinimumNode);
+            findSecondMinimumNode(node.right, minimum, secondMinimumNode);
+
+            return;
+        }
+
+        if (node.val > minimum) {
+            if (secondMinimumNode[0] == null) {
+                secondMinimumNode[0] = new TreeNode(node.val);
+            } else if (node.val < secondMinimumNode[0].val) {
+                secondMinimumNode[0].val = node.val;
+            }
+        }
     }
 
     private TreeNode findSecondMinimumNode(TreeNode node, int minimum) {
@@ -68,4 +101,56 @@ public class No671 {
 
         return left.val < right.val ? left : right;
     }
+
+    public int findThirdMinimumValue(TreeNode root) {
+        TreeNode[] secondMinimumNode = new TreeNode[1];
+        TreeNode[] thirdMinimumNode = new TreeNode[1];
+
+        findThirdMinimumNode(root, root.val, secondMinimumNode, thirdMinimumNode);
+
+        return thirdMinimumNode[0] == null ? -1 : thirdMinimumNode[0].val;
+    }
+
+    private void findThirdMinimumNode(TreeNode node, int minimum, TreeNode[] secondMinimumNode, TreeNode[] thirdMinimumNode) {
+        if (node == null) {
+            return;
+        }
+
+        if (node.val == minimum) {
+            findThirdMinimumNode(node.left, minimum, secondMinimumNode, thirdMinimumNode);
+            findThirdMinimumNode(node.right, minimum, secondMinimumNode, thirdMinimumNode);
+
+            return;
+        }
+
+        if (node.val > minimum) {
+            if (secondMinimumNode[0] == null) {
+                setNodeValue(secondMinimumNode, node.val);
+
+                findThirdMinimumNode(node.left, minimum, secondMinimumNode, thirdMinimumNode);
+                findThirdMinimumNode(node.right, minimum, secondMinimumNode, thirdMinimumNode);
+            } else if (node.val < secondMinimumNode[0].val) {
+                setNodeValue(thirdMinimumNode, secondMinimumNode[0].val);
+                secondMinimumNode[0].val = node.val;
+
+                findThirdMinimumNode(node.left, minimum, secondMinimumNode, thirdMinimumNode);
+                findThirdMinimumNode(node.right, minimum, secondMinimumNode, thirdMinimumNode);
+            } else if (thirdMinimumNode[0] == null || node.val < thirdMinimumNode[0].val) {
+                setNodeValue(thirdMinimumNode, node.val);
+            }
+        }
+    }
+
+    private void setNodeValue(TreeNode[] node, int value) {
+        if (node[0] == null) {
+            node[0] = new TreeNode(value);
+        } else {
+            node[0].val = value;
+        }
+    }
+
+     private static class Pair {
+        TreeNode second;
+        TreeNode third;
+     }
 }

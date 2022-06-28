@@ -35,7 +35,7 @@ public class No367 {
             int dividend = num / mid;
 
             if (dividend == mid) {
-                return true;
+                return dividend * mid == num;
             } else if (dividend > mid) {
                 start = mid + 1;
             } else {
