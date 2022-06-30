@@ -41,12 +41,16 @@ public class No341 {
     @Override
     public boolean hasNext() {
         while (!stack.isEmpty()) {
-            if (!stack.peek().hasNext()) {
-                stack.pop();
-            } else if ((this.next = stack.peek().next()).isInteger()) {
-                return true;
+            if (stack.peek().hasNext()) {
+                this.next = stack.peek().next();
+
+                if (this.next.isInteger()) {
+                    return true;
+                }
+
+                this.stack.push(this.next.getList().iterator());
             } else {
-                stack.push(this.next.getList().iterator());
+                this.stack.pop();
             }
         }
         return false;

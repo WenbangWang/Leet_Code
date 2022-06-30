@@ -25,7 +25,9 @@ public class No33 {
 
             if(midValue == target) {
                 return mid;
-            } else if(midValue >= nums[start]) {
+            }
+
+            if(midValue >= nums[start]) {
                 if(midValue > target && target >= nums[start]) {
                     end = mid - 1;
                 } else {

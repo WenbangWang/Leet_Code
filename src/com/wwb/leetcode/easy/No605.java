@@ -80,12 +80,12 @@ public class No605 {
     private int countConsecutiveEmptySlots(int[] flowerBed, int i) {
         int result = 0;
 
-        for (; i < flowerBed.length; i++) {
-            if (flowerBed[i] == 0) {
-                result++;
-            } else {
+        while (i++ < flowerBed.length) {
+            if (flowerBed[i] != 0) {
                 return result;
             }
+
+            result++;
         }
 
         return result;

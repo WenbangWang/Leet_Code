@@ -47,20 +47,20 @@ public class No703 {
             this.minHeap = new PriorityQueue<>();
 
             for (int num : nums) {
-                minHeap.offer(num);
-            }
-
-            while(this.minHeap.size() > k) {
-                this.minHeap.poll();
+                this.add(num);
             }
         }
 
         public int add(int val) {
-            this.minHeap.offer(val);
-
-            if (this.minHeap.size() > k) {
-                this.minHeap.poll();
+            if (this.minHeap.size() == k) {
+                if (!this.minHeap.isEmpty() && this.minHeap.peek() < val) {
+                    this.minHeap.poll();
+                    this.minHeap.offer(val);
+                }
+            } else {
+                this.minHeap.offer(val);
             }
+
 
             return this.minHeap.peek();
         }

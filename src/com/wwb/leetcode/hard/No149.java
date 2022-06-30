@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class No149 {
 
-    public int maxPoints(int[][] points ) {
+    public int maxPoints(int[][] points) {
         if(points == null) {
             return 0;
         }

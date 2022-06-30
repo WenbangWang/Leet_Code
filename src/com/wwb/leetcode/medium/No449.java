@@ -69,25 +69,6 @@ public class No449 {
             return result;
         }
 
-        private TreeNode deserialize(List<Integer> values, int start, int end) {
-            if (start > end) {
-                return null;
-            }
-
-            if (values.get(start) == null) {
-                return null;
-            }
-
-            TreeNode node = new TreeNode(values.get(start));
-
-            int nextGreaterValueIndex = findNextGreaterValueIndex(start + 1, end, values, values.get(start));
-
-            node.left = deserialize(values, start + 1, nextGreaterValueIndex == -1 ? end : nextGreaterValueIndex - 1);
-            node.right = nextGreaterValueIndex == -1 ? null : deserialize(values, nextGreaterValueIndex, end);
-
-            return node;
-        }
-
         private Pair deserialize(List<Integer> values, int start, int end, int min, int max) {
             if (start > end) {
                 return null;
@@ -124,16 +105,6 @@ public class No449 {
             node.right = right.node;
 
             return new Pair(right.nextIndex, node);
-        }
-
-        private int findNextGreaterValueIndex(int start, int end, List<Integer> values, int target) {
-            for (int i = start; i <= end; i++) {
-                if (values.get(i) != null && values.get(i) > target) {
-                    return i;
-                }
-            }
-
-            return -1;
         }
 
         private String intToByteString(int value) {

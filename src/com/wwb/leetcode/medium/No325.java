@@ -35,9 +35,7 @@ public class No325 {
                 max = Math.max(max, i - map.get(sum - k));
             }
 
-            if(!map.containsKey(sum)) {
-                map.put(sum, i);
-            }
+            map.putIfAbsent(sum, i);
         }
 
         return max;

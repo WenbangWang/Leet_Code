@@ -14,7 +14,6 @@ public class No69 {
 
         int left = 1;
         int right = x;
-        int result = 0;
 
         while(left <= right) {
             int mid = left + (right - left) / 2;
@@ -22,14 +21,15 @@ public class No69 {
 
             if(dividend == mid) {
                 return mid;
-            } else if(dividend < mid) {
+            }
+
+            if(dividend < mid) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
-                result = mid;
             }
         }
 
-        return result;
+        return right;
     }
 }

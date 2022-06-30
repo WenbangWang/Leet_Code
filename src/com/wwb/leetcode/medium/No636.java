@@ -72,14 +72,15 @@ public class No636 {
                 stack.push(log);
             } else {
                 Log top = stack.pop();
+                int timeSpent = log.timestamp - top.timestamp + 1;
 
-                result[top.id] += log.timestamp - top.timestamp + 1;
+                result[top.id] += timeSpent;
 
                 if (!stack.isEmpty()) {
                     // the one in the stack should be updated accordingly
                     // so in later evaluation we won't over account with
                     // "log.timestamp - top.timestamp + 1"
-                    result[stack.peek().id] -= log.timestamp - top.timestamp + 1;
+                    result[stack.peek().id] -= timeSpent;
                 }
             }
         }

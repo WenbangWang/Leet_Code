@@ -2,9 +2,12 @@ package com.wwb.leetcode.medium;
 
 import com.wwb.leetcode.utils.TreeNode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * Serialization is the process of converting a data structure or object into a sequence of bits
@@ -35,28 +38,30 @@ public class Codec {
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        StringBuilder sb = new StringBuilder();
-        this.buildString(root, sb);
-        return sb.toString();
+        return String.join(SPLITTER, preorderSerialize(root));
     }
 
-    private void buildString(TreeNode node, StringBuilder sb) {
+    private List<String> preorderSerialize(TreeNode node) {
         if (node == null) {
-            sb.append(NN).append(SPLITTER);
-        } else {
-            sb.append(node.val).append(SPLITTER);
-            this.buildString(node.left, sb);
-            this.buildString(node.right,sb);
+            return Collections.singletonList(NN);
         }
+
+        List<String> result = new ArrayList<>();
+
+        result.add(String.valueOf(node.val));
+        result.addAll(preorderSerialize(node.left));
+        result.addAll(preorderSerialize(node.right));
+
+        return result;
     }
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        Deque<String> nodes = new LinkedList<>(Arrays.asList(data.split(SPLITTER)));
+        Queue<String> nodes = new LinkedList<>(Arrays.asList(data.split(SPLITTER)));
         return this.buildTree(nodes);
     }
 
-    private TreeNode buildTree(Deque<String> nodes) {
-        String val = nodes.remove();
+    private TreeNode buildTree(Queue<String> nodes) {
+        String val = nodes.poll();
         if (val.equals(NN)) {
             return null;
         }

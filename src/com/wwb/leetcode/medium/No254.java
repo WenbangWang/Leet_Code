@@ -38,7 +38,9 @@ public class No254 {
     }
 
     public void backtrack(List<List<Integer>> result, List<Integer> factors, int n, int start){
-        for (int i = start; i * i <= n; i++) {
+        var sqrt = Math.sqrt(n);
+
+        for (int i = start; i <= sqrt; i++) {
             if (n % i == 0) {
                 factors.add(i);
                 factors.add(n / i);

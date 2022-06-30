@@ -33,15 +33,15 @@ package com.wwb.leetcode.easy;
 public class No744 {
     public char nextGreatestLetter(char[] letters, char target) {
         int start = 0;
-        int end = letters.length;
+        int end = letters.length - 1;
 
-        while (start < end) {
+        while (start <= end) {
             int mid = start + (end - start) / 2;
 
             if (target >= letters[mid]) {
                 start = mid + 1;
             } else {
-                end = mid ;
+                end = mid - 1;
             }
         }
 

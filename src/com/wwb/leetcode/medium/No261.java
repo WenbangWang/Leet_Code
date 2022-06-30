@@ -21,6 +21,8 @@ public class No261 {
     }
 
     private boolean unionFind(int n, int[][] edges) {
+        // IMPORTANT!! a valid tree has to have exact N - 1 edges
+        // where N is the number of nodes.
         if (edges.length != n - 1) {
             return false;
         }

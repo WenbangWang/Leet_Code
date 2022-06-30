@@ -49,6 +49,7 @@ package com.wwb.leetcode.medium;
  * grid[i][j] is either 0 or 1.
  */
 public class No2174 {
+    // O(MN^max(M, N))
     public int removeOnes(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
@@ -81,6 +82,6 @@ public class No2174 {
                 }
             }
         }
-        return ((minFlips == Integer.MAX_VALUE) ? 0 : minFlips);
+        return (minFlips == Integer.MAX_VALUE) ? 0 : minFlips;
     }
 }

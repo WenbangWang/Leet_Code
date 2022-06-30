@@ -67,7 +67,7 @@ public class No730 {
                     }
 
                     if (left > right) {
-                        // consider the string from start to end is "a...a" "a...a"...
+                        // consider the string from start to end is "a...a"
                         // where there is no character 'a' inside the leftmost and rightmost 'a'
                         // eg:  "aba" while start = 0 and end = 2:  dp[1][1] = 1 records the palindrome{"b"},
                         // the reason why dp[start + 1][end  - 1] * 2 counted is that

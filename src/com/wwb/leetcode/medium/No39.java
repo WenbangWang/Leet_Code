@@ -25,6 +25,7 @@ public class No39 {
         return solution1(candidates, target);
     }
 
+    // O(N^T)
     private List<List<Integer>> solution1(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<>();
         List<Integer> combination = new ArrayList<>();

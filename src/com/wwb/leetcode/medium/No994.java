@@ -41,7 +41,7 @@ import java.util.Queue;
  */
 public class No994 {
     public int orangesRotting(int[][] grid) {
-        Queue<Pair> queue = new LinkedList<>();
+        Queue<Coordinate> queue = new LinkedList<>();
 
         // Step 1). build the initial set of rotten oranges
         int freshOranges = 0;
@@ -51,7 +51,7 @@ public class No994 {
         for (int row = 0; row < rows; row++)
             for (int column = 0; column < columns; column++)
                 if (grid[row][column] == 2) {
-                    queue.offer(new Pair(row, column));
+                    queue.offer(new Coordinate(row, column));
                 } else if (grid[row][column] == 1) {
                     freshOranges++;
                 }
@@ -64,9 +64,9 @@ public class No994 {
             int size = queue.size();
 
             while (--size >= 0) {
-                Pair p = queue.poll();
-                int row = p.first;
-                int col = p.second;
+                Coordinate c = queue.poll();
+                int row = c.row;
+                int col = c.column;
 
                 // this is a rotten orange
                 // then it would contaminate its neighbors
@@ -80,7 +80,7 @@ public class No994 {
                             grid[neighborRow][neighborCol] = 2;
                             freshOranges--;
                             // this orange would then contaminate other oranges
-                            queue.offer(new Pair(neighborRow, neighborCol));
+                            queue.offer(new Coordinate(neighborRow, neighborCol));
                         }
                     }
                 }
@@ -96,13 +96,13 @@ public class No994 {
         return freshOranges == 0 ? minutesElapsed : -1;
     }
 
-    private static class Pair {
-        private int first;
-        private int second;
+    private static class Coordinate {
+        private int row;
+        private int column;
 
-        Pair(int first, int second) {
-            this.first = first;
-            this.second = second;
+        Coordinate(int row, int column) {
+            this.row = row;
+            this.column = column;
         }
     }
 }

@@ -21,56 +21,53 @@ import java.util.*;
  * The input is always valid. You may assume that evaluating the queries will result in no division by zero and there is no contradiction.
  */
 public class No399 {
-    public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
         Map<String, List<String>> pairs = new HashMap<>();
         Map<String, List<Double>> valuesPair = new HashMap<>();
-        for (int i = 0; i < equations.length; i++) {
-            String[] equation = equations[i];
-            if (!pairs.containsKey(equation[0])) {
-                pairs.put(equation[0], new ArrayList<>());
-                valuesPair.put(equation[0], new ArrayList<>());
-            }
-            if (!pairs.containsKey(equation[1])) {
-                pairs.put(equation[1], new ArrayList<>());
-                valuesPair.put(equation[1], new ArrayList<>());
-            }
-            pairs.get(equation[0]).add(equation[1]);
-            pairs.get(equation[1]).add(equation[0]);
-            valuesPair.get(equation[0]).add(values[i]);
-            valuesPair.get(equation[1]).add(1/values[i]);
+        for (int i = 0; i < equations.size(); i++) {
+            var equation = equations.get(i);
+
+            pairs.putIfAbsent(equation.get(0), new ArrayList<>());
+            valuesPair.putIfAbsent(equation.get(0), new ArrayList<>());
+            pairs.putIfAbsent(equation.get(1), new ArrayList<>());
+            valuesPair.putIfAbsent(equation.get(1), new ArrayList<>());
+
+            pairs.get(equation.get(0)).add(equation.get(1));
+            pairs.get(equation.get(1)).add(equation.get(0));
+            valuesPair.get(equation.get(0)).add(values[i]);
+            valuesPair.get(equation.get(1)).add(1/values[i]);
         }
 
-        double[] result = new double[queries.length];
-        for (int i = 0; i < queries.length; i++) {
-            String[] query = queries[i];
-            result[i] = dfs(query[0], query[1], pairs, valuesPair, new HashSet<>(), 1.0);
-
-            if (result[i] == 0.0) {
-                result[i] = -1.0;
-            }
+        double[] results = new double[queries.size()];
+        for (int i = 0; i < queries.size(); i++) {
+            var query = queries.get(i);
+            results[i] = dfs(query.get(0), query.get(1), pairs, valuesPair, new HashSet<>(), 1.0).orElse(-1.0);
         }
-        return result;
+        return results;
     }
 
-    private double dfs(String start, String end, Map<String, List<String>> pairs, Map<String, List<Double>> values, Set<String> visited, double value) {
+    private OptionalDouble dfs(String start, String end, Map<String, List<String>> pairs, Map<String, List<Double>> valuesPair, Set<String> visited, double value) {
         if (visited.contains(start) || !pairs.containsKey(start)) {
-            return 0.0;
+            return OptionalDouble.empty();
         }
         if (start.equals(end)) {
-            return value;
+            return OptionalDouble.of(value);
         }
         visited.add(start);
 
-        List<String> strList = pairs.get(start);
-        List<Double> valueList = values.get(start);
-        double result = 0.0;
-        for (int i = 0; i < strList.size(); i++) {
-            result = dfs(strList.get(i), end, pairs, values, visited, value*valueList.get(i));
-            if (result != 0.0) {
+        List<String> divisors = pairs.get(start);
+        List<Double> values = valuesPair.get(start);
+        OptionalDouble result = OptionalDouble.empty();
+
+        for (int i = 0; i < divisors.size(); i++) {
+            result = dfs(divisors.get(i), end, pairs, valuesPair, visited, value * values.get(i));
+            if (result.isPresent()) {
                 break;
             }
         }
+
         visited.remove(start);
+
         return result;
     }
 }

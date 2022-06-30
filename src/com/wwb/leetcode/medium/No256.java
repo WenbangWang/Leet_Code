@@ -1,5 +1,7 @@
 package com.wwb.leetcode.medium;
 
+import java.util.Arrays;
+
 /**
  * There is a row of n houses, where each house can be painted one of three colors: red, blue, or green. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
  * <p>
@@ -31,6 +33,10 @@ package com.wwb.leetcode.medium;
  */
 public class No256 {
     public int minCost(int[][] costs) {
+        return solution1(costs);
+    }
+
+    private int solution1(int[][] costs) {
         int[][] dp = new int[costs.length][Color.values().length];
 
         dp[0] = costs[0];
@@ -42,34 +48,70 @@ public class No256 {
         }
 
         return Math.min(
-                dp[costs.length - 1][Color.BLUE.ordinal()],
-                Math.min(
-                        dp[costs.length - 1][Color.RED.ordinal()],
-                        dp[costs.length - 1][Color.GREEN.ordinal()]
-                )
+            dp[costs.length - 1][Color.BLUE.ordinal()],
+            Math.min(
+                dp[costs.length - 1][Color.RED.ordinal()],
+                dp[costs.length - 1][Color.GREEN.ordinal()]
+            )
+        );
+    }
+
+    private int solution2(int[][] costs) {
+        int[] dp = costs[0];
+
+        for (int house = 1; house < costs.length; house++) {
+            int[] currentCost = Arrays.copyOf(dp, dp.length);
+
+            for (Color color : Color.values()) {
+                currentCost[color.ordinal()] = getPreviousMinCost(color, house, dp) + costs[house][color.ordinal()];
+            }
+
+            dp = currentCost;
+        }
+
+        return Math.min(
+            dp[Color.BLUE.ordinal()],
+            Math.min(
+                dp[Color.RED.ordinal()],
+                dp[Color.GREEN.ordinal()]
+            )
         );
     }
 
     private int getPreviousMinCost(Color currentColor, int currentHouse, int[][] dp) {
-        switch (currentColor) {
-            case RED:
-                return Math.min(
-                        dp[currentHouse - 1][Color.BLUE.ordinal()],
-                        dp[currentHouse - 1][Color.GREEN.ordinal()]
-                );
-            case BLUE:
-                return Math.min(
-                        dp[currentHouse - 1][Color.RED.ordinal()],
-                        dp[currentHouse - 1][Color.GREEN.ordinal()]
-                );
-            case GREEN:
-                return Math.min(
-                        dp[currentHouse - 1][Color.RED.ordinal()],
-                        dp[currentHouse - 1][Color.BLUE.ordinal()]
-                );
-            default:
-                return 0;
-        }
+        return switch (currentColor) {
+            case RED -> Math.min(
+                dp[currentHouse - 1][Color.BLUE.ordinal()],
+                dp[currentHouse - 1][Color.GREEN.ordinal()]
+            );
+            case BLUE -> Math.min(
+                dp[currentHouse - 1][Color.RED.ordinal()],
+                dp[currentHouse - 1][Color.GREEN.ordinal()]
+            );
+            case GREEN -> Math.min(
+                dp[currentHouse - 1][Color.RED.ordinal()],
+                dp[currentHouse - 1][Color.BLUE.ordinal()]
+            );
+            default -> 0;
+        };
+    }
+
+    private int getPreviousMinCost(Color currentColor, int currentHouse, int[] dp) {
+        return switch (currentColor) {
+            case RED -> Math.min(
+                dp[Color.BLUE.ordinal()],
+                dp[Color.GREEN.ordinal()]
+            );
+            case BLUE -> Math.min(
+                dp[Color.RED.ordinal()],
+                dp[Color.GREEN.ordinal()]
+            );
+            case GREEN -> Math.min(
+                dp[Color.RED.ordinal()],
+                dp[Color.BLUE.ordinal()]
+            );
+            default -> 0;
+        };
     }
 
     private enum Color {

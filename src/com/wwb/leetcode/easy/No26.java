@@ -12,20 +12,19 @@ package com.wwb.leetcode.easy;
  * It doesn't matter what you leave beyond the new length.
  */
 public class No26 {
-
-    public int removeDuplicates(int[] A) {
-        int count = 0;
-
-        if(A == null || A.length == 0) {
+    public int removeDuplicates(int[] nums) {
+        if(nums == null || nums.length == 0) {
             return 0;
         }
 
-        for(int i = 1; i < A.length; i++) {
-            if(A[i] != A[i - 1]) {
-                A[++count] = A[i];
+        int count = 1;
+
+        for(int i = 1; i < nums.length; i++) {
+            if(nums[i] != nums[i - 1]) {
+                nums[count++] = nums[i];
             }
         }
 
-        return count + 1;
+        return count;
     }
 }

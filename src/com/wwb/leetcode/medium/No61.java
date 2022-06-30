@@ -18,20 +18,20 @@ public class No61 {
 
         ListNode start = new ListNode(0);
         ListNode current = start;
-        ListNode runner = start;
-        int index = 0;
+        ListNode last = start;
+        int length = 0;
         start.next = head;
 
-        while(runner.next != null) {
-            runner = runner.next;
-            index++;
+        while(last.next != null) {
+            last = last.next;
+            length++;
         }
 
-        for(int i = index - k % index; i > 0; i--) {
+        for(int i = length - k % length; i > 0; i--) {
             current = current.next;
         }
 
-        runner.next = start.next;
+        last.next = start.next;
         start.next = current.next;
         current.next = null;
 

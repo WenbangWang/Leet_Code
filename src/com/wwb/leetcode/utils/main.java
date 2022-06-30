@@ -1,6 +1,6 @@
 package com.wwb.leetcode.utils;
 
-import com.wwb.leetcode.medium.No678;
+import com.wwb.leetcode.medium.No50;
 
 import java.util.Random;
 import java.util.UUID;
@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 public class main {
 
     public static void main(String[] args)  {
-        var a = new No678();
+        var a = new No50();
 
-        a.checkValidString("(((((*(()((((*((**(((()()*)()()()*((((**)())*)*)))))))(())(()))())((*()()(((()((()*(())*(()**)()(())");
+        System.out.printf(String.valueOf(a.myPow(34.00515, -3)));
     }
 
     private static class Task implements Delayed {

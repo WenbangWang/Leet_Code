@@ -1,6 +1,8 @@
 package com.wwb.leetcode.medium;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Given an integer array nums and an integer k, return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
@@ -49,7 +51,7 @@ public class No698 {
             return false;
         }
 
-        return solution1(nums, k, sum);
+        return solution2(nums, k, sum);
     }
 
     // TLE
@@ -94,6 +96,23 @@ public class No698 {
 
                 totalSum[future] = totalSum[i] + nums[j];
             }
+        }
+
+        for (int i = 0; i < totalSum.length; i++) {
+            if (totalSum[i] == -1) {
+                continue;
+            }
+            List<Integer> subset = new ArrayList<>();
+
+            String bit = Integer.toBinaryString(i);
+
+            for (int j = 0; j < bit.length(); j++) {
+                if (bit.charAt(j) == '1') {
+                    subset.add(nums[j]);
+                }
+            }
+
+            System.out.println("bit " + bit + " subset " + subset + " sum is " + totalSum[i]);
         }
 
         return totalSum[(1 << n) - 1] % target == 0;

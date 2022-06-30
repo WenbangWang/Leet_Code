@@ -2,6 +2,8 @@ package com.wwb.leetcode.medium;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -38,10 +40,16 @@ import java.util.Set;
  */
 public class No547 {
     public int findCircleNum(int[][] isConnected) {
+        return solution1(isConnected);
+    }
+
+    private int solution1(int[][] isConnected) {
         int n = isConnected.length;
         int[] parents = new int[n];
+        int[] ranks = new int[n];
 
         Arrays.fill(parents, -1);
+        Arrays.fill(ranks, 1);
 
         for (int city = 0; city < n; city++) {
             int[] connectedCities = isConnected[city];
@@ -51,8 +59,16 @@ public class No547 {
                     int cityParent = find(parents, city);
                     int connectedCityParent = find(parents, connectedCity);
 
-                    if (cityParent != connectedCityParent) {
+                    if (cityParent == connectedCityParent) {
+                        continue;
+                    }
+
+                    if (ranks[cityParent] > ranks[connectedCityParent]) {
+                        parents[connectedCityParent] = cityParent;
+                        ranks[cityParent] += ranks[connectedCityParent];
+                    } else {
                         parents[cityParent] = connectedCityParent;
+                        ranks[connectedCityParent] += ranks[cityParent];
                     }
                 }
             }
@@ -77,5 +93,58 @@ public class No547 {
         parents[city] = find(parents, parents[city]);
 
         return parents[city];
+    }
+
+    private int solution2(int[][] isConnected) {
+        int n = isConnected.length;
+        boolean[] visited = new boolean[n];
+        int count = 0;
+
+        for (int city = 0; city < n; city++) {
+            if (!visited[city]) {
+                dfs(isConnected, visited, city);
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private void dfs(int[][] isConnected, boolean[] visited, int city) {
+        int n = isConnected.length;
+        visited[city] = true;
+
+        for (int connectedCity = 0; connectedCity < n; connectedCity++) {
+            if (isConnected[city][connectedCity] == 1 && !visited[connectedCity]) {
+                dfs(isConnected, visited, connectedCity);
+            }
+        }
+    }
+
+    // BFS
+    private int solution3(int[][] isConnected) {
+        int n = isConnected.length;
+        boolean[] visited = new boolean[n];
+        int count = 0;
+        Queue<Integer> queue = new LinkedList<>();
+
+        for (int city = 0; city < n; city++) {
+            if (!visited[city]) {
+                queue.add(city);
+                while (!queue.isEmpty()) {
+                    int s = queue.poll();
+                    visited[s] = true;
+
+                    for (int connectedCity = 0; connectedCity < n; connectedCity++) {
+                        if (isConnected[s][connectedCity] == 1 && !visited[connectedCity]) {
+                            queue.add(connectedCity);
+                        }
+                    }
+                }
+                count++;
+            }
+        }
+
+        return count;
     }
 }
