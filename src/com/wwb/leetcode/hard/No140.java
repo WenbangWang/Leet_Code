@@ -15,6 +15,9 @@ import java.util.*;
  */
 public class No140 {
 
+    // Let N be the length of the input string and W be the number of words in the dictionary.
+    //
+    //Time Complexity: o(N ^ 2 + 2^N + W)
     public List<String> wordBreak(String s, Set<String> wordDict) {
         if(s == null || s.isEmpty() || wordDict == null) {
             return Collections.emptyList();
