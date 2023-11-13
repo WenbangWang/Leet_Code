@@ -23,6 +23,10 @@ import java.util.Queue;
 public class No226 {
 
     public TreeNode invertTree(TreeNode root) {
+        return solution1(root);
+    }
+
+    private TreeNode solution1(TreeNode root) {
         if(root == null) {
             return null;
         }
@@ -46,6 +50,22 @@ public class No226 {
                 queue.offer(node.right);
             }
         }
+
+        return root;
+    }
+
+    private TreeNode solution2(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.left == null && root.right == null) {
+            return root;
+        }
+
+        TreeNode temp = solution2(root.left);
+        root.left = solution2(root.right);
+        root.right = temp;
 
         return root;
     }

@@ -21,6 +21,10 @@ import com.wwb.leetcode.utils.ListNode;
 public class No25 {
 
     public ListNode reverseKGroup(ListNode head, int k) {
+        return solution1(head, k);
+    }
+
+    private ListNode solution1(ListNode head, int k) {
         ListNode current = head;
         int count = 0;
 
@@ -43,5 +47,44 @@ public class No25 {
         }
 
         return head;
+    }
+
+    private ListNode solution2(ListNode head, int k) {
+        ListNode current = head;
+        int count = 0;
+
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode begin = dummyHead;
+
+        while (current != null) {
+            count++;
+
+            if (count % k == 0) {
+                begin = reverse(begin, current.next);
+                current = begin.next;
+            } else {
+                current = current.next;
+            }
+        }
+
+        return dummyHead.next;
+    }
+
+    // exclusive
+    // return the last node within the range
+    private ListNode reverse(ListNode begin, ListNode end) {
+        ListNode pre = begin;
+        ListNode current = begin.next;
+        ListNode next = current.next;
+
+        while (current.next != end) {
+            current.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+            next = current.next;
+        }
+
+        return current;
     }
 }

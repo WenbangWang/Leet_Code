@@ -41,27 +41,35 @@ public class No37 {
         return true;
     }
 
-    private boolean isValid(char[][] board, int i, int j, char c) {
-        for(int row = 0; row < 9; row++) {
-            if(board[row][j] == c) {
+    private boolean isValid(char[][] board, int row, int col, char c) {
+        // Block no. is i/3, first element is i/3*3
+        int cubeRow = (row / 3) * 3;
+        int cubeCol = (col / 3) * 3;
+        for (int n = 0; n < 9; n++)
+            if (board[n][col] == c || board[row][n] == c || board[cubeRow + n / 3][cubeCol + n % 3] == c) {
                 return false;
             }
-        }
-
-        for(int col = 0; col < 9; col++) {
-            if(board[i][col] == c) {
-                return false;
-            }
-        }
-
-        for(int row = (i / 3) * 3; row < (i / 3) * 3 + 3; row++) {
-            for(int col = (j / 3) * 3; col < (j / 3) * 3 + 3; col++) {
-                if(board[row][col] == c) {
-                    return false;
-                }
-            }
-        }
-
         return true;
+//        for(int row = 0; row < 9; row++) {
+//            if(board[row][j] == c) {
+//                return false;
+//            }
+//        }
+//
+//        for(int col = 0; col < 9; col++) {
+//            if(board[i][col] == c) {
+//                return false;
+//            }
+//        }
+//
+//        for(int row = (i / 3) * 3; row < (i / 3) * 3 + 3; row++) {
+//            for(int col = (j / 3) * 3; col < (j / 3) * 3 + 3; col++) {
+//                if(board[row][col] == c) {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        return true;
     }
 }

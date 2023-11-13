@@ -21,31 +21,15 @@ public class No13 {
         for(int length = s.length(), i = length - 1; i >= 0; i--) {
             char c = s.charAt(i);
 
-            switch(c) {
-                case ONE:
-                    sum += (sum >= 5 ? -1 : 1);
-                    break;
-                case FIVE:
-                    sum += 5;
-                    break;
-                case TEN:
-                    sum += 10 * (sum >= 50 ? -1 : 1);
-                    break;
-                case FIFTY:
-                    sum += 50;
-                    break;
-                case HUNDRED:
-                    sum += 100 * (sum >= 500 ? -1 : 1);
-                    break;
-                case FIVE_HUNDRED:
-                    sum += 500;
-                    break;
-                case THOUSAND:
-                    sum += 1000;
-                    break;
-                default:
-                    sum += 0;
-                    break;
+            switch (c) {
+                case ONE -> sum += (sum >= 5 ? -1 : 1);
+                case FIVE -> sum += 5;
+                case TEN -> sum += 10 * (sum >= 50 ? -1 : 1);
+                case FIFTY -> sum += 50;
+                case HUNDRED -> sum += 100 * (sum >= 500 ? -1 : 1);
+                case FIVE_HUNDRED -> sum += 500;
+                case THOUSAND -> sum += 1000;
+                default -> sum += 0;
             }
         }
 

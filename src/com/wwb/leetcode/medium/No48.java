@@ -19,23 +19,19 @@ public class No48 {
 
             for(int i = first; i < last; i++) {
                 int offset = i - first;
-                //top
-                int top = matrix[first][i];
-                //right
-                int right = matrix[i][last];
-                //bottom
-                int bottom = matrix[last][last-offset];
-                //left
-                int left = matrix[last - offset][first];
+                int topLeft = matrix[first][i];
+                int topRight = matrix[i][last];
+                int bottomRight = matrix[last][last-offset];
+                int bottomLeft = matrix[last - offset][first];
 
-                //top -> left
-                matrix[first][i] = left;
-                //left -> bottom
-                matrix[last - offset][first] = bottom;
-                //bottom -> right
-                matrix[last][last-offset] = right;
-                //right -> top
-                matrix[i][last] = top;
+                // bottom-left -> top-left
+                matrix[first][i] = bottomLeft;
+                // bottom-right -> bottom-left
+                matrix[last - offset][first] = bottomRight;
+                //top-right -> bottom-right
+                matrix[last][last-offset] = topRight;
+                // top-left -> top-right
+                matrix[i][last] = topLeft;
             }
         }
     }

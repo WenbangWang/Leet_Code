@@ -41,8 +41,12 @@ public class No72 {
         for(int i = 0; i < wordLength1; i++) {
             for(int j = 0; j < wordLength2; j++) {
                 if(word1.charAt(i) == word2.charAt(j)) {
+                    // no operation is needed
                     dp[i + 1][j + 1] = dp[i][j];
                 } else {
+                    // replace word1[i] by word2[j] -> dp[i][j]
+                    // delete word1[i] -> dp[i][j + 1]
+                    // insert word2[j] into word1[i] -> dp[i + 1][j]
                     dp[i + 1][j + 1] = Math.min(dp[i][j], Math.min(dp[i][j + 1], dp[i + 1][j])) + 1;
                 }
             }
@@ -70,22 +74,20 @@ public class No72 {
         }
 
         for(int i = 1; i <= wordLength1; i++) {
-            int previousSteps = i;
+            int previousSteps = dp[0];
+            dp[0] = i;
 
             for(int j = 1; j <= wordLength2; j++) {
-                int currentSteps;
+                int currentSteps = dp[j];
 
                 if(word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    currentSteps = dp[j - 1];
+                    dp[j] = previousSteps;
                 } else {
-                    currentSteps = Math.min(previousSteps, Math.min(dp[j], dp[j - 1])) + 1;
+                    dp[j] = Math.min(previousSteps, Math.min(dp[j], dp[j - 1])) + 1;
                 }
 
-                dp[j - 1] = previousSteps;
                 previousSteps = currentSteps;
             }
-
-            dp[wordLength2] = previousSteps;
         }
 
         return dp[wordLength2];

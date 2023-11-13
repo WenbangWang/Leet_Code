@@ -31,15 +31,11 @@ public class No49 {
             char[] charArray = str.toCharArray();
             Arrays.sort(charArray);
             String sortedStr = new String(charArray);
-            List<String> anagrams = sortedStrs.get(sortedStr);
 
-            if(anagrams == null) {
-                List<String> anagram = new ArrayList<>();
-                anagram.add(str);
-                sortedStrs.put(sortedStr, anagram);
-            } else {
-                anagrams.add(str);
+            if (!sortedStrs.containsKey(sortedStr)) {
+                sortedStrs.put(sortedStr, new ArrayList<>());
             }
+            sortedStrs.get(sortedStr).add(str);
         }
 
         return new ArrayList<>(sortedStrs.values());

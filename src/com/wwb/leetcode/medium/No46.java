@@ -1,5 +1,6 @@
 package com.wwb.leetcode.medium;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,18 @@ import java.util.List;
 public class No46 {
 
     public List<List<Integer>> permute(int[] nums) {
+        return solution1(nums);
+    }
+
+    private List<List<Integer>> solution1(int[] nums) {
         return getPerm(nums, 0);
+    }
+
+    private List<List<Integer>> solution2(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(nums, result, new LinkedList<>(), new boolean[nums.length]);
+
+        return result;
     }
 
     private List<List<Integer>> getPerm(int[] nums, int level) {
@@ -36,5 +48,25 @@ public class No46 {
         }
 
         return perms;
+    }
+
+    private void backtrack(int[] nums, List<List<Integer>> result, List<Integer> current, boolean[] visited) {
+        if (nums.length == current.size()) {
+            result.add(new LinkedList<>(current));
+
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
+                continue;
+            }
+
+            visited[i] = true;
+            current.add(nums[i]);
+            backtrack(nums, result, current, visited);
+            visited[i] = false;
+            current.remove(current.size() - 1);
+        }
     }
 }

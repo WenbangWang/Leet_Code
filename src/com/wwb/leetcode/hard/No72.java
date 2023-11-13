@@ -74,22 +74,20 @@ public class No72 {
         }
 
         for(int i = 1; i <= wordLength1; i++) {
-            int previousSteps = i;
+            int previousSteps = dp[0];
+            dp[0] = i;
 
             for(int j = 1; j <= wordLength2; j++) {
-                int currentSteps;
+                int currentSteps = dp[j];
 
                 if(word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    currentSteps = dp[j - 1];
+                    dp[j] = previousSteps;
                 } else {
-                    currentSteps = Math.min(previousSteps, Math.min(dp[j], dp[j - 1])) + 1;
+                    dp[j] = Math.min(previousSteps, Math.min(dp[j], dp[j - 1])) + 1;
                 }
 
-                dp[j - 1] = previousSteps;
                 previousSteps = currentSteps;
             }
-
-            dp[wordLength2] = previousSteps;
         }
 
         return dp[wordLength2];

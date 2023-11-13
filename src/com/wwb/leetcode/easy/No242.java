@@ -15,11 +15,12 @@ public class No242 {
     public boolean isAnagram(String s, String t) {
         if(s == null && t == null) {
             return true;
-        } else if(s == null || t == null) {
+        }
+        if(s == null || t == null) {
             return false;
         }
 
-        if(s.length() == 0 && t.length() == 0) {
+        if(s.isEmpty() && t.isEmpty()) {
             return true;
         }
 

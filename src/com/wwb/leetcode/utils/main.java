@@ -1,6 +1,6 @@
 package com.wwb.leetcode.utils;
 
-import com.wwb.leetcode.medium.No50;
+import com.wwb.leetcode.hard.No149;
 
 import java.util.Random;
 import java.util.UUID;
@@ -10,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 public class main {
 
-    public static void main(String[] args)  {
-        var a = new No50();
+    public static void main(String[] args) {
+        var a = new No149();
 
-        System.out.printf(String.valueOf(a.myPow(34.00515, -3)));
+        a.maxPoints(new int[][]{{1,1}, {2,1},{3,1}});
     }
 
     private static class Task implements Delayed {
@@ -33,7 +33,7 @@ public class main {
 
         @Override
         public int compareTo(Delayed o) {
-            return (int)(this.startTime - ((Task) o).startTime);
+            return (int) (this.startTime - ((Task) o).startTime);
         }
 
         @Override

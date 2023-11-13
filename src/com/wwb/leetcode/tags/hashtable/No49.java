@@ -25,29 +25,20 @@ public class No49 {
         }
 
         Arrays.sort(strs);
-        List<List<String>> result = new ArrayList<>();
         Map<String, List<String>> sortedStrs = new HashMap<>();
 
         for(String str : strs) {
             char[] charArray = str.toCharArray();
             Arrays.sort(charArray);
             String sortedStr = new String(charArray);
-            List<String> anagrams = sortedStrs.get(sortedStr);
 
-            if(anagrams == null) {
-                List<String> anagram = new ArrayList<>();
-                anagram.add(str);
-                sortedStrs.put(sortedStr, anagram);
-            } else {
-                anagrams.add(str);
+            if (!sortedStrs.containsKey(sortedStr)) {
+                sortedStrs.put(sortedStr, new ArrayList<>());
             }
+            sortedStrs.get(sortedStr).add(str);
         }
 
-        for(List<String> anagrams : sortedStrs.values()) {
-            result.add(anagrams);
-        }
-
-        return result;
+        return new ArrayList<>(sortedStrs.values());
     }
 
     public List<String> anagrams(String[] strs) {

@@ -59,13 +59,14 @@ public class No77 {
             List<List<List<Integer>>> current = new ArrayList<>();
             current.add(Collections.singletonList(allCombine(i)));
 
+            // c(j, i)
             for(int j = i + 1; j <= n; j++) {
                 int size = current.size();
 
-                //c(i, j - 1)
+                // c(j - 1, i)
                 List<List<Integer>> list = new ArrayList<>(current.get(size - 1));
 
-                //c(i - 1, j - 1)
+                // c(j - 1, i - 1)
                 for(List<Integer> item : previous.get(size)) {
                     List<Integer> newItem = new ArrayList<>(item);
                     newItem.add(j);

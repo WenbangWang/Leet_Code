@@ -8,110 +8,107 @@ package com.wwb.leetcode.tags.trie;
  */
 public class No208 {
 
-class TrieNode {
-    private boolean isWord;
-    private TrieNode[] children;
-    private char value;
-    // Initialize your data structure here.
-    public TrieNode(char c) {
-        this.isWord = false;
-        this.children = new TrieNode[26];
-        this.value = c;
+    static class TrieNode {
+        private boolean isWord;
+        private TrieNode[] children;
+        private char value;
+        // Initialize your data structure here.
+        public TrieNode(char c) {
+            this.isWord = false;
+            this.children = new TrieNode[26];
+            this.value = c;
+        }
+
+        public boolean isWord() {
+            return this.isWord;
+        }
+
+        public void setWord(boolean isWord) {
+            this.isWord = isWord;
+        }
+
+        public TrieNode[] getChildren() {
+            return this.children;
+        }
+
+        public TrieNode getChild(int i) {
+            return this.children[i];
+        }
+
+        public void setChild(TrieNode c, int i) {
+            children[i] = c;
+        }
+
+        public char getValue() {
+            return this.value;
+        }
     }
 
-    public boolean isWord() {
-        return this.isWord;
-    }
+    public static class Trie {
+        private TrieNode root;
 
-    public void setWord(boolean isWord) {
-        this.isWord = isWord;
-    }
+        public Trie() {
+            root = new TrieNode(' ');
+        }
 
-    public TrieNode[] getChildren() {
-        return this.children;
-    }
+        // Inserts a word into the trie.
+        public void insert(String word) {
+            TrieNode node = root;
 
-    public TrieNode getChild(int i) {
-        return this.children[i];
-    }
+            for(char c : word.toCharArray()) {
+                int index = c - 'a';
+                TrieNode child = node.getChild(index);
 
-    public void setChild(TrieNode c, int i) {
-        children[i] = c;
-    }
-
-    public char getValue() {
-        return this.value;
-    }
-}
-
-public class Trie {
-    private TrieNode root;
-
-    public Trie() {
-        root = new TrieNode(' ');
-    }
-
-    // Inserts a word into the trie.
-    public void insert(String word) {
-        TrieNode node = root;
-
-        for(char c : word.toCharArray()) {
-            int index = c - 'a';
-            TrieNode child = node.getChild(index);
-
-            if(child == null) {
-                child = new TrieNode(c);
-                node.setChild(child, index);
+                if(child == null) {
+                    child = new TrieNode(c);
+                    node.setChild(child, index);
+                }
+                node = child;
             }
-            node = child;
+
+            node.setWord(true);
         }
 
-        node.setWord(true);
-    }
+        // Returns if the word is in the trie.
+        public boolean search(String word) {
+            TrieNode node = this.searchNode(word);
 
-    // Returns if the word is in the trie.
-    public boolean search(String word) {
-        if(word == null) {
-            return false;
-        }
-
-        TrieNode node = root;
-
-        for(char c : word.toCharArray()) {
-            TrieNode child = node.getChild(c - 'a');
-
-            if(child == null) {
+            if (node == null) {
                 return false;
             }
 
-            node = child;
+            return node.isWord();
         }
 
-        return node.isWord();
-    }
+        // Returns if there is any word in the trie
+        // that starts with the given prefix.
+        public boolean startsWith(String prefix) {
+            TrieNode node = this.searchNode(prefix);
 
-    // Returns if there is any word in the trie
-    // that starts with the given prefix.
-    public boolean startsWith(String prefix) {
-        if(prefix == null) {
-            return false;
+            return node != null;
         }
 
-        TrieNode node = root;
 
-        for(char c : prefix.toCharArray()) {
-            TrieNode child = node.getChild(c - 'a');
-
-            if(child == null) {
-                return false;
+        private TrieNode searchNode(String word) {
+            if(word == null) {
+                return null;
             }
 
-            node = child;
-        }
+            TrieNode node = root;
 
-        return true;
+            for(char c : word.toCharArray()) {
+                TrieNode child = node.getChild(c - 'a');
+
+                if(child == null) {
+                    return null;
+                }
+
+                node = child;
+            }
+
+            return node;
+        }
     }
-}
 
 // Your Trie object will be instantiated and called as such:
 // Trie trie = new Trie();

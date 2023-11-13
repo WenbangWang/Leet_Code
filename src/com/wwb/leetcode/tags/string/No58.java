@@ -15,7 +15,7 @@ package com.wwb.leetcode.tags.string;
 public class No58 {
 
     public int lengthOfLastWord(String s) {
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return 0;
         }
 

@@ -71,20 +71,10 @@ public static class Trie {
 
     // Returns if the word is in the trie.
     public boolean search(String word) {
-        if(word == null) {
+        TrieNode node = this.searchNode(word);
+
+        if (node == null) {
             return false;
-        }
-
-        TrieNode node = root;
-
-        for(char c : word.toCharArray()) {
-            TrieNode child = node.getChild(c - 'a');
-
-            if(child == null) {
-                return false;
-            }
-
-            node = child;
         }
 
         return node.isWord();
@@ -93,23 +83,30 @@ public static class Trie {
     // Returns if there is any word in the trie
     // that starts with the given prefix.
     public boolean startsWith(String prefix) {
-        if(prefix == null) {
-            return false;
+        TrieNode node = this.searchNode(prefix);
+
+        return node != null;
+    }
+
+
+    private TrieNode searchNode(String word) {
+        if(word == null) {
+            return null;
         }
 
         TrieNode node = root;
 
-        for(char c : prefix.toCharArray()) {
+        for(char c : word.toCharArray()) {
             TrieNode child = node.getChild(c - 'a');
 
             if(child == null) {
-                return false;
+                return null;
             }
 
             node = child;
         }
 
-        return true;
+        return node;
     }
 }
 
