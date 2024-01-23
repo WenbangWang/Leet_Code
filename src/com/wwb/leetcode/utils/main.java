@@ -1,7 +1,9 @@
 package com.wwb.leetcode.utils;
 
-import com.wwb.leetcode.hard.No149;
+import com.wwb.leetcode.easy.No1128;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.DelayQueue;
@@ -11,9 +13,35 @@ import java.util.concurrent.TimeUnit;
 public class main {
 
     public static void main(String[] args) {
-        var a = new No149();
+        var a = new No1128();
 
-        a.maxPoints(new int[][]{{1,1}, {2,1},{3,1}});
+        System.out.println(a.numEquivDominoPairs(new int[][]{{1,2},{2,1},{3,4},{5,6}}));
+
+        System.out.println(combination(9, 2, new HashMap<>()));
+    }
+
+    private static int factorial(int n) {
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+
+        return n * factorial(n - 1);
+    }
+
+    private static int combination(int n, int r, Map<Integer, Integer> factorials) {
+        if (!factorials.containsKey(n)) {
+            factorials.put(n, factorial(n));
+        }
+
+        if (!factorials.containsKey(r)) {
+            factorials.put(r, factorial(r));
+        }
+
+        if (!factorials.containsKey(n - r)) {
+            factorials.put(n - r, factorial(n - r));
+        }
+
+        return (int) (1L * factorials.get(n) / (1L * factorials.get(n - r) * factorials.get(r)));
     }
 
     private static class Task implements Delayed {

@@ -36,9 +36,9 @@ public class TreeNode {
         return root;
     }
 
-    public static void printTreeLeetCode(TreeNode root) {
+    public void printTreeLeetCode() {
         Queue<TreeNode> q = new LinkedList<>();
-        q.add(root);
+        q.add(this);
         StringBuilder sb = new StringBuilder();
 
         while (!q.isEmpty()) {
@@ -49,6 +49,38 @@ public class TreeNode {
                 q.add(t.right);
             }
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
+    }
+
+    public int getMaxDepth() {
+        return this.getMaxDepth(this);
+    }
+
+    public int size() {
+        return this.size(this);
+    }
+
+    private int getMaxDepth(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        if (node.left == null && node.right == null) {
+            return 1;
+        }
+
+        return 1 + Math.max(this.getMaxDepth(node.left), this.getMaxDepth(node.right));
+    }
+
+    private int size(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        if (node.left == null && node.right == null) {
+            return 1;
+        }
+
+        return 1 + this.size(node.left) + this.size(node.right);
     }
 }
