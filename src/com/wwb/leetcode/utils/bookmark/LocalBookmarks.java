@@ -41,9 +41,6 @@ public class LocalBookmarks {
             // optional, but recommended
             // process XML securely, avoid attacks like XML External Entities (XXE)
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-//            // setIgnoringElementContentWhitespace will only work if the parser is in validating mode
-//            dbf.setValidating(true);
-//            dbf.setIgnoringElementContentWhitespace(true);
 
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
