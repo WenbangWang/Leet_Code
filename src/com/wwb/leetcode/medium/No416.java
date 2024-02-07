@@ -3,7 +3,8 @@ package com.wwb.leetcode.medium;
 import java.util.Arrays;
 
 /**
- * Given a non-empty array nums containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.
+ * Given a non-empty array nums containing only positive integers,
+ * find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal.
  *
  *
  *
@@ -55,7 +56,7 @@ public class No416 {
                 } else {
                     // we could either include the current num to form the current subset sum (j)
                     // or not include.
-                    dp[i][j] = dp[i - 1][j] || (dp[i - 1][j - num]);
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - num];
                 }
             }
         }
@@ -81,7 +82,7 @@ public class No416 {
 
         for (int num : nums) {
             for (int i = subsetSum; i >= num; i--) {
-                dp[i] |= dp[i - num];
+                dp[i] = dp[i] || dp[i - num];
             }
         }
 

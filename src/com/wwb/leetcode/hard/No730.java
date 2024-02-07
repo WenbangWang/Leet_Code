@@ -3,7 +3,8 @@ package com.wwb.leetcode.hard;
 import java.util.Arrays;
 
 /**
- * Given a string s, return the number of different non-empty palindromic subsequences in s. Since the answer may be very large, return it modulo 10^9 + 7.
+ * Given a string s, return the number of different non-empty palindromic subsequences in s.
+ * Since the answer may be very large, return it modulo 10^9 + 7.
  * <p>
  * A subsequence of a string is obtained by deleting zero or more characters from the string.
  * <p>
@@ -23,7 +24,7 @@ import java.util.Arrays;
  * <p>
  * Input: s = "abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba"
  * Output: 104860361
- * Explanation: There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 109 + 7.
+ * Explanation: There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 10^9 + 7.
  * <p>
  * <p>
  * Constraints:

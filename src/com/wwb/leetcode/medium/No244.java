@@ -3,7 +3,8 @@ package com.wwb.leetcode.medium;
 import java.util.*;
 
 /**
- * Design a data structure that will be initialized with a string array, and then it should answer queries of the shortest distance between two different strings from the array.
+ * Design a data structure that will be initialized with a string array,
+ * and then it should answer queries of the shortest distance between two different strings from the array.
  *
  * Implement the WordDistance class:
  *

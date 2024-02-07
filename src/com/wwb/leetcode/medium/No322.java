@@ -76,21 +76,17 @@ public class No322 {
         Arrays.sort(coins);
 
         for (int sum = 1; sum <= amount; sum++) {
-            int min = -1;
+            int min = Integer.MAX_VALUE;
 
             for (int coin : coins) {
                 if (sum < coin) {
                     break;
                 }
 
-                if (dp[sum - coin] != -1) {
+                if (dp[sum - coin] != Integer.MAX_VALUE) {
                     int currentResult = dp[sum - coin] + 1;
 
-                    if (min < 0) {
-                        min = currentResult;
-                    } else {
-                        min = Math.min(min, currentResult);
-                    }
+                    min = Math.min(min, currentResult);
                 }
             }
 

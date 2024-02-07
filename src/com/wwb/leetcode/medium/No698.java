@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Given an integer array nums and an integer k, return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
+ * Given an integer array nums and an integer k, return true if it is possible to divide this array
+ * into k non-empty subsets whose sums are all equal.
  *
  *
  *
@@ -70,6 +71,8 @@ public class No698 {
         int[] totalSum = new int[1 << n];
         Arrays.fill(totalSum, -1);
         int target = sum / k;
+
+        System.out.println("Target: " + target);
 
         totalSum[0] = 0;
 

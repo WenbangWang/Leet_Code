@@ -51,6 +51,6 @@ public class No224 {
             }
         }
 
-        return number != 0 ? result + sign * number : result;
+        return result + sign * number;
     }
 }

@@ -23,4 +23,23 @@ public class No50 {
 
         return result / x;
     }
+
+    private double solution2(double x, int n) {
+        if (n < 0) {
+            n = -n;
+            x = 1 / x;
+        }
+
+        double result = 1;
+
+        for (; n != 0; n /= 2) {
+            if ((n & 1) != 0) {
+                result *= x;
+            }
+
+            x *= x;
+        }
+
+        return result;
+    }
 }

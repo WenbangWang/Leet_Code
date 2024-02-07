@@ -3,7 +3,8 @@ package com.wwb.leetcode.medium;
 import java.util.Arrays;
 
 /**
- * Given an integer array nums, return the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle.
+ * Given an integer array nums, return the number of triplets chosen from the array that can make triangles
+ * if we take them as side lengths of a triangle.
  *
  *
  *
@@ -35,39 +36,21 @@ public class No611 {
         Arrays.sort(nums);
 
         int result = 0;
-//        boolean firstTime = true;
 
-        for (int first = 0; first < nums.length - 2; first++) {
-            int third = first + 2;
-            for (int second = first + 1; second < nums.length - 1 && nums[first] != 0; second++) {
-//                if (firstTime) {
-//                    int target = nums[first] + nums[second];
-//                    third = binarySearch(nums, third, nums.length - 1, target);
-//                    firstTime = false;
-//                } else {
-                    while (third < nums.length && nums[first] + nums[second] > nums[third]) {
-                        third++;
-                    }
-//                }
+        for (int third = nums.length - 1; third >= 0; third--) {
+            int first = 0;
+            int second = third - 1;
 
-                result += third - second - 1;
+            while (first < second) {
+                if (nums[first] + nums[second] > nums[third]) {
+                    result += second - first;
+                    second--;
+                } else {
+                    first++;
+                }
             }
         }
 
         return result;
-    }
-
-    private int binarySearch(int[] nums, int start, int end, int target) {
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-
-            if (target > nums[mid]) {
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
-        }
-
-        return start;
     }
 }

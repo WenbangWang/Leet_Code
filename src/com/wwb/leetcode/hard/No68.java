@@ -1,8 +1,10 @@
 package com.wwb.leetcode.hard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
@@ -58,11 +60,7 @@ public class No68 {
 
             // last row or a single word consists a row
             if(last == length || slots == 0) {
-                for(int i = index; i < last; i++) {
-                    stringBuilder.append(words[i]).append(" ");
-                }
-
-                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                stringBuilder.append(Arrays.stream(words, index, last).collect(Collectors.joining(" ")));
 
                 stringBuilder.append(" ".repeat(maxWidth - stringBuilder.length()));
             } else {

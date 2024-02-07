@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list, so that the concatenation of the two words words[i] + words[j] is a palindrome.
+ * Given a list of unique words, return all the pairs of the distinct indices (i, j) in the given list,
+ * so that the concatenation of the two words words[i] + words[j] is a palindrome.
  *
  *
  *
@@ -113,7 +114,7 @@ public class No336 {
             String word = words[i];
             String reversedWord = new StringBuilder(word).reverse().toString();
             TrieNode currentTrieLevel = trie;
-            for (int j = 0; j < word.length(); j++) {
+            for (int j = 0; j < reversedWord.length(); j++) {
                 // current word starts with a palindrome end at current position
                 if (hasPalindromeRemaining(reversedWord, j)) {
                     currentTrieLevel.palindromePrefixRemaining.add(i);

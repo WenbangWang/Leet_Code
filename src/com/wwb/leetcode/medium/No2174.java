@@ -1,5 +1,10 @@
 package com.wwb.leetcode.medium;
 
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
+
 /**
  * You are given a 0-indexed m x n binary matrix grid.
  * <p>
@@ -51,6 +56,10 @@ package com.wwb.leetcode.medium;
 public class No2174 {
     // O(MN^max(M, N))
     public int removeOnes(int[][] grid) {
+        return solution1(grid);
+    }
+
+    private int solution1(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
         int minFlips = Integer.MAX_VALUE;
@@ -83,5 +92,68 @@ public class No2174 {
             }
         }
         return (minFlips == Integer.MAX_VALUE) ? 0 : minFlips;
+    }
+
+    private int solution2(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int state = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    state |= encodeToBitMask(grid, i, j);
+                }
+            }
+        }
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        Set<Integer> visited = new HashSet<>();
+        int result = 0;
+        queue.offer(state);
+        visited.add(state);
+
+        while (!queue.isEmpty()) {
+            for (int k = 0; k < queue.size(); k++) {
+                state = queue.poll();
+
+                if (state == 0) {
+                    return result;
+                }
+
+                for (int i = 0; i < m; i++) {
+                    for (int j = 0; j < n; j++) {
+                        if (grid[i][j] == 0) {
+                            continue;
+                        }
+
+                        int nextState = state;
+
+                        for (int row = 0; row < m; row++) {
+                            // ~ is to zero out current row/col
+                            nextState &= ~(encodeToBitMask(grid, row, j));
+                        }
+
+                        for (int col = 0; col < n; col++) {
+                            nextState &= ~(encodeToBitMask(grid, i, col));
+                        }
+
+                        if (!visited.add(nextState)) {
+                            queue.offer(nextState);
+                        }
+                    }
+                }
+            }
+
+            result++;
+        }
+
+        return -1;
+    }
+
+    private int encodeToBitMask(int[][] grid, int i, int j) {
+        int n = grid[0].length;
+
+        return 1 << (i * n + j);
     }
 }
