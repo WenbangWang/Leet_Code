@@ -2,12 +2,11 @@ package com.wwb.leetcode.other;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RoundRobinTournament {
     static List<List<Integer>> arrange(int numberOfTeams) {
-        List<Integer> teams = IntStream.range(2, numberOfTeams + 1).boxed().collect(Collectors.toList());
+        List<Integer> teams = IntStream.range(2, numberOfTeams + 1).boxed().toList();
         List<List<Integer>> arrange = new ArrayList<>(numberOfTeams);
 
         for (int i = 0; i < numberOfTeams; i++) {

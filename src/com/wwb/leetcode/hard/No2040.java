@@ -64,25 +64,26 @@ public class No2040 {
     }
 
     private long countNumbersSmallerThanOrEqualTo(long target, int[] nums1, int[] nums2) {
-        boolean isFirstArrayShorter = nums1.length < nums2.length;
-        int[] shorterArray = isFirstArrayShorter ? nums1 : nums2;
-        int[] longerArray = isFirstArrayShorter ? nums2 : nums1;
+        if (nums1.length > nums2.length) {
+            return countNumbersSmallerThanOrEqualTo(target, nums2, nums1);
+        }
+
         long count = 0;
 
-        for (int num : shorterArray) {
+        for (int num : nums1) {
             if (num > 0) {
                 // when num is positive, the product is in ascending order
-                count += binarySearch(longerArray, num, target);
+                count += binarySearch(nums2, num, target);
             } else if (num < 0) {
                 // when num is negative, the product is in descending order
                 // hence we use the right part of the array to indicate
                 // the count of numbers smaller than or equal to target
-                count += longerArray.length - binarySearch(longerArray, num, target);
+                count += nums2.length - binarySearch(nums2, num, target);
             } else if (target >= 0) {
                 // when num is ZERO and current target is non-negative
                 // all products from ZERO are ZEROs hence they should
                 // be all smaller than or equal to a non-negative number
-                count += longerArray.length;
+                count += nums2.length;
             }
         }
 

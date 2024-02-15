@@ -2,8 +2,8 @@ package com.wwb.leetcode.medium;
 
 import com.wwb.leetcode.utils.TreeNode;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
  * Serialization is converting a data structure or object into a sequence of bits
@@ -45,15 +45,13 @@ public class No449 {
 
         // Decodes your encoded data to tree.
         public TreeNode deserialize(String data) {
-            List<Integer> values = preorderDeserialize(data);
+            Queue<Integer> values = preorderDeserialize(data);
 
-            var result = deserialize(values, 0, values.size() - 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-
-            return result == null ? null : result.node;
+            return deserialize(values,Integer.MIN_VALUE, Integer.MAX_VALUE);
         }
 
-        private List<Integer> preorderDeserialize(String data) {
-            List<Integer> result = new ArrayList<>();
+        private Queue<Integer> preorderDeserialize(String data) {
+            Queue<Integer> result = new ArrayDeque<>();
 
             for (int i = 0; i < data.length(); i += 2) {
                 result.add(byteStringToInt(data.substring(i, i + 2)));
@@ -74,42 +72,25 @@ public class No449 {
             return result;
         }
 
-        private Pair deserialize(List<Integer> values, int start, int end, int min, int max) {
-            if (start > end) {
+        private TreeNode deserialize(Queue<Integer> values, int min, int max) {
+            if (values.isEmpty()) {
                 return null;
             }
 
-            if (values.get(start) == null) {
+            int num = values.peek();
+
+            if (num > max || num < min) {
                 return null;
             }
 
-            if (values.get(start) > max) {
-                return new Pair(start, null);
-            }
+            num = values.poll();
 
-            if (values.get(start) < min) {
-                return new Pair(start, null);
-            }
+            TreeNode node = new TreeNode(num);
 
-            TreeNode node = new TreeNode(values.get(start));
+            node.left = deserialize(values, min, num);
+            node.right = deserialize(values, num, max);
 
-            var left = deserialize(values, start + 1, end, min, node.val);
-
-            if (left == null) {
-                return new Pair(values.size(), node);
-            }
-
-            node.left = left.node;
-
-            var right = deserialize(values, left.nextIndex, end, node.val, max);
-
-            if (right == null) {
-                return new Pair(values.size(), node);
-            }
-
-            node.right = right.node;
-
-            return new Pair(right.nextIndex, node);
+            return node;
         }
 
         private String intToByteString(int value) {
@@ -131,16 +112,6 @@ public class No449 {
             }
 
             return result;
-        }
-
-        private class Pair {
-            TreeNode node;
-            int nextIndex;
-
-            Pair(int nextIndex, TreeNode node) {
-                this.nextIndex = nextIndex;
-                this.node = node;
-            }
         }
     }
 

@@ -69,6 +69,24 @@ public class No20 {
         return stack.isEmpty();
     }
 
+    private boolean solution3(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                stack.push(')');
+            } else if (c == '{') {
+                stack.push('}');
+            } else if (c == '[') {
+                stack.push(']');
+            } else if (stack.isEmpty() || stack.pop() != c) {
+                return false;
+            }
+        }
+
+        return stack.isEmpty();
+    }
+
     private boolean isLeftRoundParen(char c) {
         return c == '(';
     }

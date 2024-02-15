@@ -1,4 +1,4 @@
-package com.wwb.leetcode.utils;
+package com.wwb.leetcode.other;
 
 import java.util.Random;
 import java.util.UUID;

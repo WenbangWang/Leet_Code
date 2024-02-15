@@ -1,7 +1,6 @@
 package com.wwb.leetcode.medium;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class No46 {
     private List<List<Integer>> getPerm(int[] nums, int level) {
         List<List<Integer>> perms = new LinkedList<>();
         if(level == nums.length - 1) {
-            perms.add(Arrays.asList(nums[level]));
+            perms.add(List.of(nums[level]));
             return perms;
         }
 

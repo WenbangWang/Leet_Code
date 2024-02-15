@@ -12,17 +12,30 @@ import java.util.*;
 public class No47 {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
+        return solution1(nums);
+    }
+
+    private List<List<Integer>> solution1(int[] nums) {
         if(nums == null || nums.length == 0) {
             return Collections.emptyList();
         }
 
-        return permuteUnique(nums, 0, new HashSet<String>());
+        return permuteUnique(nums, 0, new HashSet<>());
+    }
+
+    private List<List<Integer>> solution2(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        Arrays.sort(nums);
+        backtrack(new ArrayList<>(), result, nums, new boolean[nums.length]);
+
+        return result;
     }
 
     private List<List<Integer>> permuteUnique(int[] nums, int level, Set<String> set) {
         List<List<Integer>> result = new ArrayList<>();
         if(nums.length == level) {
-            result.add(new ArrayList<Integer>());
+            result.add(new ArrayList<>());
             return result;
         }
 
@@ -40,5 +53,28 @@ public class No47 {
         }
 
         return result;
+    }
+
+    private void backtrack(List<Integer> current, List<List<Integer>> result, int[] nums, boolean[] visited) {
+        if (current.size() == nums.length) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
+                continue;
+            }
+
+            if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
+                continue;
+            }
+
+            visited[i] = true;
+            current.add(nums[i]);
+            backtrack(current, result, nums, visited);
+            current.remove(current.size() - 1);
+            visited[i] = false;
+        }
     }
 }

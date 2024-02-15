@@ -9,13 +9,6 @@ import java.util.Stack;
  * The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
  */
 public class No20 {
-
-    public static void main(String[] args) {
-        No20 no20 = new No20();
-
-        System.out.println(no20.isValid("([])"));
-    }
-
     public boolean isValid(String s) {
         if(s == null || s.length() == 0) {
             return true;

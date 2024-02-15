@@ -54,7 +54,7 @@ public class No158 {
         }
     }
 
-    private void copyInto(char [] buf, int[] pointer, int numberOfCharsNeeded) {
+    private void copyInto(char[] buf, int[] pointer, int numberOfCharsNeeded) {
         while (pointer[0] < numberOfCharsNeeded && this.tempBufferPointer < this.numberOfCharactersRead) {
             buf[pointer[0]++] = this.tempBuffer[this.tempBufferPointer++];
         }

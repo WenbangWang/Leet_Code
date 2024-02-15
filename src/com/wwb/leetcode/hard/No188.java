@@ -21,11 +21,14 @@ public class No188 {
         int[][] dp = new int[k + 1][length];
 
         for (int i = 1; i <= k; i++) {
-            int tmpMax = -prices[0];
+            int currentHoldAtHand = -prices[0];
 
             for (int j = 1; j < length; j++) {
-                dp[i][j] = Math.max(dp[i][j - 1], prices[j] + tmpMax);
-                tmpMax =  Math.max(tmpMax, dp[i - 1][j - 1] - prices[j]);
+                // we either keep the profit as is or sell at current price prices[j]
+                dp[i][j] = Math.max(dp[i][j - 1], prices[j] + currentHoldAtHand);
+                // Keep holding whatever we have or get profit from previous transaction (dp[i - 1][j - 1])
+                // and buy at current price prices[j]
+                currentHoldAtHand =  Math.max(currentHoldAtHand, dp[i - 1][j - 1] - prices[j]);
             }
         }
 

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class main {
 
     public static void main(String[] args) {
+        System.out.println(false || true && false);
     }
 
     private static class Task implements Delayed {

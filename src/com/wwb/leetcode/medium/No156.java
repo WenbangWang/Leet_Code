@@ -11,7 +11,8 @@ import com.wwb.leetcode.utils.TreeNode;
  * The original root becomes the new right child.
  * The original right child becomes the new left child.
  *
- * The mentioned steps are done level by level. It is guaranteed that every right node has a sibling (a left node with the same parent) and has no children.
+ * The mentioned steps are done level by level.
+ * It is guaranteed that every right node has a sibling (a left node with the same parent) and has no children.
  *
  *
  *

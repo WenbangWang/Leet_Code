@@ -54,7 +54,7 @@ import java.util.Set;
  * grid[i][j] is either 0 or 1.
  */
 public class No2174 {
-    // O(MN^max(M, N))
+    // O(2^MN * MN^max(M, N))
     public int removeOnes(int[][] grid) {
         return solution1(grid);
     }
@@ -114,7 +114,8 @@ public class No2174 {
         visited.add(state);
 
         while (!queue.isEmpty()) {
-            for (int k = 0; k < queue.size(); k++) {
+            int size = queue.size();
+            for (int k = 0; k < size; k++) {
                 state = queue.poll();
 
                 if (state == 0) {
@@ -138,7 +139,7 @@ public class No2174 {
                             nextState &= ~(encodeToBitMask(grid, i, col));
                         }
 
-                        if (!visited.add(nextState)) {
+                        if (visited.add(nextState)) {
                             queue.offer(nextState);
                         }
                     }
