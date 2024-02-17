@@ -56,7 +56,7 @@ public class No416 {
                 } else {
                     // we could either include the current num to form the current subset sum (j)
                     // or not include.
-                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - num];
+                    dp[i][j] = dp[i - 1][j - num] || dp[i - 1][j];
                 }
             }
         }

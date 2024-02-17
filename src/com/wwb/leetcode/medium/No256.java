@@ -66,7 +66,7 @@ public class No256 {
             int[] currentCost = Arrays.copyOf(dp, dp.length);
 
             for (Color color : Color.values()) {
-                currentCost[color.ordinal()] = getPreviousMinCost(color, house, dp) + costs[house][color.ordinal()];
+                currentCost[color.ordinal()] = getPreviousMinCost(color, dp) + costs[house][color.ordinal()];
             }
 
             dp = currentCost;
@@ -95,11 +95,10 @@ public class No256 {
                 dp[currentHouse - 1][Color.RED.ordinal()],
                 dp[currentHouse - 1][Color.BLUE.ordinal()]
             );
-            default -> 0;
         };
     }
 
-    private int getPreviousMinCost(Color currentColor, int currentHouse, int[] dp) {
+    private int getPreviousMinCost(Color currentColor, int[] dp) {
         return switch (currentColor) {
             case RED -> Math.min(
                 dp[Color.BLUE.ordinal()],
@@ -113,7 +112,6 @@ public class No256 {
                 dp[Color.RED.ordinal()],
                 dp[Color.BLUE.ordinal()]
             );
-            default -> 0;
         };
     }
 

@@ -14,6 +14,7 @@ import java.util.Set;
  */
 public class No139 {
 
+    // O(n^3)
     public boolean wordBreak(String s, Set<String> wordDict) {
         if(s == null) {
             return false;
@@ -34,6 +35,7 @@ public class No139 {
         return results[length];
     }
 
+    // O(2^n)
     private boolean solution2(String s, Set<String> wordDict) {
         if (s == null) {
             return false;

@@ -1,9 +1,9 @@
 package com.wwb.leetcode.hard;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 
 /**
  * Design a data structure to store the strings' count with the ability to
@@ -52,34 +52,65 @@ import java.util.function.Function;
  * At most 5 * 10^4 calls will be made to inc, dec, getMaxKey, and getMinKey.
  */
 public class No432 {
-    private static class AllOne {
-        private Map<Integer, KeyNode> keysGroupByCount;
-        private Map<String, Integer> countGroupByKey;
-        private KeyNode head;
-        private KeyNode tail;
+    public static class AllOne {
+        private Map<String, Node> keyToNode;
+        private Node head;
+        private Node tail;
 
 
         public AllOne() {
-            this.head = new KeyNode(-1);
-            this.tail = new KeyNode(-1);
-            this.keysGroupByCount = new HashMap<>();
-            this.countGroupByKey = new HashMap<>();
+            this.head = new Node(0);
+            this.tail = new Node(0);
+            this.keyToNode = new HashMap<>();
 
             this.head.next = this.tail;
             this.tail.pre = this.head;
         }
 
         public void inc(String key) {
-            if (countGroupByKey.containsKey(key)) {
-                updateKeyWhenExists(key, 1, node -> node);
+            Node node = this.keyToNode.getOrDefault(key, this.head);
+
+            node.keys.remove(key);
+            Node nextNode;
+
+            if (node.next == this.tail || node.next.count != node.count + 1) {
+                nextNode = new Node(node.count + 1);
+                nextNode.keys.add(key);
+
+                insertAfter(node, nextNode);
             } else {
-                updateMapsWithNewCount(key, n -> this.head, null, 1);
+                nextNode = node.next;
+                nextNode.keys.add(key);
             }
+
+            detachOldNodeIfNeeded(node);
+            this.keyToNode.put(key, nextNode);
         }
 
         public void dec(String key) {
-            if (countGroupByKey.containsKey(key)) {
-                updateKeyWhenExists(key, -1, node -> node.pre);
+            if (this.keyToNode.containsKey(key)) {
+                Node node = this.keyToNode.get(key);
+
+                node.keys.remove(key);
+
+                if (node.count == 1) {
+                    this.keyToNode.remove(key);
+                } else {
+                    Node preNode;
+                    if (node.pre == this.head || node.pre.count != node.count - 1) {
+                        preNode = new Node(node.count - 1);
+                        preNode.keys.add(key);
+
+                        insertBefore(node, preNode);
+                    } else {
+                        preNode = node.pre;
+                        preNode.keys.add(key);
+                    }
+
+                    this.keyToNode.put(key, preNode);
+                }
+
+                detachOldNodeIfNeeded(node);
             }
         }
 
@@ -91,60 +122,37 @@ public class No432 {
             return this.head.next == this.tail ? "" : this.head.next.keys.iterator().next();
         }
 
-        private void updateKeyWhenExists(String key, int delta, Function<KeyNode, KeyNode> newNodeInsertionFunc) {
-            var oldNode = keysGroupByCount.get(countGroupByKey.get(key));
-            int newCount = oldNode.count + delta;
-
-            updateMapsWithNewCount(key, newNodeInsertionFunc, oldNode, newCount);
-
-
-            oldNode.keys.remove(key);
-            detachOldNodeIfNeeded(oldNode);
+        private void insertAfter(Node node, Node newNode) {
+            newNode.pre = node;
+            newNode.next = node.next;
+            node.next.pre = newNode;
+            node.next = newNode;
         }
 
-        private void insertAfter(KeyNode keyNode, KeyNode newKeyNode) {
-            newKeyNode.pre = keyNode;
-            newKeyNode.next = keyNode.next;
-            keyNode.next.pre = newKeyNode;
-            keyNode.next = newKeyNode;
+        private void insertBefore(Node node, Node newNode) {
+            newNode.next = node;
+            newNode.pre = node.pre;
+            node.pre.next = newNode;
+            node.pre = newNode;
         }
 
-        private void detachOldNodeIfNeeded(KeyNode oldNode) {
-            if (oldNode.keys.isEmpty()) {
+        private void detachOldNodeIfNeeded(Node oldNode) {
+            if (oldNode != this.head && oldNode.keys.isEmpty()) {
                 oldNode.pre.next = oldNode.next;
                 oldNode.next.pre = oldNode.pre;
                 oldNode.pre = null;
                 oldNode.next = null;
-
-                keysGroupByCount.remove(oldNode.count);
             }
         }
 
-        private void updateMapsWithNewCount(String key, Function<KeyNode, KeyNode> newNodeInsertionFunc, KeyNode keyNode, int newCount) {
-            if (newCount == 0) {
-                countGroupByKey.remove(key);
-            } else {
-                keysGroupByCount.computeIfAbsent(newCount, c -> {
-                    var newKeyNode = new KeyNode(c);
-                    insertAfter(newNodeInsertionFunc.apply(keyNode), newKeyNode);
-
-                    return newKeyNode;
-                });
-
-                keysGroupByCount.get(newCount).keys.add(key);
-                countGroupByKey.put(key, newCount);
-            }
-        }
-
-
-        private static class KeyNode {
+        private static class Node {
             int count;
-            KeyNode pre;
-            KeyNode next;
-            LinkedHashSet<String> keys;
+            Node pre;
+            Node next;
+            Set<String> keys;
 
-            KeyNode(int count) {
-                this.keys = new LinkedHashSet<>();
+            Node(int count) {
+                this.keys = new HashSet<>();
                 this.count = count;
             }
         }

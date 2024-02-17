@@ -84,7 +84,7 @@ public class No605 {
 
         while (i++ < flowerBed.length) {
             if (flowerBed[i] != 0) {
-                return result;
+                break;
             }
 
             result++;

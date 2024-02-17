@@ -35,21 +35,21 @@ public class No81 {
                 }
             } else {
                 if (nums[mid] == nums[end]) {
-                    boolean flag = true;
+                    boolean allTheSame = true;
 
                     for (int i = 1; mid - i >= start && mid + i <= end; i++) {
                         if (nums[mid] != nums[mid - i]) {
                             end = mid - i;
-                            flag = false;
+                            allTheSame = false;
                             break;
                         } else if (nums[mid] != nums[mid + i]) {
                             start = mid + i;
-                            flag = false;
+                            allTheSame = false;
                             break;
                         }
                     }
 
-                    if (flag) {
+                    if (allTheSame) {
                         return false;
                     }
                 } else {

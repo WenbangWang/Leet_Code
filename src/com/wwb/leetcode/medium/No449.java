@@ -95,7 +95,7 @@ public class No449 {
 
         private String intToByteString(int value) {
             char[] bytes = new char[2];
-            int mask = (2 << 16) - 1;
+            int mask = (1 << 16) - 1;
 
             for (int i = 1; i >= 0; i--) {
                 bytes[1 - i] = (char) ((value >> (16 * i)) & mask);

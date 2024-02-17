@@ -18,7 +18,7 @@ import java.util.Stack;
 public class No227 {
 
     public int calculate(String s) {
-        if(s == null || s.length() == 0) {
+        if(s == null || s.isEmpty()) {
             return 0;
         }
 
@@ -31,8 +31,7 @@ public class No227 {
             char c = s.charAt(i);
             if(Character.isDigit(c)) {
                 number = 10 * number + (c - '0');
-            }
-            if(!Character.isDigit(c) && c != ' ' || i == length - 1) {
+            } else if(c != ' ' || i == length - 1) {
                 if(lastSign == '-') {
                     stack.push(-number);
                 } else if(lastSign == '+') {

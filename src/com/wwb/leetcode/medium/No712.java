@@ -43,7 +43,7 @@ public class No712 {
             dp[i][0] = dp[i - 1][0] + s1.charAt(i - 1);
         }
 
-        for(int j = 1; j <= n ; j++)     {
+        for(int j = 1; j <= n ; j++) {
             // base case filling up
             dp[0][j] = dp[0][j - 1] + s2.charAt(j - 1);
         }
@@ -52,8 +52,7 @@ public class No712 {
             for(int j = 1 ; j <= n ; j++) {
                 if(s1.charAt(i - 1) == s2.charAt(j - 1)) {
                     dp[i][j] = dp[i - 1][j - 1];
-                }
-                else {
+                } else {
                     dp[i][j] = Math.min(dp[i - 1][j] + s1.charAt(i - 1), dp[i][j - 1] + s2.charAt(j - 1));
                 }
             }
