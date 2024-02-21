@@ -75,15 +75,14 @@ public class No432 {
 
             if (node.next == this.tail || node.next.count != node.count + 1) {
                 nextNode = new Node(node.count + 1);
-                nextNode.keys.add(key);
 
                 insertAfter(node, nextNode);
             } else {
                 nextNode = node.next;
-                nextNode.keys.add(key);
             }
 
             detachOldNodeIfNeeded(node);
+            nextNode.keys.add(key);
             this.keyToNode.put(key, nextNode);
         }
 
@@ -99,14 +98,13 @@ public class No432 {
                     Node preNode;
                     if (node.pre == this.head || node.pre.count != node.count - 1) {
                         preNode = new Node(node.count - 1);
-                        preNode.keys.add(key);
 
                         insertBefore(node, preNode);
                     } else {
                         preNode = node.pre;
-                        preNode.keys.add(key);
                     }
 
+                    preNode.keys.add(key);
                     this.keyToNode.put(key, preNode);
                 }
 

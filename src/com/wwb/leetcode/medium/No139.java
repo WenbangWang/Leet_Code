@@ -24,7 +24,7 @@ public class No139 {
         results[0] = true;
 
         for(int i = 1; i <= length; i++) {
-            for(int j = i - 1; j >= 0; j--) {
+            for(int j = 0; j < i; j++) {
                 if(results[j] && wordDict.contains(s.substring(j, i))) {
                     results[i] = true;
                     break;
@@ -47,7 +47,7 @@ public class No139 {
 
         for (int i = 1; i < s.length(); i++) {
             String firstHalf = s.substring(0, i);
-            String secondHalf = s.substring(i, s.length());
+            String secondHalf = s.substring(i);
 
             if (wordDict.contains(firstHalf) && solution2(secondHalf, wordDict)) {
                 return true;

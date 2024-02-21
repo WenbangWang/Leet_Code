@@ -47,10 +47,6 @@ public class No227 {
             }
         }
 
-        for(int n : stack) {
-            result += n;
-        }
-
-        return result;
+        return stack.stream().reduce(Integer::sum).orElse(0);
     }
 }

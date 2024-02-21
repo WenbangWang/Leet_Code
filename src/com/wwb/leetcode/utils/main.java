@@ -1,7 +1,5 @@
 package com.wwb.leetcode.utils;
 
-import com.wwb.leetcode.medium.No1197;
-
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.DelayQueue;
@@ -11,10 +9,6 @@ import java.util.concurrent.TimeUnit;
 public class main {
 
     public static void main(String[] args) {
-        var a = new No1197();
-
-        System.out.println(a.minKnightMoves(5,5));
-        System.out.println(a.solution2(5,5));
     }
 
     private static class Task implements Delayed {

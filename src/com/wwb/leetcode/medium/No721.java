@@ -127,6 +127,10 @@ public class No721 {
                     var parent1 = find(parents, lastIndex);
                     var parent2 = find(parents, i);
 
+                    if (parent1 == parent2) {
+                        continue;
+                    }
+
                     if (size[parent1] > size[parent2]) {
                         size[parent1] += size[parent2];
                         parents[parent2] = parent1;

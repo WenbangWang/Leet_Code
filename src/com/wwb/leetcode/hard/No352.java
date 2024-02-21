@@ -76,14 +76,17 @@ public class No352 {
         }
 
         public int[][] getIntervals() {
-            int[][] res = new int[map.size()][2];
+//            int[][] res = new int[map.size()][2];
+//
+//            int i = 0;
+//            for (var entry : this.map.entrySet()) {
+//                res[i++] = new int[]{entry.getKey(), entry.getValue()};
+//            }
 
-            int i = 0;
-            for (var entry : this.map.entrySet()) {
-                res[i++] = new int[]{entry.getKey(), entry.getValue()};
-            }
-
-            return res;
+            return this.map.entrySet()
+                .stream()
+                .map(entry -> new int[]{entry.getKey(), entry.getValue()})
+                .toArray(n -> new int[n][2]);
         }
     }
 }

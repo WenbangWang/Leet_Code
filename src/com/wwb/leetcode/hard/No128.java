@@ -19,20 +19,20 @@ public class No128 {
             return 0;
         }
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> numToCount = new HashMap<>();
         int result = 0;
 
         for(int num : nums) {
-            if(!map.containsKey(num)) {
-                int left = map.getOrDefault(num - 1, 0);
-                int right = map.getOrDefault(num + 1, 0);
-                int sum = left + right + 1;
+            if(!numToCount.containsKey(num)) {
+                int leftCount = numToCount.getOrDefault(num - 1, 0);
+                int rightCount = numToCount.getOrDefault(num + 1, 0);
+                int sum = leftCount + rightCount + 1;
 
                 result = Math.max(result, sum);
 
-                map.put(num, sum);
-                map.put(num - left, sum);
-                map.put(num + right, sum);
+                numToCount.put(num, sum);
+                numToCount.put(num - leftCount, sum);
+                numToCount.put(num + rightCount, sum);
             }
         }
 

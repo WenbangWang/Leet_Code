@@ -47,7 +47,7 @@ public class No449 {
         public TreeNode deserialize(String data) {
             Queue<Integer> values = preorderDeserialize(data);
 
-            return deserialize(values,Integer.MIN_VALUE, Integer.MAX_VALUE);
+            return deserialize(values, Integer.MIN_VALUE, Integer.MAX_VALUE);
         }
 
         private Queue<Integer> preorderDeserialize(String data) {

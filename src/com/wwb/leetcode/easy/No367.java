@@ -32,11 +32,11 @@ public class No367 {
 
         while (start <= end) {
             int mid = start + (end - start) / 2;
-            int dividend = num / mid;
+            int divisor = num / mid;
 
-            if (dividend == mid) {
-                return dividend * mid == num;
-            } else if (dividend > mid) {
+            if (divisor == mid) {
+                return divisor * mid == num;
+            } else if (divisor > mid) {
                 start = mid + 1;
             } else {
                 end = mid - 1;

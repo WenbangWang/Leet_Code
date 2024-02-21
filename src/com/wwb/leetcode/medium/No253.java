@@ -22,7 +22,7 @@ public class No253 {
         }
 
         Arrays.sort(intervals, Comparator.comparingInt(value -> value.start));
-        Queue<Interval> heap = new PriorityQueue<>(intervals.length, Comparator.comparingInt(value -> value.end));
+        Queue<Interval> heap = new PriorityQueue<>(Comparator.comparingInt(value -> value.end));
 
         heap.offer(intervals[0]);
 
