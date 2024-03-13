@@ -59,7 +59,7 @@ public class No39 {
         return result;
     }
 
-    // O(2^T)
+    // O(2^T) WHERE T = TARGET / CANDIDATES[i]
     // https://leetcode.com/problems/combination-sum/solutions/1777569/full-explanation-with-state-space-tree-recursion-and-backtracking-well-explained-c/
     private List<List<Integer>> solution2(int[] candidates, int target) {
         List<List<List<Integer>>> dp = new ArrayList<>(target + 1);

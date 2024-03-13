@@ -94,6 +94,7 @@ public class No2174 {
         return (minFlips == Integer.MAX_VALUE) ? 0 : minFlips;
     }
 
+    // O((m*n) * 2^(m*n) * (m+n))
     private int solution2(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;

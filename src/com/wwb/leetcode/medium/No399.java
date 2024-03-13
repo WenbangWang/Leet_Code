@@ -26,26 +26,26 @@ import java.util.*;
  */
 public class No399 {
     public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        Map<String, List<String>> pairs = new HashMap<>();
-        Map<String, List<Double>> valuesPair = new HashMap<>();
+        Map<String, List<String>> dividendToDivisors = new HashMap<>();
+        Map<String, List<Double>> dividendToValues = new HashMap<>();
         for (int i = 0; i < equations.size(); i++) {
             var equation = equations.get(i);
 
-            pairs.putIfAbsent(equation.get(0), new ArrayList<>());
-            valuesPair.putIfAbsent(equation.get(0), new ArrayList<>());
-            pairs.putIfAbsent(equation.get(1), new ArrayList<>());
-            valuesPair.putIfAbsent(equation.get(1), new ArrayList<>());
+            dividendToDivisors.putIfAbsent(equation.get(0), new ArrayList<>());
+            dividendToValues.putIfAbsent(equation.get(0), new ArrayList<>());
+            dividendToDivisors.putIfAbsent(equation.get(1), new ArrayList<>());
+            dividendToValues.putIfAbsent(equation.get(1), new ArrayList<>());
 
-            pairs.get(equation.get(0)).add(equation.get(1));
-            pairs.get(equation.get(1)).add(equation.get(0));
-            valuesPair.get(equation.get(0)).add(values[i]);
-            valuesPair.get(equation.get(1)).add(1/values[i]);
+            dividendToDivisors.get(equation.get(0)).add(equation.get(1));
+            dividendToDivisors.get(equation.get(1)).add(equation.get(0));
+            dividendToValues.get(equation.get(0)).add(values[i]);
+            dividendToValues.get(equation.get(1)).add(1/values[i]);
         }
 
         double[] results = new double[queries.size()];
         for (int i = 0; i < queries.size(); i++) {
             var query = queries.get(i);
-            results[i] = dfs(query.get(0), query.get(1), pairs, valuesPair, new HashSet<>(), 1.0).orElse(-1.0);
+            results[i] = dfs(query.get(0), query.get(1), dividendToDivisors, dividendToValues, new HashSet<>(), 1.0).orElse(-1.0);
         }
         return results;
     }

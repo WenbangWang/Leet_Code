@@ -120,7 +120,7 @@ public class No642 {
             return res;
         }
 
-        class TrieNode {
+        static class TrieNode {
             Map<Character, TrieNode> children;
             Map<String, Integer> counts;
 
@@ -130,7 +130,7 @@ public class No642 {
             }
         }
 
-        class Pair {
+        static class Pair {
             String sentence;
             int count;
 

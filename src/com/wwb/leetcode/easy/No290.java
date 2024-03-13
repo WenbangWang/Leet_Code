@@ -29,23 +29,23 @@ public class No290 {
             return false;
         }
 
-        Map<Character, String> keyValueMap = new HashMap<>();
-        Map<String, Character> valueKeyMap = new HashMap<>();
+        Map<Character, String> patternToWord = new HashMap<>();
+        Map<String, Character> wordToPattern = new HashMap<>();
 
         for(int i = 0; i < words.length; i++) {
             String word = words[i];
-            char c = pattern.charAt(i);
+            char p = pattern.charAt(i);
 
-            if(keyValueMap.containsKey(c) && !keyValueMap.get(c).equals(word)) {
+            if(patternToWord.containsKey(p) && !patternToWord.get(p).equals(word)) {
                 return false;
             }
 
-            if(valueKeyMap.containsKey(word) && valueKeyMap.get(word) != c) {
+            if(wordToPattern.containsKey(word) && wordToPattern.get(word) != p) {
                 return false;
             }
 
-            keyValueMap.put(c, word);
-            valueKeyMap.put(word, c);
+            patternToWord.put(p, word);
+            wordToPattern.put(word, p);
         }
 
         return true;

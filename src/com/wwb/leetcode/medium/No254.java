@@ -37,6 +37,7 @@ public class No254 {
         return result;
     }
 
+    // O(sqrt(n) * log(n))
     public void backtrack(List<List<Integer>> result, List<Integer> factors, int n, int start){
         var sqrt = Math.sqrt(n);
 

@@ -56,7 +56,7 @@ public class No68 {
                 last++;
             }
 
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder(maxWidth);
             int slots = last - index - 1;
 
             // last row or a single word consists a row

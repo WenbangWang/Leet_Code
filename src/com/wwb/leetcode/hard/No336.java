@@ -49,8 +49,8 @@ public class No336 {
         List<List<Integer>> result = new ArrayList<>();
 
         for (int i = 0; i < words.length; i++) {
-            for (int j = 0; j < words.length; j++) {
-                if (i != j && isPalindrome(words[i] + words[j])) {
+            for (int j = i + 1; j < words.length; j++) {
+                if (isPalindrome(words[i] + words[j])) {
                     result.add(Arrays.asList(i, j));
                 }
             }
