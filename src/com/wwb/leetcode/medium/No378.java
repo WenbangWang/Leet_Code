@@ -5,11 +5,12 @@ import java.util.Queue;
 
 /**
  * Given a n row n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
- *
+ * <p>
  * Note that it is the kth smallest element in the sorted order, not the kth distinct element.
- *
+ * <p>
  * Example:
  *
+ * <pre>
  * matrix = [
  *   [ 1,  5,  9],
  *   [10, 11, 13],
@@ -18,8 +19,11 @@ import java.util.Queue;
  * k = 8,
  *
  * return 13.
+ * </pre>
+ * <pre>
  * Note:
  * You may assume k is always valid, 1 ≤ k ≤ n2.
+ * </pre>
  */
 public class No378 {
     public int kthSmallest(int[][] matrix, int k) {
@@ -32,7 +36,7 @@ public class No378 {
         int numberOfColumns = matrix[0].length;
         int numberOfRows = matrix.length;
 
-        for (int column = 0; column < numberOfColumns; column++) {
+        for (int column = 0; column < Math.min(numberOfColumns, k); column++) {
             minHeap.offer(new Tuple(0, column, matrix[0][column]));
         }
 
@@ -60,11 +64,12 @@ public class No378 {
             this.value = value;
         }
 
-        public int compareTo (Tuple anotherTuple) {
+        public int compareTo(Tuple anotherTuple) {
             return Integer.compare(this.value, anotherTuple.value);
         }
     }
 
+    // O((M + N) * log(largest number in matrix))
     private int solution2(int[][] matrix, int k) {
         if (matrix == null || matrix[0] == null || matrix.length == 0 || matrix[0].length == 0) {
             return -1;

@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * Given a collection of intervals, merge all overlapping intervals.
- *
+ * <p>
  * For example,
  * Given [1,3],[2,6],[8,10],[15,18],
  * return [1,6],[8,10],[15,18].
@@ -14,7 +14,7 @@ import java.util.*;
 public class No56 {
 
     public List<Interval> merge(List<Interval> intervals) {
-        if(intervals == null || intervals.isEmpty()) {
+        if (intervals == null || intervals.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -24,8 +24,8 @@ public class No56 {
         int start = intervals.get(0).start;
         int end = intervals.get(0).end;
 
-        for(Interval interval : intervals) {
-            if(interval.start <= end) {
+        for (Interval interval : intervals) {
+            if (interval.start <= end) {
                 end = Math.max(end, interval.end);
             } else {
                 result.add(new Interval(start, end));

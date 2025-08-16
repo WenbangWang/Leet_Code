@@ -1,0 +1,92 @@
+https://www.1point3acres.com/bbs/thread-1137704-1-1.html
+
+Bank System。地里已经出现过的老题。~
+level1: 实现createAccount，deposit，pay method
+class BankSystemImpl :BankSystem{
+  bool createAccount(timestamp, customerId)
+  Int deposit(timestamp, customerId, amount)
+  Int pay(timestamp, sourceAccountId, targetAccountId, amount)
+} ...
+
+level 2:找top N activity. 根据deposit和pay的amount总和来算。PQ维护一个size N的最小堆即可。
+level 3:
+String transfer(timestamp, targetAccountId, amount) return transferId
+boolean accept(timestamp, accountId, transferId)
+transfer的时候hold source Account的钱，accept的时候真正转到target account。
+level 4: Merge Accounts
+mergeCustomers(oldId, newId)
+合并两个客户，要求保留各自的balance ,交易记录等。
+
+我一共做出了3个level，第4个level没时间了。前两个level基本15分钟就可以全部写完。我花太多时间在debug level3上了。其实是几个很小的bug。但要看它的test case自己算过才明白miss在哪儿了。
+1. transfer的时候有把amount从sourceAcc去除。accept的时候如果transaction expire了要把hold的钱补回sourceAccount
+2. accept成功的话，这个amount要加到activity amount里。不然level3 的topN的test case会报错
+3. 如果transaction expire了之后再deposit/pay，需要确保返回正确的amount -> deposit/pay都需要加一层处理expire transaction的逻辑。 - 这个debug了挺久因为它的test case太长了 有10个accounts 每个都各种操作，光看懂test就花了点时间。
+最后一题进去了但也来不及做了。
+
+https://www.1point3acres.com/bbs/thread-1137324-1-1.html
+
+第一题，两个数string形式相加求和，返回string总和。
+第二题，leetcode 528，但是输入是城市加人口的形式，随机选择一个城市，概率是根据人口除以总人口。
+
+
+https://www.1point3acres.com/bbs/thread-1137019-1-1.html
+
+Phone Interview:
+LC408 Valid Word Abbreviation, follow-up: “What if there are two abbreviations over one word?”
+
+LC528 Random Pick with Weight
+
+Onsite / Full Loop:
+
+Product Architecture 1:** Dropbox-style system design. 类似于 hello-interview Dropbox question。
+
+
+Coding Interview 1:
+
+
+LC227 Basic Calculator II。 知道最优解，但面试中卡在了代码验证上。面试官给了一些提示，错过了一个 if 语句的 edge case，但立刻修复了。
+
+LC670 Maximum Swap。 说了最优方法，写代码时有一些小 bug，但是边写边改。 用了一个 map 来存储 digit indices，并且从 9->0 循环来寻找 swap。面试官要求进一步优化，希望一旦没有更大的 digit 存在就提前退出。
+
+
+Coding Interview 2:
+
+
+LC88 Merge Two Sorted Arrays。解释了最优解法，写了代码。面试官以一种令人困惑的方式问 “did you miss anything?” 导致我添加了不必要的代码，然后意识到后又删除了。
+
+LC138 Copy List with Random Pointer。说了 2-pass hash map 的方法。面试官要求优化。一开始没明白，后来发现他想要 in-place single-pass 版本，即把新节点交错插入到原链表中。
+
+
+Behavioral:
+
+Project I’m proud of
+Dealing with ambiguity
+Growth mindset
+A boss I had issues with (or something similar)
+
+
+
+https://www.1point3acres.com/bbs/thread-1136919-1-1.html
+
+Onsite:
+
+[Medium] 给定一个 integer，最多交换两位数字，求能得到的最小的 integer。similar to 670
+[Hard] exp add ops (Leetcode 282)
+[Medium] insert into circular LL LC 708
+[Medium] diameter of n-ary tree (Leetcode 1522)
+
+
+Standard behavioral questions: conflicts, prioritization, sell yourself on biggest project. 准备好 STAR 方法的故事。
+
+Heavy hitters / Top K 问题。
+Follow up: 如果不需要 instantaneous results，该如何修改设计？
+
+
+Design ticket booking system，重点在于 atomic operations 等方面。
+
+一些建议:
+
+如果目标是 Meta，一定要刷题，疯狂刷题！至少要在最近 30 天/3 个月/6 个月内刷够 75 道题，并且把 Top 50 烂熟于心。最好能做到看到题目就能立刻写出最优解并且完整地讲解出来。
+Communication 很重要！就算代码写得飞快，如果不能清晰地表达你的思路，也很难通过面试。
+不要忽略 Behavioral 面试，准备好关于 conflict, priority 等常见问题的 STAR 方法的故事。
+System Design 方面，要多练习，能够流畅地讨论 trade-offs，不要因为某些资料上说某个方案是最优的就立刻选择它，要根据实际情况灵活变通。

@@ -4,23 +4,29 @@ import java.util.*;
 
 /**
  * There are a total of n courses you have to take, labeled from 0 to n - 1.
- *
+ * <p>
  * Some courses may have prerequisites, for example to take course 0 you have to first take course 1,
  * which is expressed as a pair: [0,1]
- *
+ * <p>
  * Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
- *
+ * <p>
  * For example:
  *
+ * <pre>
  * 2, [[1,0]]
  * There are a total of 2 courses to take. To take course 1 you should have finished course 0. So it is possible.
+ * </pre>
  *
+ * <pre>
  * 2, [[1,0],[0,1]]
  * There are a total of 2 courses to take. To take course 1 you should have finished course 0,
  * and to take course 0 you should also have finished course 1. So it is impossible.
+ * </pre>
  *
+ * <pre>
  * Note:
  * The input prerequisites is a graph represented by a list of edges, not adjacency matrices.
+ * </pre>
  */
 public class No207 {
 
@@ -30,36 +36,38 @@ public class No207 {
 
     private boolean solution1(int numCourses, int[][] prerequisites) {
         List<List<Integer>> graph = new ArrayList<>();
-        int[] degree = new int[numCourses];
+        int[] incomingDegree = new int[numCourses];
         int count = 0;
         Queue<Integer> queue = new LinkedList<>();
 
-        for(int i = 0; i < numCourses; i++) {
+        for (int i = 0; i < numCourses; i++) {
             graph.add(new ArrayList<>());
         }
 
-        for(int i = 0; i < prerequisites.length; i++) {
-            int prerequisite = prerequisites[i][1];
-            degree[prerequisite]++;
-            graph.get(prerequisites[i][0]).add(prerequisite);
+        for (int i = 0; i < prerequisites.length; i++) {
+            int parent = prerequisites[i][1];
+            int child = prerequisites[i][0];
+
+            incomingDegree[parent]++;
+            graph.get(child).add(parent);
         }
 
-        for(int i = 0; i < degree.length; i++) {
-            if(degree[i] == 0) {
+        for (int i = 0; i < incomingDegree.length; i++) {
+            if (incomingDegree[i] == 0) {
                 queue.add(i);
                 count++;
             }
         }
 
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             int course = queue.poll();
-            List<Integer> prerequisiteList = graph.get(course);
+            List<Integer> parents = graph.get(course);
 
-            for(int prerequisite : prerequisiteList) {
-                degree[prerequisite]--;
+            for (int parent : parents) {
+                incomingDegree[parent]--;
 
-                if(degree[prerequisite] == 0) {
-                    queue.add(prerequisite);
+                if (incomingDegree[parent] == 0) {
+                    queue.add(parent);
                     count++;
                 }
             }
@@ -72,16 +80,16 @@ public class No207 {
         List<List<Integer>> graph = new ArrayList<>();
         boolean[] visited = new boolean[numCourses];
 
-        for(int i = 0; i < numCourses; i++) {
+        for (int i = 0; i < numCourses; i++) {
             graph.add(new ArrayList<>());
         }
 
-        for(int i = 0; i < prerequisites.length; i++) {
+        for (int i = 0; i < prerequisites.length; i++) {
             graph.get(prerequisites[i][0]).add(prerequisites[i][1]);
         }
 
-        for(int i = 0; i < numCourses; i++) {
-            if(!dfs(graph, visited, i)) {
+        for (int i = 0; i < numCourses; i++) {
+            if (hasCircle(graph, visited, i)) {
                 return false;
             }
         }
@@ -93,7 +101,7 @@ public class No207 {
         int[] inDegrees = new int[numCourses];
         Map<Integer, List<Integer>> courseToDependents = new HashMap<>();
 
-        for(int[] p : prerequisites) {
+        for (int[] p : prerequisites) {
             inDegrees[p[0]]++;
             courseToDependents.putIfAbsent(p[1], new ArrayList<>());
             courseToDependents.get(p[1]).add(p[0]);
@@ -124,23 +132,23 @@ public class No207 {
         return numCourses == 0;
     }
 
-    private boolean dfs(List<List<Integer>> graph, boolean[] visited, int course) {
-        if(visited[course]) {
-            return false;
+    private boolean hasCircle(List<List<Integer>> graph, boolean[] visited, int course) {
+        if (visited[course]) {
+            return true;
         }
 
         visited[course] = true;
 
         List<Integer> prerequisiteList = graph.get(course);
 
-        for(int prerequisite: prerequisiteList) {
-            if(!dfs(graph, visited, prerequisite)) {
-                return false;
+        for (int prerequisite : prerequisiteList) {
+            if (hasCircle(graph, visited, prerequisite)) {
+                return true;
             }
         }
 
         visited[course] = false;
 
-        return true;
+        return false;
     }
 }

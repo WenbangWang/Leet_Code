@@ -1,16 +1,17 @@
 package com.wwb.leetcode.hard;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
  * Design and implement a data structure for Least Recently Used (LRU) cache.
  * It should support the following operations: get and set.
-
- get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
- set(key, value) - Set or insert the value if the key is not already present.
- When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+ * <p>
+ * get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+ * <p>
+ * set(key, value) - Set or insert the value if the key is not already present.
+ * <p>
+ * When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
  */
 public class No146 {
 
@@ -21,6 +22,7 @@ public class No146 {
         private Node head;
         private Node tail;
         private Map<Integer, Node> map;
+
         public LRUCache(int capacity) {
             this.head = new Node();
             this.tail = new Node();
@@ -35,7 +37,7 @@ public class No146 {
         public int get(int key) {
             Node node = this.map.get(key);
 
-            if(node == null) {
+            if (node == null) {
                 return -1;
             }
 
@@ -47,7 +49,7 @@ public class No146 {
         public void set(int key, int value) {
             Node node = this.map.get(key);
 
-            if(node == null) {
+            if (node == null) {
                 node = new Node();
                 node.key = key;
                 node.value = value;
@@ -56,7 +58,7 @@ public class No146 {
                 this.map.put(key, node);
                 this.addHead(node);
 
-                if(this.size > this.capacity) {
+                if (this.size > this.capacity) {
                     this.map.remove(this.tail.pre.key);
                     this.removeLast();
                     this.size--;

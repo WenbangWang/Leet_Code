@@ -6,6 +6,8 @@ package com.wwb.leetcode.medium;
  *
  * Integers in each row are sorted in ascending from left to right.
  * Integers in each column are sorted in ascending from top to bottom.
+ *
+ * <pre>
  * For example,
  *
  * Consider the following matrix:
@@ -20,6 +22,7 @@ package com.wwb.leetcode.medium;
  * Given target = 5, return true.
  *
  * Given target = 20, return false.
+ * </pre>
  */
 public class No240 {
 

@@ -10,14 +10,17 @@ import java.util.Queue;
 /**
  * Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei),
  * find the minimum number of conference rooms required.
+ * <p>
  *
+ * <pre>
  * For example,
  * Given [[0, 30],[5, 10],[15, 20]],
  * return 2.
+ * </pre>
  */
 public class No253 {
     public int minMeetingRooms(Interval[] intervals) {
-        if(intervals == null || intervals.length == 0) {
+        if (intervals == null || intervals.length == 0) {
             return 0;
         }
 
@@ -26,11 +29,11 @@ public class No253 {
 
         heap.offer(intervals[0]);
 
-        for(int i = 1; i < intervals.length; i++) {
+        for (int i = 1; i < intervals.length; i++) {
             Interval lastMeeting = heap.poll();
             Interval currentMeeting = intervals[i];
 
-            if(currentMeeting.start >= lastMeeting.end) {
+            if (currentMeeting.start >= lastMeeting.end) {
                 lastMeeting.end = currentMeeting.end;
             } else {
                 heap.offer(currentMeeting);

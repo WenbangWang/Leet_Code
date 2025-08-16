@@ -4,7 +4,9 @@ import java.util.*;
 
 /**
  * Given an array of strings, group anagrams together.
+ * <p>
  *
+ * <pre>
  * For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"],
  * Return:
  *
@@ -16,6 +18,7 @@ import java.util.*;
  * Note:
  * For the return value, each inner list's elements must follow the lexicographic order.
  * All inputs will be in lower-case.
+ * </pre>
  */
 public class No49 {
 

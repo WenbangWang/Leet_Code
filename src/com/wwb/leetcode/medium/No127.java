@@ -9,9 +9,11 @@ import java.util.Set;
 /**
  * Given two words (beginWord and endWord), and a dictionary,
  * find the length of shortest transformation sequence from beginWord to endWord, such that:
- *
+ * <p>
  * Only one letter can be changed at a time
  * Each intermediate word must exist in the dictionary
+ *
+ * <pre>
  * For example,
  *
  * Given:
@@ -25,12 +27,13 @@ import java.util.Set;
  * Return 0 if there is no such transformation sequence.
  * All words have the same length.
  * All words contain only lowercase alphabetic characters.
+ * </pre>
  */
 public class No127 {
 
     // O(M^2 * N) where M is the length of the word and N is the size of the list
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        if(beginWord == null || endWord == null || wordList == null || beginWord.isEmpty() || endWord.isEmpty()) {
+        if (beginWord == null || endWord == null || wordList == null || beginWord.isEmpty() || endWord.isEmpty()) {
             return 0;
         }
 
@@ -40,7 +43,7 @@ public class No127 {
 
         queue.add(beginWord);
 
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             step++;
             var size = queue.size();
 
@@ -49,18 +52,18 @@ public class No127 {
                 char[] currentWordArray = currentWord.toCharArray();
                 int currentWordLength = currentWordArray.length;
 
-                if(currentWord.equals(endWord)) {
+                if (currentWord.equals(endWord)) {
                     return step;
                 }
 
-                for(int j = 0; j < currentWordLength; j++) {
-                    for(char c = 'a'; c <= 'z'; c++) {
+                for (int j = 0; j < currentWordLength; j++) {
+                    for (char c = 'a'; c <= 'z'; c++) {
                         char tempChar = currentWordArray[j];
                         currentWordArray[j] = c;
                         String tempWord = new String(currentWordArray);
                         currentWordArray[j] = tempChar;
 
-                        if(wordDict.contains(tempWord)) {
+                        if (wordDict.contains(tempWord)) {
                             queue.add(tempWord);
                             wordDict.remove(tempWord);
                         }

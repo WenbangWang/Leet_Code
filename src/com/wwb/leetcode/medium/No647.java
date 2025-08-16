@@ -2,29 +2,36 @@ package com.wwb.leetcode.medium;
 
 /**
  * Given a string s, return the number of palindromic substrings in it.
- *
+ * <p>
  * A string is a palindrome when it reads the same backward as forward.
- *
+ * <p>
  * A substring is a contiguous sequence of characters within the string.
  *
  *
  *
+ * <pre>
  * Example 1:
  *
  * Input: s = "abc"
  * Output: 3
  * Explanation: Three palindromic strings: "a", "b", "c".
+ * </pre>
+ *
+ * <pre>
  * Example 2:
  *
  * Input: s = "aaa"
  * Output: 6
  * Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+ * </pre>
  *
  *
+ * <pre>
  * Constraints:
  *
  * 1 <= s.length <= 1000
  * s consists of lowercase English letters.
+ * </pre>
  */
 public class No647 {
     public int countSubstrings(String s) {
@@ -39,8 +46,10 @@ public class No647 {
         int result = 0;
 
         for (int i = 0; i < s.length(); i++) {
-            for (int lengthOfSubstring = 1; lengthOfSubstring <= s.length() && lengthOfSubstring + i <= s.length(); lengthOfSubstring++) {
-                if (isPalindrome(s, i, lengthOfSubstring + i)) {
+            for (int lengthOfSubstring = 1;
+                 lengthOfSubstring <= s.length() && lengthOfSubstring + i <= s.length();
+                 lengthOfSubstring++) {
+                if (isPalindrome(s, i, lengthOfSubstring + i - 1)) {
                     result++;
                 }
             }

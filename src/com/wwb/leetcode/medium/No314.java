@@ -6,12 +6,13 @@ import java.util.*;
 
 /**
  * Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
- *
+ * <p>
  * If two nodes are in the same row and column, the order should be from left to right.
- *
+ * <p>
  * Examples:
- *
+ * <p>
  * Given binary tree [3,9,20,null,null,15,7],
+ * <div>
  *   3
  *  /\
  * /  \
@@ -19,6 +20,7 @@ import java.util.*;
  *    /\
  *   /  \
  *  15   7
+ * </div>
  * return its vertical order traversal as:
  * [
  *   [9],
@@ -27,6 +29,8 @@ import java.util.*;
  *   [7]
  * ]
  * Given binary tree [3,9,8,4,0,1,7],
+ * <div>
+ * <p>
  *    3
  *   /\
  *  /  \
@@ -34,6 +38,7 @@ import java.util.*;
  *  /\  /\
  * /  \/  \
  * 4  01   7
+ * </div>
  * return its vertical order traversal as:
  * [
  *   [4],
@@ -64,7 +69,7 @@ import java.util.*;
  */
 public class No314 {
     public List<List<Integer>> verticalOrder(TreeNode root) {
-        if(root == null) {
+        if (root == null) {
             return Collections.emptyList();
         }
 
@@ -77,22 +82,22 @@ public class No314 {
         nodeQueue.add(root);
         columnQueue.add(0);
 
-        while(!nodeQueue.isEmpty()) {
+        while (!nodeQueue.isEmpty()) {
             TreeNode node = nodeQueue.poll();
             int column = columnQueue.poll();
 
-            if(!map.containsKey(column)) {
+            if (!map.containsKey(column)) {
                 map.put(column, new ArrayList<>());
             }
 
             map.get(column).add(node.val);
 
-            if(node.left != null) {
+            if (node.left != null) {
                 nodeQueue.add(node.left);
                 columnQueue.add(column - 1);
             }
 
-            if(node.right != null) {
+            if (node.right != null) {
                 nodeQueue.add(node.right);
                 columnQueue.add(column + 1);
             }

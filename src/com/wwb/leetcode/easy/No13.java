@@ -2,7 +2,7 @@ package com.wwb.leetcode.easy;
 
 /**
  * Given a roman numeral, convert it to an integer.
- *
+ * <p>
  * Input is guaranteed to be within the range from 1 to 3999.
  */
 public class No13 {
@@ -18,7 +18,7 @@ public class No13 {
 
         int sum = 0;
 
-        for(int length = s.length(), i = length - 1; i >= 0; i--) {
+        for (int length = s.length(), i = length - 1; i >= 0; i--) {
             char c = s.charAt(i);
 
             switch (c) {

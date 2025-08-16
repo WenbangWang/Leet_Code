@@ -8,35 +8,45 @@ import java.util.Queue;
 
 /**
  * You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
- *
+ * <p>
  * Merge all the linked-lists into one sorted linked-list and return it.
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Example 1:
- *
+ * <p>
  * Input: lists = [[1,4,5],[1,3,4],[2,6]]
+ * <p>
  * Output: [1,1,2,3,4,4,5,6]
+ * <p>
  * Explanation: The linked-lists are:
+ * <div>
  * [
  *   1->4->5,
  *   1->3->4,
  *   2->6
  * ]
+ * </div>
  * merging them into one sorted list:
+ * <p>
  * 1->1->2->3->4->4->5->6
+ * <p>
  * Example 2:
- *
+ * <p>
  * Input: lists = []
+ * <p>
  * Output: []
+ * <p>
  * Example 3:
- *
+ * <p>
+ * <p>
  * Input: lists = [[]]
+ * <p>
  * Output: []
- *
- *
+ * <p>
+ * <p>
  * Constraints:
- *
+ * <p>
  * k == lists.length
  * 0 <= k <= 10^4
  * 0 <= lists[i].length <= 500

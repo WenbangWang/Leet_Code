@@ -9,7 +9,7 @@ import java.util.*;
  * Only one letter can be changed at a time
  * Each intermediate word must exist in the word list
  * For example,
- * <p>
+ * <pre>
  * Given:
  * beginWord = "hit"
  * endWord = "cog"
@@ -22,6 +22,7 @@ import java.util.*;
  * Note:
  * All words have the same length.
  * All words contain only lowercase alphabetic characters.
+ * </pre>
  */
 public class No126 {
 

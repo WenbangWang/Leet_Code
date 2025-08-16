@@ -3,6 +3,8 @@ package com.wwb.leetcode.easy;
 /**
  * Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
  *
+ *
+ * <pre>
  * Example:
  * Given nums = [-2, 0, 3, -5, 2, -1]
  *
@@ -12,6 +14,7 @@ package com.wwb.leetcode.easy;
  * Note:
  * You may assume that the array does not change.
  * There are many calls to sumRange function.
+ * </pre>
  */
 public class No303 {
 
@@ -20,7 +23,7 @@ public class No303 {
         private int[] nums;
 
         public NumArray(int[] nums) {
-            for(int i = 1; i < nums.length; i++) {
+            for (int i = 1; i < nums.length; i++) {
                 nums[i] += nums[i - 1];
             }
 
@@ -28,7 +31,7 @@ public class No303 {
         }
 
         public int sumRange(int i, int j) {
-            if(i == 0) {
+            if (i == 0) {
                 return nums[j];
             }
 

@@ -4,11 +4,12 @@ import com.wwb.leetcode.utils.TreeNode;
 
 /**
  * Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the BST.
- *
+ * <p>
  * According to the definition of LCA on Wikipedia:
  * “The lowest common ancestor is defined between two nodes v and w as the lowest node in T
  * that has both v and w as descendants (where we allow a node to be a descendant of itself).”
  *
+ * <div>
  *       _______3______
  *      /              \
  *   ___5__          ___1__
@@ -16,6 +17,7 @@ import com.wwb.leetcode.utils.TreeNode;
  *  6      _2       0      8
  *        /  \
  *       7   4
+ * </div>
  * For example, the lowest common ancestor (LCA) of nodes 5 and 1 is 3.
  * Another example is LCA of nodes 5 and 4 is 5,
  * since a node can be a descendant of itself according to the LCA definition.
@@ -27,14 +29,14 @@ public class No236 {
     }
 
     private TreeNode solution1(TreeNode node, TreeNode p, TreeNode q) {
-        if(node == null || node == p || node == q) {
+        if (node == null || node == p || node == q) {
             return node;
         }
 
         TreeNode left = solution1(node.left, p, q);
         TreeNode right = solution1(node.right, p, q);
 
-        if(left != null && right != null) {
+        if (left != null && right != null) {
             return node;
         }
 
@@ -43,7 +45,7 @@ public class No236 {
 
     private TreeNode solution2(TreeNode root, TreeNode p, TreeNode q) {
         Result result = getAncestor(root, p, q);
-        if(result.isAncestor) {
+        if (result.isAncestor) {
             return result.node;
         }
 
@@ -51,26 +53,26 @@ public class No236 {
     }
 
     private Result getAncestor(TreeNode node, TreeNode p, TreeNode q) {
-        if(node == null) {
+        if (node == null) {
             return new Result(null, false);
         }
 
-        if(node == p && node == q) {
+        if (node == p && node == q) {
             return new Result(node, true);
         }
 
         Result left = getAncestor(node.left, p, q);
-        if(left.isAncestor) {
+        if (left.isAncestor) {
             return left;
         }
         Result right = getAncestor(node.right, p, q);
-        if(right.isAncestor) {
+        if (right.isAncestor) {
             return right;
         }
 
-        if(left.node != null && right.node != null) {
+        if (left.node != null && right.node != null) {
             return new Result(node, true);
-        } else if(node == p || node == q) {
+        } else if (node == p || node == q) {
             boolean isAncestor = left.node != null || right.node != null;
             return new Result(node, isAncestor);
         } else {

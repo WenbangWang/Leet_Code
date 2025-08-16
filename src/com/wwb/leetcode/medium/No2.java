@@ -5,26 +5,28 @@ import com.wwb.leetcode.utils.ListNode;
 /**
  * You are given two linked lists representing two non-negative numbers.
  * The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
- *
+ * <p>
+ * <pre>
  * Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
  * Output: 7 -> 0 -> 8
+ * </pre>
  */
 public class No2 {
 
     /**
      * Definition for singly-linked list.
      * public class ListNode {
-     *     int val;
-     *     ListNode next;
-     *     ListNode(int x) { val = x; }
+     * int val;
+     * ListNode next;
+     * ListNode(int x) { val = x; }
      * }
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if(l1 == null && l2 != null) {
+        if (l1 == null && l2 != null) {
             return l2;
-        } else if(l1 != null && l2 == null) {
+        } else if (l1 != null && l2 == null) {
             return l1;
-        } else if(l1 == null && l2 == null) {
+        } else if (l1 == null && l2 == null) {
             return null;
         }
 
@@ -37,14 +39,14 @@ public class No2 {
         ListNode current = result;
         int carry = 0;
 
-        while(l1 != null || l2 != null) {
+        while (l1 != null || l2 != null) {
             int sum = carry;
 
-            if(l1 != null) {
+            if (l1 != null) {
                 sum += l1.val;
                 l1 = l1.next;
             }
-            if(l2 != null) {
+            if (l2 != null) {
                 sum += l2.val;
                 l2 = l2.next;
             }
@@ -56,7 +58,7 @@ public class No2 {
             current = current.next;
         }
 
-        if(carry == 1) {
+        if (carry == 1) {
             current.next = new ListNode(carry);
         }
 
@@ -64,11 +66,11 @@ public class No2 {
     }
 
     private ListNode solution2(ListNode l1, ListNode l2, int carry) {
-        if(l1 == null) {
+        if (l1 == null) {
             return carry == 0 ? l2 : solution2(new ListNode(1), l2, 0);
         }
 
-        if(l2 == null) {
+        if (l2 == null) {
             return carry == 0 ? l1 : solution2(new ListNode(1), l1, 0);
         }
 

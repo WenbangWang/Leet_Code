@@ -5,13 +5,14 @@ import com.wwb.leetcode.utils.TreeNode;
 /**
  * Given a root node reference of a BST and a key, delete the node with the given key in the BST.
  * Return the root node reference (possibly updated) of the BST.
- *
+ * <p>
  * Basically, the deletion can be divided into two stages:
- *
+ * <p>
  * Search for a node to remove.
  * If the node is found, delete the node.
  *
  *
+ * <pre>
  * Example 1:
  *
  *
@@ -39,6 +40,7 @@ import com.wwb.leetcode.utils.TreeNode;
  * Each node has a unique value.
  * root is a valid binary search tree.
  * -10^5 <= key <= 10^5
+ * </pre>
  */
 public class No450 {
     public TreeNode deleteNode(TreeNode root, int key) {
@@ -134,7 +136,7 @@ public class No450 {
         TreeNode pre = current;
 
         // find leftmost (smallest) node
-        while(current.left != null) {
+        while (current.left != null) {
             pre = current;
             current = current.left;
         }

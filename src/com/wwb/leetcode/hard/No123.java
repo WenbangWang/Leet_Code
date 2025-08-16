@@ -17,10 +17,10 @@ public class No123 {
         int minBuyPrice2 = Integer.MAX_VALUE;
 
         for(int price : prices) {
-            maxProfit2 = Math.max(maxProfit2, price - minBuyPrice2);
-            minBuyPrice2 = Math.min(minBuyPrice2, price - maxProfit1);
-            maxProfit1 = Math.max(maxProfit1, price - minBuyPrice1);
             minBuyPrice1 = Math.min(minBuyPrice1, price);
+            maxProfit1 = Math.max(maxProfit1, price - minBuyPrice1);
+            minBuyPrice2 = Math.min(minBuyPrice2, price - maxProfit1);
+            maxProfit2 = Math.max(maxProfit2, price - minBuyPrice2);
         }
 
         return maxProfit2;

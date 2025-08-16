@@ -8,14 +8,16 @@ import java.util.List;
 /**
  * Given a binary tree, imagine yourself standing on the right side of it,
  * return the values of the nodes you can see ordered from top to bottom.
- *
+ * <p>
  * For example:
  * Given the following binary tree,
+ * <div>
  *   1            <---
  * /   \
  * 2     3         <---
  *  \     \
  *   5     4       <---
+ *   </div>
  * You should return [1, 3, 4].
  */
 public class No199 {
@@ -28,7 +30,7 @@ public class No199 {
         List<Integer> result = new ArrayList<>();
         List<TreeNode> level = new ArrayList<>();
 
-        if(root != null) {
+        if (root != null) {
             level.add(root);
 
             rightSideView(result, level);
@@ -46,31 +48,31 @@ public class No199 {
     }
 
     private void rightSideView(TreeNode node, List<Integer> result, int currentLevel) {
-        if(node == null) {
+        if (node == null) {
             return;
         }
 
-        if(result.size() == currentLevel) {
+        if (result.size() == currentLevel) {
             result.add(node.val);
         }
 
         rightSideView(node.right, result, currentLevel + 1);
-        rightSideView(node.left, result,  currentLevel + 1);
+        rightSideView(node.left, result, currentLevel + 1);
     }
 
     private void rightSideView(List<Integer> result, List<TreeNode> level) {
-        if(level == null || level.isEmpty()) {
+        if (level == null || level.isEmpty()) {
             return;
         }
 
         List<TreeNode> currentLevel = new ArrayList<>();
         result.add(level.get(level.size() - 1).val);
 
-        for(TreeNode current: level) {
-            if(current.left != null) {
+        for (TreeNode current : level) {
+            if (current.left != null) {
                 currentLevel.add(current.left);
             }
-            if(current.right != null) {
+            if (current.right != null) {
                 currentLevel.add(current.right);
             }
         }

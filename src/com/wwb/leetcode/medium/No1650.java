@@ -5,15 +5,15 @@ import java.util.Set;
 
 /**
  * Given two nodes of a binary tree p and q, return their lowest common ancestor (LCA).
- *
+ * <p>
  * Each node will have a reference to its parent node. The definition for Node is below:
- *
+ * <p>
  * According to the definition of LCA on Wikipedia:
  * "The lowest common ancestor of two nodes p and q in a tree T is
  * the lowest node that has both p and q as descendants (where we allow a node to be a descendant of itself)."
- *
+ * <p>
  * Constraints:
- *
+ * <p>
  * The number of nodes in the tree is in the range [2, 10^5].
  * -10^9 <= Node.val <= 10^9
  * All Node.val are unique.

@@ -4,12 +4,13 @@ import com.wwb.leetcode.utils.TreeNode;
 
 /**
  * You are given the root of a binary search tree (BST) and an integer val.
- *
+ * <p>
  * Find the node in the BST that the node's value equals val and return the subtree rooted with that node.
  * If such a node does not exist, return null.
  *
  *
  *
+ * <pre>
  * Example 1:
  *
  *
@@ -28,6 +29,7 @@ import com.wwb.leetcode.utils.TreeNode;
  * 1 <= Node.val <= 10^7
  * root is a binary search tree.
  * 1 <= val <= 10^7
+ * </pre>
  */
 public class No700 {
     public TreeNode searchBST(TreeNode root, int val) {

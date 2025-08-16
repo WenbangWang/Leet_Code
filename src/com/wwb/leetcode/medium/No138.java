@@ -7,13 +7,15 @@ import java.util.Map;
 
 /**
  * A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
- *
+ * <p>
  * Return a deep copy of the list.
+ * <div>
  *                   0        1      2      3     4
  * Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
  *                    |        |     |            |
  *                    ---------       -------------
  * Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+ * </div>
  */
 public class No138 {
 
@@ -28,12 +30,12 @@ public class No138 {
         return copyRandomList(head, map);
     }
 
-    private RandomListNode copyRandomList(RandomListNode node,  Map<RandomListNode, RandomListNode> map) {
-        if(node == null) {
+    private RandomListNode copyRandomList(RandomListNode node, Map<RandomListNode, RandomListNode> map) {
+        if (node == null) {
             return null;
         }
 
-        if(map.containsKey(node)) {
+        if (map.containsKey(node)) {
             return map.get(node);
         }
 
@@ -48,7 +50,7 @@ public class No138 {
     private RandomListNode solution2(RandomListNode head) {
         RandomListNode current = head;
 
-        if(head == null) {
+        if (head == null) {
             return null;
         }
 
@@ -56,7 +58,7 @@ public class No138 {
             insert them next to the original node.
             List [1,2,3] will look like [1,1,2,2,3,3]
         */
-        while(current != null){
+        while (current != null) {
             /*create node. */
             RandomListNode newNode = new RandomListNode(current.label);
 
@@ -72,8 +74,8 @@ public class No138 {
         original node.
         */
         current = head;
-        while(current != null){
-            if(current.random != null){
+        while (current != null) {
+            if (current.random != null) {
                 /* current.next is cloned node. its random points
                 to next of current nodes random. */
                 current.next.random = current.random.next;
@@ -84,11 +86,11 @@ public class No138 {
         current = head;
         RandomListNode newHead = head.next;
         /* Step 3 : Detach the cloned list from the original list */
-        while(current != null){
+        while (current != null) {
             RandomListNode node = current.next;
             current.next = current.next.next;
             /* IMPORTANT: Check for the last node. */
-            if(current.next != null){
+            if (current.next != null) {
                 node.next = current.next.next;
             }
             current = current.next;

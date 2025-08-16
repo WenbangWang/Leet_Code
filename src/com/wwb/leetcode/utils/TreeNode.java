@@ -36,20 +36,26 @@ public class TreeNode {
         return root;
     }
 
-    public void printTreeLeetCode() {
+    public String toString() {
         Queue<TreeNode> q = new LinkedList<>();
         q.add(this);
-        StringBuilder sb = new StringBuilder();
+        LinkedList<String> result = new LinkedList<>();
 
         while (!q.isEmpty()) {
             TreeNode t = q.poll();
-            sb.append(t == null ? "null" : t.val).append(", ");
+            result.add(t == null ? "null" : String.valueOf(t.val));
             if (t != null) {
                 q.add(t.left);
                 q.add(t.right);
             }
         }
-        System.out.println(sb);
+
+        // remove trailing nulls
+        while (!result.isEmpty() && result.peekLast().equals("null")) {
+            result.removeLast();
+        }
+
+        return String.join(", ", result);
     }
 
     public int getMaxDepth() {

@@ -2,9 +2,11 @@ package com.wwb.leetcode.medium;
 
 /**
  * Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
- *
+ * <p>
  * Integers in each row are sorted from left to right.
  * The first integer of each row is greater than the last integer of the previous row.
+ *
+ * <pre>
  * For example,
  *
  * Consider the following matrix:
@@ -15,6 +17,7 @@ package com.wwb.leetcode.medium;
  *   [23, 30, 34, 50]
  * ]
  * Given target = 3, return true.
+ * </pre>
  */
 public class No74 {
 
@@ -28,13 +31,13 @@ public class No74 {
         int start = 0;
         int end = row * col - 1;
 
-        while(start <= end) {
+        while (start <= end) {
             int mid = start + (end - start) / 2;
             int current = matrix[mid / col][mid % col];
 
-            if(target == current) {
+            if (target == current) {
                 return true;
-            } else if(target > current) {
+            } else if (target > current) {
                 start = mid + 1;
             } else {
                 end = mid - 1;

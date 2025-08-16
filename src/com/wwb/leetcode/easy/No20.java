@@ -5,13 +5,13 @@ import java.util.Stack;
 /**
  * Given a string containing just the characters '(', ')', '{', '}', '[' and ']',
  * determine if the input string is valid.
- *
+ * <p>
  * The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
  */
 public class No20 {
 
     public boolean isValid(String s) {
-        if(s == null || s.isEmpty()) {
+        if (s == null || s.isEmpty()) {
             return true;
         }
 
@@ -23,21 +23,21 @@ public class No20 {
         Stack<Character> rightStack = new Stack<>();
         char[] parenArray = s.toCharArray();
 
-        for(char paren : parenArray) {
+        for (char paren : parenArray) {
             leftStack.push(paren);
         }
 
-        while(!leftStack.isEmpty()) {
+        while (!leftStack.isEmpty()) {
             char left = leftStack.pop();
 
-            if(rightStack.isEmpty()) {
+            if (rightStack.isEmpty()) {
                 rightStack.push(left);
             } else {
                 char right = rightStack.peek();
 
-                if(isAPair(left, right)) {
+                if (isAPair(left, right)) {
                     rightStack.pop();
-                } else if (!areOnSameSide(left, right)){
+                } else if (!areOnSameSide(left, right)) {
                     return false;
                 } else {
                     rightStack.push(left);
@@ -52,14 +52,14 @@ public class No20 {
         Stack<Character> stack = new Stack<>();
         char[] parenArray = s.toCharArray();
 
-        for(char paren : parenArray) {
-            if(isLeftRoundParen(paren) || isLeftCurlParen(paren) || isLeftSquareParen(paren)) {
+        for (char paren : parenArray) {
+            if (isLeftRoundParen(paren) || isLeftCurlParen(paren) || isLeftSquareParen(paren)) {
                 stack.push(paren);
-            } else if(isRightRoundParen(paren) && !stack.isEmpty() && isLeftRoundParen(stack.peek())) {
+            } else if (isRightRoundParen(paren) && !stack.isEmpty() && isLeftRoundParen(stack.peek())) {
                 stack.pop();
-            } else if(isRightCurlParen(paren) && !stack.isEmpty() && isLeftCurlParen(stack.peek())) {
+            } else if (isRightCurlParen(paren) && !stack.isEmpty() && isLeftCurlParen(stack.peek())) {
                 stack.pop();
-            } else if(isRightSquareParen(paren) && !stack.isEmpty() && isLeftSquareParen(stack.peek())) {
+            } else if (isRightSquareParen(paren) && !stack.isEmpty() && isLeftSquareParen(stack.peek())) {
                 stack.pop();
             } else {
                 return false;

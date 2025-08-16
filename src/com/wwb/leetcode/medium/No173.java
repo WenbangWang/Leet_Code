@@ -6,9 +6,9 @@ import java.util.Stack;
 
 /**
  * Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
- *
+ * <p>
  * Calling next() will return the next smallest number in the BST.
- *
+ * <p>
  * Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
  */
 public class No173 {
@@ -22,16 +22,20 @@ public class No173 {
             this.pushLeft(root);
         }
 
-        /** @return whether we have a next smallest number */
+        /**
+         * @return whether we have a next smallest number
+         */
         public boolean hasNext() {
             return !this.stack.isEmpty();
         }
 
-        /** @return the next smallest number */
+        /**
+         * @return the next smallest number
+         */
         public int next() {
             TreeNode current = this.stack.pop();
 
-            if(current.right != null) {
+            if (current.right != null) {
                 this.pushLeft(current.right);
             }
 
@@ -39,9 +43,9 @@ public class No173 {
         }
 
         private void pushLeft(TreeNode node) {
-            while(node != null) {
+            while (node != null) {
                 this.stack.push(node);
-                if(node.left != null) {
+                if (node.left != null) {
                     node = node.left;
                 } else {
                     break;

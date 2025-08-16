@@ -7,8 +7,10 @@ import java.util.Stack;
 /**
  * Given a singly linked list, determine if it is a palindrome.
  *
+ * <pre>
  * Follow up:
  * Could you do it in O(n) time and O(1) space?
+ * </pre>
  */
 public class No234 {
 
