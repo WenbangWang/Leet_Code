@@ -1,0 +1,112 @@
+https://www.1point3acres.com/bbs/thread-1143118-1-1.html
+
+第一轮 recruiter 面：就是聊聊有这么多AI公司，为什么来人类学。我的回答是人类学有点学术话，我比较喜欢academic flavor.
+
+第二轮电面：面了文件去重那道题。follow up是怎么利用meta data而不是简单的hash content。答案是先根据file size来过第一遍，file size相同再用hash。问了hash collision怎么办，推荐用SHA 256 算法，collision概率会降低。问了distributed system下怎么办，随便回答了一些map reduce， 把文件大小类似的shuffle到一台电脑再根据hash来判断。问了IO bound 还是 CPU bound, 如果用SSD的话IO bound和CPU bound的界限就不那么分明了。面试官很友好，虽然他一边在干活一边在面试，但是还是挺好的。
+
+
+店面一轮：问technical project。把project 讲懂，沟通清楚对方不明白的点然后反馈。一般来讲你是good listener都不会有问题。
+
+店面第二轮： system design：你的data center需要从外界下载一个ML model，然后在 data center内部distribute到100个电脑上。data center和外界的带宽是10G/s,内部之间任何一个电脑的上传下载加起来也只能是10G。问你怎么做到最快的把ML model download到一个data center的电脑上，然后distribute到所有其他电脑上。我的解法是把所有电脑串联在一起，然后每一个电脑从上游下载的同时把文件传递给下一个电脑，就像管道输水一样。然后设计下怎么coordinate，假如有一个电脑坏了怎么办之类的general design question。
+
+店面第三轮：cultural 面。就是为什么要加入人类学。你相信AI会颠覆世界吗，如果是的话，security方面你愿不愿意牺牲自己的利益来确保AI不毁灭人类。必须表现出你真的相信AI。要不这轮会挂人的。建议看Lex的采访，看了之后就会有自己的理解。我这次面试人类学，看了这些资料后，真的有点担心我作为traditional SDE 的job security。
+
+店面第四轮：HM面。就是聊各种behavior。没什么特别注意的地方。
+
+店面第五轮：stack那道题。follow up的时间不够了。所以大家一定要练习下follow up。就是给定一个N，所有连续出现的function call在N以下时，不要generate相应的event。我应该是挂在了这道题上。因为我在装第一次看到这道题，去跟面试官沟通题目的意思，举例子说明是不是这样理解的，然后没时间写follow up了。（我觉得不走这些流程太假了，除非日常就用这样的profiler，哪有可能看完文字描述直接写的）。Anyway，大家一定要熟练这个follow up。
+
+
+就是这样，还是花了很多时间准备，最后没过也在意料之中。这次找工作面试最怕遇到华二代，特别是店面第五轮的那位华二代小姐姐，虽然表面上特别热情，但直接把题目扔那里让我自己读，然后不提示例子就让我直接写，我感觉我像个小丑。遇到了这样一个面试官，最后没去成也没有很难过。店面完了过了一周后收到拒信的。
+
+
+
+https://www.1point3acres.com/bbs/thread-1137987-1-1.html
+
+
+店面 coding Q3 stack trace 那题， follow up N consecutive - pass
+VO
+day1 - Coding Q2(dedup files) + Culture
+day2 - Tech project + System Q1 (inference API)
+day1 面完后 直接挂了，之后的都取消了
+
+以下内容需要积分高于 300 您已经可以浏览
+
+VO coding Q2  题目如下
+遍历root folder 下的所有files, 找到相同内容的文件
+给了个例子
+[ ["a/f1.mp4", "a/f2.mp4"], ["b/f3.mp4", "b/tmp/f4.mp4]...]
+这个root folder是a/, b/
+
+因为时间不够用就没有问follow up,刚好size -> partial -> full写完结束了。
+
+Culture fit
+我感觉这轮考察点两类 1是看你对A家感兴趣否 2是看你fit不
+- what's your career plan?第一个问题
+- 对AI safety看法
+- 觉得A家在AI safety方面还有哪些地方可以改进的
+- 为什么A家
+- 更倾向什么样的工作环境和文化，我说low ego，他立马会问你之前遇到过什么ego很大的同事和情况吗。简单说下，然后说我一般如何应对这样的情况。
+
+以下是常规BQ：
+- 有没有give/take feedback, any feedback that was surprised you
+- how to deal with conflict，即使你们的看法都是完全符合公司的 mission的,
+- any situation that you changed view of a person
+我感觉面我culture轮的小哥在接近全力来collect signals面到后来都超时. 整体我觉得A家你要进去可能需要抓到里面的人好好问一问。要不然光靠Dario的那些posts不太够。我还算看了比较多的他们公司的视频和文章的，了解也比较深入。AI safety这块的见解他也一个劲说nice, great..但最后还是挂，不知道挂在哪里。
+
+
+
+
+
+
+补充内容 (2025-07-24 02:55 +08:00):
+我联系到了HR要反馈，以下是coding and culture考察点：
+以下内容需要积分高于 300 您已经可以浏览
+
+coding考察点：
+- 高效查doc（efficient search)
+- 快速debug （没bug自己假装一个吧，喂多一个signal是一个）
+- 给不同的solution（简单版-》改进版-〉最优）
+- 快速理解问题，抓核心 （别心虚，感觉自己提前知道题目不好意思秒懂）
+都可以排练下，反正上面都是signals，你不显示出这些signals就快速默写完后，人家也要想出个啥来让你查一查doc/debug个啥，还不如都喂给面试官。这是我的理解，也可能你天赋异禀就是写的又快又好，那完全可以不借鉴哈。
+*注意：查doc时候不要用AI给的结果！
+
+Culture 考察点：
+- true interest in mission （safety & ethical)
+就这个mission可能需要好好deep dive下，然后面试官也说即使组内不同人对mission也会有不同的见解，HR和我说主要是safety and ethical方面。
+
+
+https://www.1point3acres.com/bbs/thread-1065604-1-1.html
+
+电面：有一个已经写好了的beautiful soup python web crawler function, given url and returns all urls on this url，然后让写一个web crawler，given root domain，抓取这个domain下所有的url，这个部分需要写代码，并且work。基本上就是一个bfs，然后记录已经抓过的url避免重复即可。第二个部分问如果要提升crawler效率怎么做，用的asyncio来实现异步处理，可以提前看一下怎么用。同时会问一些system design的问题，比如如何scale，如果expand到更多root domain
+
+昂塞1： coding + system design，假设你有一个uber api，given longitude and latitude, return true iff the coordinate is in surge area。然后让写一个function，given a longitude and latitude, return path or coordinate so that the user can walk to the location outside of the surge area。这轮的代码不用run。这里lz想复杂了，说用bfs，但是实际上只要找上下左右四个方向最近的path就可以。然后接着问了一些system design问题，比如如何scale，如何防止我们的function crash uber api, etc
+
+昂塞2： HM BQ，很标准的BQ，没啥好说的
+
+昂塞3： culture round，也是一轮BQ，但是会问一些比较灵性的问题比如怎么看待AI的risk，对AI最大的concern是什么。LZ直接看的recruiter发的anthropic官方博客里的文章，里面会提到这些内容
+
+昂塞4：system design，题目是让design一个prompt playground，类似于chatgpt playground，让你从product的角度说需要哪些requirement，怎么实现，怎么scale。面试的形式跟其他大厂的system design不太一样，问题很偏product/full-stack，面试官会walk through everything with you and take note for you，然后让我只要一直讲下去就行
+
+https://www.1point3acres.com/bbs/thread-1134248-1-1.html
+
+https://www.1point3acres.com/bbs/thread-1098075-1-1.html
+
+Phone：多线程web crawler
+HM call： most proud project
+
+Onsite：
+HM call： 正常bq
+value：如何看待AI security，你为了security做过什么tradeoff
+coding： 文件系统如何找出重复的文件，bfs + size compare + partial/full hash compare即可。需要熟悉文件读写的api。
+system design：你有一群gpu server，他们有一个inference的API，input是list of string，output是list of string，这个api的latency对于list size在1～100是固定的。 请你设计 chatgpt 来合理运用这些server。 （这道题核心我感觉就是request的aggregation， 面试官好像不是很关心fault tolerent所以，所有的component我感觉理论上来讲都可以放到memory里面，比如message queue。）
+coding： 地里有那道题，就是给你个list of call stack，要求output，function的start和end 。 follow-up：只output那些appears N consecutive times的functions，N is configurable。 注意这道题，假如你的call stack是a-》b 和 c-〉b 是两个不同的function虽然最终都call了b。
+
+
+https://www.1point3acres.com/bbs/thread-1088526-1-1.html
+
+一共有四个level， 第一个level就是创建账户和存储转账之类的，第二个和第三部分分别是实现延迟交易，和找到最活跃的用户，最后是实现任意时间节点的余额查询
+整体下来感觉不需要很多算法储备就可以做，只要对数据结构熟悉就够了，感觉主要在考一个朴实的coding和debug能力
+比较不方便的是在codesignal上只能run unittest，导致没有办法print东西出来debug，可以说很影响效率了，只能参考失败的测例去看哪里出问题了。
+四个level会对应不同的分数，比如说250/500/750/1000, 只有pass前一个level所有测试用例才能到下一个level
+整体时间上还是比较紧张的（主要还是debug不方便），也可能是我没找到正经debug的方法（所以建议提前熟悉一下codesignal）
+其实面试前就看到很多帖子说是bank系统设计了，没想到还真碰上了，怀疑所有在线coding题目都一样==

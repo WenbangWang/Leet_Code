@@ -1,0 +1,188 @@
+Q1 web crawler
+
+
+Q2 Dedup
+
+
+Q3 stack trace
+
+https://www.1point3acres.com/bbs/thread-1089271-1-1.html
+
+
+
+
+
+# Problem: Converting stack samples to a trace
+
+Sampling profilers are a performance analysis tool for finding the slow parts of your code by periodically sampling the entire call stack.
+
+In our problem the samples will be a list of `Sample`s of a float timestamp and a list of function names, **in order by timestamp**, like this.
+
+* Sample stacks contain every function that is currently executing
+* The stacks are in order from outermost function (like "main") to the innermost currently executing function
+* An unlimited amount of execution/change can happen between samples. We don't have all the function calls that happened, just some samples we want to visualize.
+
+example:
+s2 = [
+  Sample(0.0, ['a','b','a','c']),# a -> b -> a -> c
+  Sample(1.0, ['a','a','b','c']),
+  ]
+  # (s, a) (s, b) (s, a), (s, c)
+  # (e, c) (e, a), (e, b), (s, a), (s, b), (s, c)
+.. where "s" is start and "e" is end.
+  
+  
+Q4 Median
+Q5 ?
+Q6 tokenize
+
+https://www.1point3acres.com/bbs/thread-1111070-1-1.html
+
+def tokenize(text: str, vocab: dict):
+  tokens = []
+  key = ""
+  for i in range(len(text)):
+  key += text[i]
+  if key in vocab:
+    tokens.append(vocab[key])
+    key = ""
+  return tokens
+
+def detokenize(tokens, vocab: dict):
+  text = ""
+  reversed_vocab = {value: key for key, value in vocab.items()}
+  for token in tokens:
+  text += reversed_vocab[token]
+
+
+  return text
+
+
+
+vocab = {
+  "a": 1,
+  "b": 2,
+  "cd": 3
+}
+
+token = tokenize("acdebe", vocab)
+detokenize(token, vocab)
+
+
+这个似乎是比较简单的文本与处理，就是把一段text转换成code。我读的时候其实很困惑比如text和vocab都是input那vocab是如何决定的之类的，面试官的意思大致就是they can be anything。 我说代码的问题是如果vocab里面没有能cover given text的character的那这个tokenize不work。然后就move on到下一个环境。
+
+
+第二个环节是code review，又给了一段代码，是在之前版本的基础上加了一点，大致就是在tokenize method的for loop结束之后多了一个if key不在vocab里面，append一个-1在tokens里然后return (something like "      tokens.append(vocab.get("UNK", -1))"。然后给的vocab里面多了个UNK：-1vocab = {
+  "a": 1,
+  "b": 2,
+  "cd": 3,
+  "UNK": -1
+  }
+然后我就更困惑了…… interviewer说你就当是在做code review有啥comment都可以，我就写了写比如
+UNK是个啥？（我面试之后才反应过来这tm是UNKNOWN的缩写）text里面有UNK咋办？
+这段改动的goal到底是啥，什么是expected behavior
+如果这样handle vocab里面没有的character那么比如text是 "xabc"那tokenize不work
+先match短的token似乎不是很efficient，比如vocab里面如果有text: xxx那直接match到return就ok （面试之后我稍微研究了一下这个应该是不可能的情况，因为tokenize的目的就是把长长的input变得越短越好，如果是当成纯算法题那这样想ok，感觉还是需要一些background knowledge的）
+
+然后interviewer说ok差不多了我们move on。
+
+
+最后一个环节是让我自己implement tokenize，目的是handle text里面的character没法被vocab里面的key value cover的情况，保证tokenize和detokenize还能work。总之这一轮我的困惑达到顶峰，发挥的非常糟糕（主要没搞明白这个tokenize到底是为了啥以及UNK是啥意思），面完之后research了一下我觉得稍微加一个else 就可以了def tokenize(text: str, vocab: dict):
+  tokens = []
+  key = ""
+  for i in range(len(text)):
+  key += text[i]
+  if key in vocab:
+    tokens.append(vocab[key])
+    key = ""
+  else:
+    if not any(k.startswith(key) for k in vocab.keys()):
+      # if not, treat it as an unknown token
+      tokens.append(vocab.get("UNK", -1))
+      key = ""
+
+  print(tokens)
+  return tokens
+
+in memory db
+
+https://www.1point3acres.com/bbs/thread-1042058-1-1.html
+
+Instructions
+Your task is to implement a simplified version of an in-memory database. Plan your design according to the level specifications below:
+Solving this task consists of several levels. Subsequent levels are opened when the current level is correctly solved. You always have access to the data for the current and all previous levels.
+Requirements
+Your task is to implement a simplified version of a banking system. Plan your design according to the level specifications below:
+Level 1: In-memory database should support basic operations to manipulate records, fields, and values ​​within fields.
+Level 2: In-memory database should support displaying a record's fields based on a filter.
+Level 3: In-memory database should support the TTL (Time-To-Live) settings for records.
+Level 4: In-memory database should support look-back operations to retrieve values ​​stored at a specific timestamp in the past.
+To move to the next level, you need to pass all the tests at this level.
+Note
+You will receive a list of queries to the system, and the final output should be an array of strings representing the returned values ​​of all queries. Each query will only call one operation.
+
+Level 1
+The basic level of the in-memory database contains records. Each record can be accessed with a unique identifier key, which is of string type. A record contains several field-value pairs, with field as string type and value as integer type. All operations have a timestamp parameter — a stringified timestamp in milliseconds. It is guaranteed that all timestamps are unique and are in a range from 1 to 109. Operations will be given in order of strictly increasing timestamps. Timestamps will be needed starting from Level 3.
+SET <timestamp> <key> <field> <value> — should insert a field-value pair to the record associated with key. If the field in the record already exists, replace the existing value with the specified value. If the record does not exist, a new one is created. This operation should return an empty string.
+COMPARE_AND_SET <timestamp> <key> <field> <expectedValue> <newValue> — should update the value of field in the record associated with key to newValue if the current value equals expectedValue. If expectedValue does not match the current value, or either key or field does not exist, this operation is ignored. This operation should return "true" if the field was updated and "false" otherwise.
+COMPARE_AND_DELETE <timestamp> <key> <field> <expectedValue> — should remove the field field in the record associated with key if the previous value equals expectedValue. If expectedValue does not match the current value, or either key or field does not exist, this operation is ignored. This operation should return "true" if the field was removed and "false" otherwise.
+GET <timestamp> <key> <field> — should return a string representing the value contained within field of the record associated with key. If the record or the field does not exist, should return an empty string.
+Examples
+The example below shows how these operations should work (the section is scrollable to the right):
+Queries
+Explanations
+queries = [
+["SET", "0", "A", "B", "4"],
+
+["SET", "1", "A", "C", "6"],
+["COMPARE_AND_SET", "2", "A", "B", "4", "9"],
+["COMPARE_AND_SET", "3", "A", "C", "4", "9"],
+["COMPARE_AND_DELETE", "4", "A", "C", "6"],
+["GET", "5", "A", "C"],
+["GET", "6", "A", "B"]
+]
+
+
+returns ""; database state: {"A": {"B": 4}}
+returns ""; database state: {"A": {"B": 4, "C": 6}}
+returns "true"; database state: {"A": {"B": 9, "C": 6}}
+returns "false"; field "C" in record "A" currently has a value of 6, so the operation is ignored
+returns "true"; database state: {"A": {"B": 9}}
+returns ""; field "C" in record "A" was previously deleted
+returns "9"
+
+
+
+
+the output should be ["", "", "true", "false", "true", "", "9"].
+Input/Output
+[execution time limit] 4 seconds (js)
+[memory limit] 1 GB
+[input] array.array.string queries
+An array of queries to the system. It is guaranteed that all the queries parameters are valid: each query calls one of the operations described in the description, all operation parameters are given in the correct format, and all conditions required for each operation are satisfied .
+Guaranteed constraints:
+1 ≤ queries.length ≤ 500.
+[output]array.string
+An array of strings representing the returned values ​​of queries.
+
+
+Test
+queries:
+[["SET","160000000","a","a","1"],
+["SET","160000001","a","A","2"],
+["GET","160000002","a","a"],
+["COMPARE_AND_DELETE","160000003","a","a","0"],
+["GET","160000004","a","a"],
+["COMPARE_AND_DELETE","160000005","a","a","1"],
+["GET","160000006","a","a"],
+["GET","160000007","a","A"],
+["COMPARE_AND_DELETE","160000008","a","A","2"],
+["SET","160000009","a","A","7"],
+["SET","160000010","a","A","9"],
+["GET","160000011","a","a"],
+["GET","160000012","a","A"]]
+
+Expected return: ["", "", "1", "false", "1", "true", "", "2", "true", "", "", "", "9"]
+
+
+https://www.1point3acres.com/bbs/thread-1137669-1-1.html
