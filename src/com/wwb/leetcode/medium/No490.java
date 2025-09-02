@@ -62,7 +62,10 @@ package com.wwb.leetcode.medium;
  */
 public class No490 {
     public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        boolean[][] visited = new boolean[maze.length][maze[0].length];
 
+        return dfs(maze, visited, dirs, start[0], start[1], destination);
     }
 
     private boolean dfs(

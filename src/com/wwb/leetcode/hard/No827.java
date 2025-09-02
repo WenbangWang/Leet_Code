@@ -55,10 +55,6 @@ import java.util.Set;
  * grid[i][j] is either 0 or 1.
  */
 public class No827 {
-    public static void main(String[] args) {
-        new No827().largestIsland(new int[][]{new int[]{1, 0}, new int[]{1, 1}});
-    }
-
     public int largestIsland(int[][] grid) {
         return solution1(grid);
     }

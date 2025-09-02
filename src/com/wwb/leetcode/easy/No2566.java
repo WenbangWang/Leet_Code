@@ -37,9 +37,6 @@ package com.wwb.leetcode.easy;
  * </pre>
  */
 public class No2566 {
-    public static void main(String[] args) {
-        System.out.println(new No2566().minMaxDifference(90));
-    }
     public int minMaxDifference(int num) {
         int mod = 1;
         int runner = num;

@@ -35,10 +35,6 @@ import java.util.Arrays;
  * </pre>
  */
 public class No354 {
-    public static void main(String[] args) {
-        System.out.println(new No354().maxEnvelopes(new int[][]{{5, 4}, {6, 4}, {6, 7}, {2, 3}}));
-    }
-
     public int maxEnvelopes(int[][] envelopes) {
         Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);
 

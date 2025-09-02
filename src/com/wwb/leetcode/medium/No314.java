@@ -12,7 +12,7 @@ import java.util.*;
  * Examples:
  * <p>
  * Given binary tree [3,9,20,null,null,15,7],
- * <div>
+ * <pre>
  *   3
  *  /\
  * /  \
@@ -20,7 +20,7 @@ import java.util.*;
  *    /\
  *   /  \
  *  15   7
- * </div>
+ *
  * return its vertical order traversal as:
  * [
  *   [9],
@@ -29,8 +29,8 @@ import java.util.*;
  *   [7]
  * ]
  * Given binary tree [3,9,8,4,0,1,7],
- * <div>
- * <p>
+ *
+ *
  *    3
  *   /\
  *  /  \
@@ -38,7 +38,7 @@ import java.util.*;
  *  /\  /\
  * /  \/  \
  * 4  01   7
- * </div>
+ *
  * return its vertical order traversal as:
  * [
  *   [4],
@@ -66,6 +66,7 @@ import java.util.*;
  *   [8,2],
  *   [7]
  * ]
+ * </pre>
  */
 public class No314 {
     public List<List<Integer>> verticalOrder(TreeNode root) {

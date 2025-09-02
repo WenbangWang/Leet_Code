@@ -11,16 +11,16 @@ import com.wwb.leetcode.utils.TreeNode;
  * <p>
  * For example,
  *
- * <div>
+ * <pre>
  *   1
  *  / \
  * 2   3
- * </div>
- * <p>
+ *
  * The root-to-leaf path 1->2 represents the number 12.
  * The root-to-leaf path 1->3 represents the number 13.
- * <p>
+ *
  * Return the sum = 12 + 13 = 25.
+ * </pre>
  */
 public class No129 {
 

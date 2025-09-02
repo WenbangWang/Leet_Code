@@ -42,10 +42,6 @@ import java.util.Queue;
  * grid[i][j] is 0 or 1
  */
 public class No1091 {
-    public static void main(String[] args) {
-        new No1091().shortestPathBinaryMatrix(new int[][]{{0,0,0},{1,1,0},{1,1,0}});
-    }
-
     public int shortestPathBinaryMatrix(int[][] grid) {
         int result = shortestPathBinaryMatrix(grid, 0, 0);
 
@@ -81,7 +77,7 @@ public class No1091 {
             for (int i = 0; i < size; i++) {
                 int[] cell = queue.poll();
 
-                if (cell[0] == n - 1 && cell[1] == n -1) {
+                if (cell[0] == n - 1 && cell[1] == n - 1) {
                     return result;
                 }
 

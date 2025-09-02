@@ -44,9 +44,6 @@ import com.wwb.leetcode.utils.TreeNode;
  * </pre>
  */
 public class No2265 {
-    public static void main(String[] args) {
-        System.out.println(new No2265().averageOfSubtree(TreeNode.buildTreeLeetCode(new Integer[]{4,8,5,0,1,null,6})));
-    }
     public int averageOfSubtree(TreeNode root) {
         return averageOfSubtree(root, new int[1], new int[1]);
     }

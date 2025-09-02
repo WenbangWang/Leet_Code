@@ -1,7 +1,6 @@
 package com.wwb.leetcode.hard;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,11 +36,11 @@ public class No428 {
     private static final int MASK = (1 << 16) - 1;
 
 
-    private String serialize(Node root) {
+    public String serialize(Node root) {
         return doSerialize(root).toString();
     }
 
-    private Node deserialize(String data) {
+    public Node deserialize(String data) {
         char[] chars = data.toCharArray();
 
         return doDeserialize(data.toCharArray(), new int[]{0});
@@ -64,37 +63,31 @@ public class No428 {
         }
 
         // 2 is the size of the current node value
-        StringBuilder result = new StringBuilder(2 + childrenSize);
+        // another 2 is the count of the children nodes
+        StringBuilder result = new StringBuilder(2 + 2 + childrenSize);
 
         result.append(intToChars(node.val));
+        result.append(intToChars(node.children.size()));
         childResults.forEach(result::append);
 
         return result;
     }
 
     private Node doDeserialize(char[] chars, int[] offsetPtr) {
-        Node node = new Node(twoCharsToInt(chars[offsetPtr[0]], chars[++offsetPtr[0]]));
-        int childrenSize = twoCharsToInt(chars[++offsetPtr[0]], chars[++offsetPtr[0]]);
+        Node node = new Node(readInt(chars, offsetPtr));
+        int childrenSize = readInt(chars, offsetPtr);
 
-        offsetPtr[0]++;
-
-        node.children.addAll(doDeserializeChildren(chars, offsetPtr, offsetPtr[0] + childrenSize));
+        for (int i = 0; i < childrenSize; i++) {
+            node.children.add(doDeserialize(chars, offsetPtr));
+        }
 
         return node;
     }
 
-    private List<Node> doDeserializeChildren(char[] chars, int[] offsetPtr, int end) {
-        if (offsetPtr[0] == end) {
-            return Collections.emptyList();
-        }
-
-        List<Node> result = new ArrayList<>();
-
-        while (offsetPtr[0] < end) {
-            result.add(doDeserialize(chars, offsetPtr));
-        }
-
-        return result;
+    private int readInt(char[] chars, int[] offset) {
+        int val = twoCharsToInt(chars[offset[0]], chars[offset[0] + 1]);
+        offset[0] += 2;
+        return val;
     }
 
     private char[] intToChars(int val) {
@@ -118,7 +111,7 @@ public class No428 {
         return result;
     }
 
-    private static class Node {
+    public static class Node {
         public int val;
         public List<Node> children;
 

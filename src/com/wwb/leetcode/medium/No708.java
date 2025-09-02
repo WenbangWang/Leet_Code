@@ -17,10 +17,7 @@ import com.wwb.leetcode.utils.ListNode;
  * The following example may help you understand the problem better:
  * <p>
  * <img src="../doc-files/708_1.jpg" />
- * 1 ----->
- * |       |
- * |       |
- * 4 <----- 3 <----- head
+ * <p>
  * In the figure above, there is a cyclic sorted list of three elements. You are given a reference to the node with value 3, and we need to insert 2 into the list.
  * <p>
  * <img src="../doc-files/708_2.jpg" />
@@ -40,7 +37,8 @@ public class No708 {
         while (pre != head) {
             if (pre != null) {
                 if (pre.val <= insertValue && current.val <= insertValue ||
-                    (pre.val > current.val && (insertValue >= pre.val || insertValue <= current.val))) {
+                    (pre.val > current.val && (insertValue >= pre.val || insertValue <= current.val)))
+                {
                     pre.next = new ListNode(insertValue);
                     pre.next.next = current;
                     break;

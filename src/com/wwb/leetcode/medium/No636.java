@@ -114,14 +114,11 @@ public class No636 {
         END;
 
         public static Event from(String event) {
-            switch (event) {
-                case "start":
-                    return Event.START;
-                case "end":
-                    return Event.END;
-                default:
-                    throw new RuntimeException("Unknown event: " + event);
-            }
+            return switch (event) {
+                case "start" -> Event.START;
+                case "end" -> Event.END;
+                default -> throw new RuntimeException("Unknown event: " + event);
+            };
         }
     }
 

@@ -10,7 +10,7 @@ package com.wwb.leetcode.easy;
  */
 public class No88 {
 
-    public void merge(int A[], int m, int B[], int n) {
+    public void merge(int[] A, int m, int[] B, int n) {
         // solution1(A, m, B, n);
         solution2(A, m, B, n);
     }

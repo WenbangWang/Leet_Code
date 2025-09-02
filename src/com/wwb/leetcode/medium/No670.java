@@ -109,7 +109,7 @@ public class No670 {
         chars[leftIndex] = chars[rightIndex];
         chars[rightIndex] = temp;
 
-        return Integer.valueOf(new String(chars));
+        return Integer.parseInt(new String(chars));
     }
 
     private void init(List<LinkedList<Integer>> indexes) {

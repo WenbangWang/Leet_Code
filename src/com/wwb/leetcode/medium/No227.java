@@ -22,7 +22,6 @@ public class No227 {
             return 0;
         }
 
-        int result = 0;
         char lastSign = '+';
         Stack<Integer> stack = new Stack<>();
         int number = 0;

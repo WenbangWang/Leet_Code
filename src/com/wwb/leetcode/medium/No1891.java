@@ -86,6 +86,12 @@ public class No1891 {
                 count += ribbon / mid;
             }
 
+            if (count < k) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+
             if (count >= k) {
                 start = mid;
             } else {
