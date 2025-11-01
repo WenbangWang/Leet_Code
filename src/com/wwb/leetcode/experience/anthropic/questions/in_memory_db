@@ -1,0 +1,74 @@
+Your task is to implement a simplified version of an in-memory database. Plan your design according to the level specifications below:
+Solving this task consists of several levels. Subsequent levels are opened when the current level is correctly solved. You always have access to the data for the current and all previous levels.
+Requirements
+Your task is to implement a simplified version of a banking system. Plan your design according to the level specifications below:
+Level 1: In-memory database should support basic operations to manipulate records, fields, and values within fields.
+Level 2: In-memory database should support displaying a record's fields based on a filter.
+Level 3: In-memory database should support the TTL (Time-To-Live) settings for records.
+Level 4: In-memory database should support look-back operations to retrieve values stored at a specific timestamp in the past.
+To move to the next level, you need to pass all the tests at this level.
+Note
+You will receive a list of queries to the system, and the final output should be an array of strings representing the returned values of all queries. Each query will only call one operation.
+
+Level 1
+The basic level of the in-memory database contains records. Each record can be accessed with a unique identifier key, which is of string type. A record contains several field-value pairs, with field as string type and value as integer type. All operations have a timestamp parameter — a stringified timestamp in milliseconds. It is guaranteed that all timestamps are unique and are in a range from 1 to 109. Operations will be given in order of strictly increasing timestamps. Timestamps will be needed starting from Level 3.
+SET <timestamp> <key> <field> <value> — should insert a field-value pair to the record associated with key. If the field in the record already exists, replace the existing value with the specified value. If the record does not exist, a new one is created. This operation should return an empty string.
+COMPARE_AND_SET <timestamp> <key> <field> <expectedValue> <newValue> — should update the value of field in the record associated with key to newValue if the current value equals expectedValue. If expectedValue does not match the current value, or either key or field does not exist, this operation is ignored. This operation should return "true" if the field was updated and "false" otherwise.
+COMPARE_AND_DELETE <timestamp> <key> <field> <expectedValue> — should remove the field field in the record associated with key if the previous value equals expectedValue. If expectedValue does not match the current value, or either key or field does not exist, this operation is ignored. This operation should return "true" if the field was removed and "false" otherwise.
+GET <timestamp> <key> <field> — should return a string representing the value contained within field of the record associated with key. If the record or the field does not exist, should return an empty string.
+Examples
+The example below shows how these operations should work (the section is scrollable to the right):
+Queries
+Explanations
+queries = [
+  ["SET", "0", "A", "B", "4"],
+
+  ["SET", "1", "A", "C", "6"],
+  ["COMPARE_AND_SET", "2", "A", "B", "4", "9"],
+  ["COMPARE_AND_SET", "3", "A", "C", "4", "9"],
+  ["COMPARE_AND_DELETE", "4", "A", "C", "6"],
+  ["GET", "5", "A", "C"],
+  ["GET", "6", "A", "B"]
+]
+
+
+returns ""; database state: {"A": {"B": 4}}
+returns ""; database state: {"A": {"B": 4, "C": 6}}
+returns "true"; database state: {"A": {"B": 9, "C": 6}}
+returns "false"; field "C" in record "A" currently has a value of 6, so the operation is ignored
+returns "true"; database state: {"A": {"B": 9}}
+returns ""; field "C" in record "A" was previously deleted
+returns "9"
+
+
+
+
+the output should be ["", "", "true", "false", "true", "", "9"].
+Input/Output
+[execution time limit] 4 seconds (js)
+[memory limit] 1 GB
+[input] array.array.string queries
+An array of queries to the system. It is guaranteed that all the queries parameters are valid: each query calls one of the operations described in the description, all operation parameters are given in the correct format, and all conditions required for each operation are satisfied .
+Guaranteed constraints:
+1 ≤ queries.length ≤ 500.
+[output]array.string
+An array of strings representing the returned values of queries.
+
+
+Test
+queries:
+[["SET","160000000","a","a","1"],
+["SET","160000001","a","A","2"],
+["GET","160000002","a","a"],
+["COMPARE_AND_DELETE","160000003","a","a","0"],
+["GET","160000004","a","a"],
+["COMPARE_AND_DELETE","160000005","a","a","1"],
+["GET","160000006","a","a"],
+["GET","160000007","a","A"],
+["COMPARE_AND_DELETE","160000008","a","A","2"],
+["SET","160000009","a","A","7"],
+["SET","160000010","a","A","9"],
+["GET","160000011","a","a"],
+["GET","160000012","a","A"]]
+
+Expected return: ["", "", "1", "false", "1", "true", "", "2", "true", "", "", "", "9"]

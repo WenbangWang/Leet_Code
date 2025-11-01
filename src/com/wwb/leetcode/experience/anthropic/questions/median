@@ -1,0 +1,7 @@
+Given a very large dataset and an array of machines, properly assign workloads to machines to find the mode of the dataset
+
+
+Follow-up: find the median for the same dataset
+
+mode每个partition生成value count的map 然后agg到一起
+median把value count的map分到不同的machine上 先随机选一个数字 count有多少个数小于 有多少数大于它， 然后继续重复做直到找到 sum/2的index？

@@ -55,23 +55,25 @@ public class No1522 {
 
     private Data dfs(Node node) {
         if (node.children.isEmpty()) {
-            return new Data(0, 0);
+            return new Data(1, 0);
         }
 
-        Data result = new Data(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        Data result = new Data(0, 0);
+        int secondMaxDepth = Integer.MIN_VALUE;
 
         for (Node child : node.children) {
             Data childResult = dfs(child);
-
-            // Don't really need this? See No543
             result.maxDiameter = Math.max(result.maxDiameter, childResult.maxDiameter);
 
-            if (result.maxDepth != Integer.MIN_VALUE) {
-                result.maxDiameter = Math.max(result.maxDiameter, result.maxDepth + childResult.maxDepth);
+            if (childResult.maxDepth > result.maxDepth) {
+                result.maxDepth = childResult.maxDepth;
+                secondMaxDepth = result.maxDepth;
+            } else if (childResult.maxDepth > secondMaxDepth) {
+                secondMaxDepth = childResult.maxDepth;
             }
-            result.maxDepth = Math.max(result.maxDepth, childResult.maxDepth);
         }
 
+        result.maxDiameter = Math.max(result.maxDiameter, result.maxDepth + secondMaxDepth);
         result.maxDepth++;
 
         return result;

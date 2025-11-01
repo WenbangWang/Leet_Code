@@ -20,7 +20,7 @@ public class No234 {
     }
 
     private boolean solution1(ListNode head) {
-        if(head == null) {
+        if (head == null) {
             return true;
         }
 
@@ -28,7 +28,7 @@ public class No234 {
         ListNode current = head;
         int size = 0;
 
-        while(current != null) {
+        while (current != null) {
             stack.push(current);
             size++;
             current = current.next;
@@ -36,8 +36,8 @@ public class No234 {
 
         current = head;
 
-        for(int i = 0; i < size / 2; i++) {
-            if(current.val != stack.pop().val) {
+        for (int i = 0; i < size / 2; i++) {
+            if (current.val != stack.pop().val) {
                 return false;
             }
             current = current.next;
@@ -47,7 +47,7 @@ public class No234 {
     }
 
     private boolean solution2(ListNode head) {
-        if(head == null) {
+        if (head == null) {
             return true;
         }
 
@@ -55,7 +55,7 @@ public class No234 {
         ListNode newHead = null;
         ListNode runner = head;
 
-        while(runner != null && runner.next != null) {
+        while (runner != null && runner.next != null) {
             runner = runner.next.next;
 
             ListNode next = current.next;
@@ -64,12 +64,14 @@ public class No234 {
             current = next;
         }
 
-        if(runner != null) {
+        // odd number of nodes
+        if (runner != null) {
+            // go pass the mid node
             current = current.next;
         }
 
-        while(newHead != null && current != null) {
-            if(newHead.val != current.val) {
+        while (newHead != null && current != null) {
+            if (newHead.val != current.val) {
                 return false;
             }
 

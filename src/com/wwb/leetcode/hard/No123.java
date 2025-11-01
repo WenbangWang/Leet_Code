@@ -2,9 +2,9 @@ package com.wwb.leetcode.hard;
 
 /**
  * Say you have an array for which the ith element is the price of a given stock on day i.
- *
+ * <p>
  * Design an algorithm to find the maximum profit. You may complete at most two transactions.
- *
+ * <p>
  * Note:
  * You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
  */
@@ -16,7 +16,7 @@ public class No123 {
         int minBuyPrice1 = Integer.MAX_VALUE;
         int minBuyPrice2 = Integer.MAX_VALUE;
 
-        for(int price : prices) {
+        for (int price : prices) {
             minBuyPrice1 = Math.min(minBuyPrice1, price);
             maxProfit1 = Math.max(maxProfit1, price - minBuyPrice1);
             minBuyPrice2 = Math.min(minBuyPrice2, price - maxProfit1);

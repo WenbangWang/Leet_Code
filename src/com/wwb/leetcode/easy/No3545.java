@@ -84,7 +84,7 @@ public class No3545 {
                 continue;
             }
 
-            result+= frequency;
+            result += frequency;
             k++;
 
             if (k == 0) {

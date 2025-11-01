@@ -2,7 +2,7 @@ package com.wwb.leetcode.easy;
 
 /**
  * Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
- *
+ * <p>
  * Example:
  *
  * <div>
@@ -16,7 +16,7 @@ package com.wwb.leetcode.easy;
 public class No346 {
     class MovingAverage {
         private int[] arr;
-        private int sum;
+        private long sum;
         private int count;
 
         MovingAverage(int size) {
@@ -30,7 +30,7 @@ public class No346 {
 
             this.sum -= this.arr[index];
             this.arr[index] = val;
-            this.sum += val;
+            this.sum += this.arr[index];
 
             this.count++;
 

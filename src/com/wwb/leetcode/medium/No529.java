@@ -67,8 +67,6 @@ public class No529 {
             return board;
         }
 
-        // board[row][col] == 'E'
-
         Queue<int[]> queue = new LinkedList<>();
         int[][] dirs = new int[][]{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
         int m = board.length;

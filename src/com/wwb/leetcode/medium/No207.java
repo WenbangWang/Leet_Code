@@ -97,6 +97,7 @@ public class No207 {
         return true;
     }
 
+    // preferred
     private boolean solution3(int numCourses, int[][] prerequisites) {
         int[] inDegrees = new int[numCourses];
         Map<Integer, List<Integer>> courseToDependents = new HashMap<>();

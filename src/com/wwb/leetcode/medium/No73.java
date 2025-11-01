@@ -44,25 +44,25 @@ public class No73 {
     private void solution2(int[][] matrix) {
         boolean firstRowHasZero = false;
         boolean firstColHasZero = false;
-        int x = matrix[0].length;
-        int y = matrix.length;
+        int column = matrix[0].length;
+        int row = matrix.length;
 
-        for (int i = 0; i < x; i++) {
+        for (int i = 0; i < column; i++) {
             if (matrix[0][i] == 0) {
                 firstRowHasZero = true;
                 break;
             }
         }
 
-        for (int i = 0; i < y; i++) {
+        for (int i = 0; i < row; i++) {
             if (matrix[i][0] == 0) {
                 firstColHasZero = true;
                 break;
             }
         }
 
-        for (int i = 1; i < y; i++) {
-            for (int j = 1; j < x; j++) {
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < column; j++) {
                 if (matrix[i][j] == 0) {
                     matrix[0][j] = 0;
                     matrix[i][0] = 0;
@@ -70,30 +70,30 @@ public class No73 {
             }
         }
 
-        for (int i = 1; i < x; i++) {
+        for (int i = 1; i < column; i++) {
             if (matrix[0][i] == 0) {
-                for (int j = 1; j < y; j++) {
+                for (int j = 1; j < row; j++) {
                     matrix[j][i] = 0;
                 }
             }
         }
 
-        for (int i = 1; i < y; i++) {
+        for (int i = 1; i < row; i++) {
             if (matrix[i][0] == 0) {
-                for (int j = 1; j < x; j++) {
+                for (int j = 1; j < column; j++) {
                     matrix[i][j] = 0;
                 }
             }
         }
 
         if (firstRowHasZero) {
-            for (int i = 0; i < x; i++) {
+            for (int i = 0; i < column; i++) {
                 matrix[0][i] = 0;
             }
         }
 
         if (firstColHasZero) {
-            for (int i = 0; i < y; i++) {
+            for (int i = 0; i < row; i++) {
                 matrix[i][0] = 0;
             }
         }

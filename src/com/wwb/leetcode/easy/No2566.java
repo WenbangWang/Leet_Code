@@ -38,6 +38,10 @@ package com.wwb.leetcode.easy;
  */
 public class No2566 {
     public int minMaxDifference(int num) {
+        return solution1(num);
+    }
+
+    private int solution1(int num) {
         int mod = 1;
         int runner = num;
 
@@ -93,5 +97,64 @@ public class No2566 {
         }
 
         return max - min;
+    }
+
+    private int solution2(int num) {
+        String str = String.valueOf(num);
+        char maxCharToReplace = '9';
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != '9') {
+                maxCharToReplace = str.charAt(i);
+                break;
+            }
+        }
+
+        String max = str.replace(maxCharToReplace, '9');
+        String min = str.replace(str.charAt(0), '0');
+
+        return Integer.parseInt(max) - Integer.parseInt(min);
+    }
+
+    // not allow leading zeros
+    private int solution3(int num) {
+        String str = String.valueOf(num);
+        char maxCharToReplace = '9';
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != '9') {
+                maxCharToReplace = str.charAt(i);
+                break;
+            }
+        }
+
+        String max = str.replace(maxCharToReplace, '9');
+
+
+        String min = getMin(str);
+
+        return Integer.parseInt(max) - Integer.parseInt(min);
+    }
+
+    private String getMin(String str) {
+        String min = "";
+
+        if (str.charAt(0) == 1) {
+            char minCharToReplace = '0';
+
+            for (int i = 1; i < str.length(); i++) {
+                if (str.charAt(i) != '0' && str.charAt(i) != '1') {
+                    minCharToReplace = str.charAt(i);
+                    break;
+                }
+            }
+
+            if (minCharToReplace != '0') {
+                min = str.replace(minCharToReplace, '0');
+            }
+        } else {
+            min = str.replace(str.charAt(0), '1');
+        }
+        return min;
     }
 }

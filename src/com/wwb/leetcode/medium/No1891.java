@@ -71,7 +71,7 @@ public class No1891 {
             maxRibbon = Math.max(ribbon, maxRibbon);
         }
 
-        int start = 0;
+        int start = 1;
         int end = maxRibbon;
 
         while (start < end) {
@@ -84,12 +84,6 @@ public class No1891 {
 
             for (int ribbon : ribbons) {
                 count += ribbon / mid;
-            }
-
-            if (count < k) {
-                end = mid;
-            } else {
-                start = mid + 1;
             }
 
             if (count >= k) {

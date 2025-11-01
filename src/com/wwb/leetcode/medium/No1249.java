@@ -65,9 +65,7 @@ public class No1249 {
             }
         }
 
-        if (!leftParens.isEmpty()) {
-            indexesToRemove.addAll(leftParens);
-        }
+        indexesToRemove.addAll(leftParens);
 
         for (int i = 0; i < s.length(); i++) {
             if (indexesToRemove.contains(i)) {

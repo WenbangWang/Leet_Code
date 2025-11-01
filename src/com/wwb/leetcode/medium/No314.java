@@ -78,7 +78,9 @@ public class No314 {
         Queue<Integer> columnQueue = new LinkedList<>();
         // key is the column index and
         // value is the list of values in this column
-        Map<Integer, List<Integer>> map = new TreeMap<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int minCol = Integer.MAX_VALUE;
+        int maxCol = Integer.MIN_VALUE;
 
         nodeQueue.add(root);
         columnQueue.add(0);
@@ -87,11 +89,11 @@ public class No314 {
             TreeNode node = nodeQueue.poll();
             int column = columnQueue.poll();
 
-            if (!map.containsKey(column)) {
-                map.put(column, new ArrayList<>());
-            }
-
+            map.putIfAbsent(column, new ArrayList<>());
             map.get(column).add(node.val);
+
+            minCol = Math.min(minCol, column);
+            maxCol = Math.max(maxCol, column);
 
             if (node.left != null) {
                 nodeQueue.add(node.left);
@@ -104,6 +106,12 @@ public class No314 {
             }
         }
 
-        return new ArrayList<>(map.values());
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (int i = minCol; i <= maxCol; i++) {
+            result.add(map.get(i));
+        }
+
+        return result;
     }
 }

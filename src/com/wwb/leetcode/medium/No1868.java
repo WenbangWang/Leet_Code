@@ -54,33 +54,28 @@ public class No1868 {
         List<List<Integer>> result = new ArrayList<>();
         int i = 0;
         int j = 0;
-        int n = encoded1.length;
 
-        while (i < n && j < n) {
-            int num = encoded1[i][0] * encoded2[j][0];
+        while (i < encoded1.length && j < encoded2.length) {
+            int product = encoded1[i][0] * encoded2[j][0];
+            int count = Math.min(encoded1[i][1], encoded2[j][1]);
 
-            if (result.isEmpty() || result.get(result.size() - 1).get(0) != num) {
-                List<Integer> current = new ArrayList<>();
-                current.add(num);
-                current.add(0);
-                result.add(current);
+            if (result.isEmpty() || result.get(result.size() - 1).get(0) != product) {
+                result.add(new ArrayList<>(List.of(product, count)));
+            } else {
+                List<Integer> last = result.get(result.size() - 1);
+                last.set(1, last.get(1) + count);
             }
 
-            List<Integer> current = result.get(result.size() - 1);
-            current.set(1, current.get(1) + 1);
-
-            encoded1[i][1]--;
-            encoded2[j][1]--;
+            encoded1[i][1] -= count;
+            encoded2[j][1] -= count;
 
             if (encoded1[i][1] == 0) {
                 i++;
             }
-
             if (encoded2[j][1] == 0) {
                 j++;
             }
         }
-
 
         return result;
     }

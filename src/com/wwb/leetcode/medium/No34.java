@@ -27,13 +27,13 @@ public class No34 {
         int start = 0;
         int end = nums.length - 1;
 
-        while (start <= end) {
+        while (start < end) {
             int mid = start + (end - start) / 2;
 
             if (target > nums[mid]) {
                 start = mid + 1;
             } else {
-                end = mid - 1;
+                end = mid;
             }
         }
 
@@ -44,17 +44,18 @@ public class No34 {
         result[0] = start;
         end = nums.length - 1;
 
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
+        while (start < end) {
+            // bias towards right
+            int mid = start + (end - start + 1) / 2;
 
             if (target < nums[mid]) {
                 end = mid - 1;
             } else {
-                start = mid + 1;
+                start = mid;
             }
         }
 
-        result[1] = end;
+        result[1] = start;
 
         return result;
     }

@@ -1,0 +1,55 @@
+System design
+
+https://www.1point3acres.com/bbs/thread-1134200-1-1.html
+
+ads click aggregation
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/ad-click-aggregator
+auction bidding
+  - https://pyemma.github.io/How-to-design-auction-system/
+design top k tags
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/top-k
+设计leetcode类似系统
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/leetcode
+设计买票系统
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/ticketmaster
+设计dropbox类似系统
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/dropbox
+  - https://www.geeksforgeeks.org/system-design/design-dropbox-a-system-design-interview-question/
+  - https://medium.com/@lazygeek78/system-design-of-dropbox-6edb397a0f67
+messenger
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/whatsapp
+  - https://bytebytego.com/courses/system-design-interview/design-a-chat-system
+design a leaderboard，find user rank globally，in the friendship circle. find k users before and after the current user globally， in the friendship circle
+  - https://bytebytego.com/courses/system-design-interview/real-time-gaming-leaderboard
+instagram
+https://www.1point3acres.com/bbs/thread-1131578-1-1.html
+design camelcamelcamel.com
+  - https://systemdesignfightclub.com/price-drop-tracker/ chatgpt
+设计一个适用于国际化的translation lib/service
+设计一个post的live comments feature
+  - https://www.hellointerview.com/learn/system-design/problem-breakdowns/fb-live-comments
+design monitoring system
+  - TODO how a disk block look like
+
+FR
+NFR
+Back of Envelope calculation
+Core Data Entities
+System Interfaces
+Start from Simple Design to Satisfy FR
+Enrich the Design to Satisfy NFR
+Deep Dives
+Walk Through Several Workflows
+
+i'm a staff software engineer and trying to prepare system design interview with meta.
+Design Instagram,
+try to follow this order.
+Clarification Questions (Ordered by FR → NFR)
+FR
+NFR
+Back of Envelope calculation
+Core Data Entities
+System Interfaces
+Start from Simple Design (include anscii diagram)
+Enrich the Design (include anscii diagram)
+Possible Deep Dives (and expand on each deep dives)

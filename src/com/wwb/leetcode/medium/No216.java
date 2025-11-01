@@ -6,9 +6,10 @@ import java.util.List;
 /**
  * Find all possible combinations of k numbers that add up to a number n,
  * given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
- *
+ * <p>
  * Ensure that numbers within the set are sorted in ascending order.
  *
+ * <pre>
  * Example 1:
  *
  * Input: k = 3, n = 7
@@ -24,14 +25,16 @@ import java.util.List;
  * Output:
  *
  * [[1,2,6], [1,3,5], [2,3,4]]
+ * </pre>
  */
 public class No216 {
 
+    // C(9, K)
     public List<List<Integer>> combinationSum3(int k, int n) {
         List<List<Integer>> result = new ArrayList<>();
         List<Integer> resultSet = new ArrayList<>();
 
-        if(k <= 0 || n <= 0) {
+        if (k <= 0 || n <= 0) {
             return result;
         }
 
@@ -41,16 +44,16 @@ public class No216 {
     }
 
     private void combinationSum3(List<List<Integer>> result, List<Integer> resultSet, int k, int n, int index) {
-        if(n < 0 || resultSet.size() > k) {
+        if (n < 0 || resultSet.size() > k) {
             return;
         }
 
-        if(resultSet.size() == k && n == 0) {
+        if (resultSet.size() == k && n == 0) {
             result.add(new ArrayList<>(resultSet));
             return;
         }
 
-        for(int i = index; i < 9; i++) {
+        for (int i = index; i < 9; i++) {
             int num = i + 1;
             resultSet.add(num);
             combinationSum3(result, resultSet, k, n - num, i + 1);

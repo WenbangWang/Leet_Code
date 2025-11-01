@@ -1,9 +1,8 @@
 package com.wwb.leetcode.medium;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 /**
  * Given a sorted integer array nums, where the range of elements are in the inclusive range [lower, upper], return its missing ranges.
@@ -18,30 +17,20 @@ import java.util.stream.IntStream;
 public class No163 {
     public List<List<Integer>> findMissingRanges(int[] nums, int lower, int upper) {
         List<List<Integer>> result = new ArrayList<>();
-        int pre = lower;
+        long pre = lower - 1;
 
         for (int i = 0; i <= nums.length; i++) {
-            int num;
+            long num;
             if (i == nums.length) {
-                num = upper;
+                num = upper + 1;
             } else {
                 num = nums[i];
             }
-            int lastPre = pre;
+
+            if (pre + 1 < num) {
+                result.add(LongStream.range(pre + 1, num - 1).mapToInt(l -> (int) l).boxed().toList());
+            }
             pre = num;
-
-            if (lastPre + 1 == num) {
-                continue;
-            }
-
-            if (lastPre + 1 == num - 1) {
-                result.add(Collections.singletonList(lastPre + 1));
-                continue;
-            }
-
-            if (lastPre + 1 < num) {
-                result.add(IntStream.range(lastPre + 1, num - 1).boxed().toList());
-            }
         }
 
         return result;

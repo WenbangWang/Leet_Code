@@ -38,20 +38,16 @@ public class No1047 {
         Deque<Character> queue = new ArrayDeque<>();
 
         for (char c : s.toCharArray()) {
-            if (queue.isEmpty()) {
-                queue.offer(c);
+            if (!queue.isEmpty() && queue.peekLast() == c) {
+                queue.pollLast();
             } else {
-                if (queue.peekLast() == c) {
-                    queue.removeLast();
-                } else {
-                    queue.offer(c);
-                }
+                queue.offer(c);
             }
         }
         StringBuilder result = new StringBuilder(s);
 
         while (!queue.isEmpty()) {
-            result.append(queue.removeFirst());
+            result.append(queue.pollFirst());
         }
 
         return result.toString();

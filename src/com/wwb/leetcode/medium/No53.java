@@ -16,12 +16,25 @@ public class No53 {
     private int solution1(int[] nums) {
         int maxSum = Integer.MIN_VALUE;
         int sum = 0;
+//        int start = 0;
+//        int end = 0;       // best subarray boundaries
+//        int tempStart = 0;            // candidate start
 
-        for (int num : nums) {
-            sum += num;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
 
             maxSum = Math.max(maxSum, sum);
             sum = Math.max(sum, 0);
+//            if (sum > maxSum) {
+//                maxSum = sum;
+//                start = tempStart;
+//                end = i;
+//            }
+//
+//            if (sum < 0) {
+//                sum = 0;
+//                tempStart = i + 1;    // start new candidate subarray
+//            }
         }
 
         return maxSum;

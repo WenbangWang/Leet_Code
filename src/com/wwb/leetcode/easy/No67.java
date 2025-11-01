@@ -1,7 +1,5 @@
 package com.wwb.leetcode.easy;
 
-import java.util.Stack;
-
 /**
  * Given two binary strings, return their sum (also a binary string).
  * <p>
@@ -16,44 +14,20 @@ public class No67 {
 
     public String addBinary(String a, String b) {
         int carry = 0;
-        Stack<Integer> stack = new Stack<>();
-        StringBuilder stringBuilder = new StringBuilder();
-        char[] firstCharArray = a.toCharArray();
-        char[] secondCharArray = b.toCharArray();
-        int aLength = firstCharArray.length;
-        int bLength = secondCharArray.length;
+        StringBuilder result = new StringBuilder();
+        int i = a.length() - 1;
+        int j = b.length() - 1;
 
-        while (aLength - 1 >= 0 && bLength - 1 >= 0) {
-            int digit = charToInt(firstCharArray[aLength - 1]) + charToInt(secondCharArray[bLength - 1]) + carry;
-            carry = digit / 2;
-            stack.push(digit % 2);
-            aLength--;
-            bLength--;
+        while (i >= 0 || j >= 0 || carry == 1) {
+            int aDigit = i < 0 ? 0 : charToInt(a.charAt(i--));
+            int bDigit = j < 0 ? 0 : charToInt(b.charAt(j--));
+
+            int sum = aDigit + bDigit + carry;
+            carry = sum / 2;
+            result.append(sum % 2);
         }
 
-        while (aLength - 1 >= 0) {
-            int digit = charToInt(firstCharArray[aLength - 1]) + carry;
-            carry = digit / 2;
-            stack.push(digit % 2);
-            aLength--;
-        }
-
-        while (bLength - 1 >= 0) {
-            int digit = charToInt(secondCharArray[bLength - 1]) + carry;
-            carry = digit / 2;
-            stack.push(digit % 2);
-            bLength--;
-        }
-
-        if (carry == 1) {
-            stack.push(carry);
-        }
-
-        while (!stack.isEmpty()) {
-            stringBuilder.append(stack.pop());
-        }
-
-        return stringBuilder.toString();
+        return result.reverse().toString();
     }
 
     private int charToInt(char c) {

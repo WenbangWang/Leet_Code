@@ -62,7 +62,6 @@ public class No480 {
         private TreeMap<Integer, Integer> maxHeap;
         private TreeMap<Integer, Integer> minHeap;
         private TreeMap<Integer, Integer> reference;
-        private TreeMap<Integer, Integer> temp;
 
         TreeMapStore() {
             this.maxHeap = new TreeMap<>(Comparator.reverseOrder());
@@ -77,14 +76,15 @@ public class No480 {
             this.minHeap.put(key, this.minHeap.getOrDefault(key, 0) + 1);
             this.remove(this.maxHeap, key);
 
-            this.temp = this.maxHeap;
-            this.maxHeap = this.minHeap;
-            this.minHeap = this.temp;
+            swap();
         }
 
         public void remove(int num) {
             if (this.minHeap.containsKey(num)) {
                 this.remove(this.minHeap, num);
+
+                // don't really need to check whether maxHeap is empty
+                // as when minHeap has number, there should be at least two numbers in total (one in each heap).
                 int key = this.maxHeap.firstKey();
                 this.remove(this.maxHeap, key);
                 this.minHeap.put(key, this.minHeap.getOrDefault(key, 0) + 1);
@@ -92,10 +92,7 @@ public class No480 {
                 this.remove(this.maxHeap, num);
             }
 
-
-            this.temp = this.maxHeap;
-            this.maxHeap = this.minHeap;
-            this.minHeap = this.temp;
+            swap();
         }
 
         public double findMedian() {
@@ -110,13 +107,18 @@ public class No480 {
                 heap.put(num, count);
             }
         }
+
+        private void swap() {
+            TreeMap<Integer, Integer> temp = this.maxHeap;
+            this.maxHeap = this.minHeap;
+            this.minHeap = temp;
+        }
     }
 
     private class QueueStore implements Store {
         private Queue<Integer> maxHeap;
         private Queue<Integer> minHeap;
         private Queue<Integer> reference;
-        private Queue<Integer> temp;
 
         QueueStore() {
             this.maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
@@ -125,8 +127,12 @@ public class No480 {
         }
 
         public void add(int num) {
-            (this.temp = this.maxHeap).offer(num);
-            (this.maxHeap = this.minHeap).offer((this.minHeap = this.temp).poll());
+            this.maxHeap.offer(num);
+            this.minHeap.offer(this.maxHeap.poll());
+
+            Queue<Integer> temp = this.maxHeap;
+            this.maxHeap = this.minHeap;
+            this.minHeap = temp;
         }
 
         public void remove(int num) {
@@ -137,9 +143,9 @@ public class No480 {
                 this.maxHeap.remove(num);
             }
 
-            this.temp = this.maxHeap;
+            Queue<Integer> temp = this.maxHeap;
             this.maxHeap = this.minHeap;
-            this.minHeap = this.temp;
+            this.minHeap = temp;
         }
 
         public double findMedian() {

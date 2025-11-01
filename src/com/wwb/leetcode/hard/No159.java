@@ -23,10 +23,7 @@ public class No159 {
         int maxLength = Integer.MIN_VALUE;
 
         while (end < length) {
-            if (windowWithTwoUniqueCharacters.size() <= 2) {
-                char c = s.charAt(end);
-                windowWithTwoUniqueCharacters.put(c, end++);
-            }
+            windowWithTwoUniqueCharacters.put(s.charAt(end), end++);
 
             if (windowWithTwoUniqueCharacters.size() > 2) {
                 int leftMost = length;

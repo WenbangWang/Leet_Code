@@ -18,6 +18,10 @@ public class No22 {
         return solution2(n);
     }
 
+    // O(2 ^ {2N} / √N)
+    // C(2N, N) / (N + 1) -
+    // (2n choose n) = number of ways to pick n items from 2n → combinatorial count.
+    // Dividing by (n+1) gives only valid sequences of balanced parentheses.
     private List<String> solution1(int n) {
         List<List<String>> results = new ArrayList<>();
         results.add(Collections.singletonList(""));

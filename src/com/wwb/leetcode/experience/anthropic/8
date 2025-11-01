@@ -1,0 +1,6 @@
+VO coding: 去重，面的時候他們剛剛換成全部CodeSignal面試，不跟Replit合作了，面試官花了點時間熟悉CodeSignal
+VO HM: 標準BQ，會從一個notable project深挖
+VO Culture: 面試官是Head of AI Safety，面的我心驚膽戰，問了對AI Safety有什麼看法，A家哪方面可以做得更好... 等，還有一些標準BQ
+VO System design: Q1 問了新題，就是地裡前幾天才出現的題 Deploy LLM model to GPU clusters：1000 workers各自有10Gbps的network bandwidth (in + out)，要如何有效率的load 500GB的model到每一個workers. 一開始給了tree解法，面試官提示了一下idle workers，改成了chunked model + 流水線(1進1出)，最後問了問怎麼manage workers
+
+https://www.1point3acres.com/bbs/thread-1144012-1-1.html

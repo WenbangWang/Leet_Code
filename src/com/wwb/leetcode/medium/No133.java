@@ -73,7 +73,6 @@ public class No133 {
             UndirectedGraphNode currentNode = queue.poll();
 
             for (UndirectedGraphNode neighbor : currentNode.neighbors) {
-
                 if (!visited.containsKey(neighbor.label)) {
                     visited.put(neighbor.label, new UndirectedGraphNode(neighbor.label));
                     queue.add(neighbor);

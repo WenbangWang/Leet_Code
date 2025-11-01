@@ -36,32 +36,19 @@ public class No977 {
         int index = nums.length - 1;
         int[] result = new int[nums.length];
 
-        while (start < end && nums[start] <= 0 && nums[end] > 0) {
-            int startNum = Math.abs(nums[start]);
-            int endNum = nums[end];
+        while (start <= end) {
+            int startNum = nums[start] * nums[start];
+            int endNum = nums[end] * nums[end];
 
             if (startNum > endNum) {
-                result[index] = startNum * startNum;
+                result[index] = startNum;
                 start++;
             } else {
-                result[index] = endNum * endNum;
+                result[index] = endNum;
                 end--;
             }
 
             index--;
-        }
-
-        while (start < nums.length && nums[start] <= 0) {
-            int startNum = Math.abs(nums[start]);
-            result[index] = startNum * startNum;
-            index--;
-            start++;
-        }
-
-        while (end >= 0 && nums[end] > 0) {
-            result[index] = nums[end] * nums[end];
-            index--;
-            end--;
         }
 
         return result;

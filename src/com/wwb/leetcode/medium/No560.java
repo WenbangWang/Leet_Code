@@ -28,24 +28,20 @@ import java.util.Map;
  */
 public class No560 {
     public int subarraySum(int[] nums, int k) {
-        int[] prefixSum = new int[nums.length];
-        prefixSum[0] = nums[0];
-
-        for (int i = 1; i < nums.length; i++) {
-            prefixSum[i] = prefixSum[i - 1] + nums[i];
-        }
-
-        Map<Integer, Integer> prefixSumToCount = new HashMap<>();
+        Map<Integer, Integer> sumToCount = new HashMap<>();
         int result = 0;
+        int sum = 0;
 
-        for (int i = 0; i < prefixSum.length; i++) {
-            if (prefixSum[i] == k) {
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+
+            if (sum == k) {
                 result++;
             }
 
-            result += prefixSumToCount.getOrDefault(prefixSum[i] - k, 0);
+            result += sumToCount.getOrDefault(sum - k, 0);
 
-            prefixSumToCount.put(prefixSum[i], prefixSumToCount.getOrDefault(prefixSum[i], 0) + 1);
+            sumToCount.put(sum, sumToCount.getOrDefault(sum, 0) + 1);
         }
 
         return result;

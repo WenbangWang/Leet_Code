@@ -42,11 +42,11 @@ public class No88 {
         }
     }
 
-    private void solution2(int[] A, int m, int[] B, int n) {
+    private void solution2(int[] large, int m, int[] small, int n) {
         int length = m + n;
 
         while (n > 0) {
-            A[--length] = (m == 0 || A[m - 1] < B[n - 1]) ? B[--n] : A[--m];
+            large[--length] = (m == 0 || large[m - 1] < small[n - 1]) ? small[--n] : large[--m];
         }
     }
 }

@@ -9,13 +9,13 @@ import java.util.Map;
  * A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
  * <p>
  * Return a deep copy of the list.
- * <div>
+ * <pre>
  *                   0        1      2      3     4
  * Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
  *                    |        |     |            |
  *                    ---------       -------------
  * Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
- * </div>
+ * </pre>
  */
 public class No138 {
 

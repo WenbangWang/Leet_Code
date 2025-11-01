@@ -16,26 +16,18 @@ public class No21 {
         ListNode head = new ListNode(0);
         ListNode current = head;
 
-        while(l1 != null && l2 != null) {
-            if(l1.val < l2.val) {
-                current.next = new ListNode(l1.val);
+        while (l1 != null || l2 != null) {
+            int l1Val = l1 == null ? Integer.MAX_VALUE : l1.val;
+            int l2Val = l2 == null ? Integer.MAX_VALUE : l2.val;
+
+            if (l1Val < l2Val) {
+                current.next = new ListNode(l1Val);
                 l1 = l1.next;
             } else {
-                current.next = new ListNode(l2.val);
+                current.next = new ListNode(l2Val);
                 l2 = l2.next;
             }
-            current = current.next;
-        }
 
-        while(l1 != null) {
-            current.next = new ListNode(l1.val);
-            l1 = l1.next;
-            current = current.next;
-        }
-
-        while(l2 != null) {
-            current.next = new ListNode(l2.val);
-            l2 = l2.next;
             current = current.next;
         }
 

@@ -86,6 +86,7 @@ public class No670 {
         return num;
     }
 
+    // find the largest digit and the leftmost digit smaller than the largest digit and swap them
     private int solution2(int num) {
         char[] chars = Integer.toString(num).toCharArray();
         int maxIndex = chars.length - 1;

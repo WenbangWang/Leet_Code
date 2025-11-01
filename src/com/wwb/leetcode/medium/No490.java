@@ -1,5 +1,8 @@
 package com.wwb.leetcode.medium;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * There is a ball in a maze with empty spaces and walls. The ball can go through empty spaces by rolling up, down, left or right, but it won't stop rolling until hitting a wall. When the ball stops, it could choose the next direction.
  * <p>
@@ -61,11 +64,59 @@ package com.wwb.leetcode.medium;
  * The maze contains at least 2 empty spaces, and both the width and height of the maze won't exceed 100.
  */
 public class No490 {
+
     public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        return solution1(maze, start, destination);
+    }
+
+    // O(M * N * max(M, N)) - max is the rolling operation
+    // space O(M * N) for both dfs stack and visited matrix
+    private boolean solution1(int[][] maze, int[] start, int[] destination) {
         int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
         boolean[][] visited = new boolean[maze.length][maze[0].length];
 
         return dfs(maze, visited, dirs, start[0], start[1], destination);
+    }
+
+    private boolean solution2(int[][] maze, int[] start, int[] destination) {
+        int m = maze.length;
+        int n = maze[0].length;
+
+        boolean[][] visited = new boolean[m][n];
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(start);
+        visited[start[0]][start[1]] = true;
+
+        int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            int x = curr[0], y = curr[1];
+
+            if (x == destination[0] && y == destination[1]) {
+                return true;
+            }
+
+            for (int[] dir : dirs) {
+                int newX = x;
+                int newY = y;
+
+                // roll until hitting a wall
+                while (newX + dir[0] >= 0 && newX + dir[0] < m &&
+                    newY + dir[1] >= 0 && newY + dir[1] < n &&
+                    maze[newX + dir[0]][newY + dir[1]] == 0) {
+                    newX += dir[0];
+                    newY += dir[1];
+                }
+
+                if (!visited[newX][newY]) {
+                    visited[newX][newY] = true;
+                    queue.offer(new int[]{newX, newY});
+                }
+            }
+        }
+
+        return false;
     }
 
     private boolean dfs(

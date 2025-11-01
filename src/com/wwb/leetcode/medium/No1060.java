@@ -34,16 +34,13 @@ package com.wwb.leetcode.medium;
  * </pre>
  */
 public class No1060 {
-    public static void main(String[] args) {
-        System.out.println(new No1060().missingElement(new int[]{4,7,9,10}, 3));
-    }
     public int missingElement(int[] nums, int k) {
         return solution1(nums, k);
     }
 
     private int solution1(int[] nums, int k) {
         for (int i = 0; i < nums.length; i++) {
-            int missingNumbers = missingNumbers(nums, i, k);
+            int missingNumbers = missingNumbers(nums, i);
 
             if (missingNumbers >= k) {
                 // missing numbers at i - 1
@@ -55,13 +52,13 @@ public class No1060 {
         }
 
         // nums[nums.length - 1] + k - nums[nums.length - 1] + nums.length - 1 + nums[0];
-        return nums[nums.length - 1] + k - missingNumbers(nums, nums.length - 1, k);
+        return nums[nums.length - 1] + k - missingNumbers(nums, nums.length - 1);
     }
 
     private int solution2(int[] nums, int k) {
         int n = nums.length;
 
-        int lastMissingNumbers = missingNumbers(nums, n - 1, k);
+        int lastMissingNumbers = missingNumbers(nums, n - 1);
         if (k >= lastMissingNumbers) {
             return nums[nums.length - 1] + k - lastMissingNumbers;
         }
@@ -72,17 +69,17 @@ public class No1060 {
         while (start <= end) {
             int mid = (end - start) / 2 + start;
 
-            if (missingNumbers(nums, mid, k) < k) {
+            if (missingNumbers(nums, mid) < k) {
                 start = mid + 1;
             } else {
                 end = mid - 1;
             }
         }
 
-        return nums[start - 1] + k -  missingNumbers(nums, start - 1, k);
+        return nums[start - 1] + k -  missingNumbers(nums, start - 1);
     }
 
-    private int missingNumbers(int[] nums, int i, int k) {
+    private int missingNumbers(int[] nums, int i) {
         return nums[i] - i - nums[0];
     }
 }

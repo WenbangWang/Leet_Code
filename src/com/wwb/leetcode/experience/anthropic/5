@@ -1,0 +1,33 @@
+Phone (Coding，国人小姐姐)
+前10分钟聊了下过往经历
+Coding是Web Crawler，提供了getURLs的function
+Follow-up: 优化 (多线程)
+用的是Replit，不是很好用，代码写完没提示任何编译问题，点了下run，出现各种import error，修了快5分钟
+代码需要run，test结果只要是小于100就是正确的
+面完过了两天，recruiter通知pass，准备安排VO
+
+VO
+Day 1 - Coding (白人小哥)
+Coding Q3，考的是那个Stack Trace的题目，提前准备过，做起来很顺
+Follow 1：N consecutive trace消噪
+Follow 2：因为最开始是prefix做的比较，这里问了postfix怎么处理
+这次是在CodeSignal里面写，需要run，看来他们家放弃用replit面试了？
+最后白人小哥说perfect solution，这轮应该没啥问题
+
+Day 1 - System Design (ABC小哥)
+Design Q1，考的是那个Inference API的题目，提前准备过，答的也很顺
+我用的Meta面试的excalidraw来画的图
+Dive deep重点问了如何优化GPU的usage，以及如何处理request暴增，需要scale more GPU时，GPU启动慢如何解决
+整个流程不太像面其他公司的SD那种按照套路一步一步走，他们只会focus在他们想dive deep的地方，别的部分一笔带过也没啥问题
+比如: BOE计算时候小哥说你可以跳过，全程也没问过任何关于failover / what if xxx failed之类的问题
+最后ABC小哥说很满意，设计的很solid，这轮应该也没啥问题
+
+Day 2 - Behavior (白人大叔)
+就是简单的问问过去经历，常规的BQ问题，大叔态度很nice，氛围很轻松
+
+Day 2 - Culture (天竺小哥，没口音)
+少许的BQ问题
+很多的AI Safety讨论
+人生理想 (你的人生中有没有什么事情改变了你 之类的)
+所有问题不一定非要工作相关，生活上的也可以
+总体来说比较玄乎

@@ -32,13 +32,14 @@ import com.wwb.leetcode.utils.TreeNode;
 public class No270 {
     public int closestValue(TreeNode root, double target) {
         int closestValue = root.val;
+        double delta = Double.MAX_VALUE;
 
         while (root != null) {
-            var currentDelta = Math.abs(target - root.val);
-            var previousDelta = Math.abs(target - closestValue);
+            double currentDelta = Math.abs(target - root.val);
 
-            if (currentDelta < previousDelta) {
+            if (currentDelta < delta) {
                 closestValue = root.val;
+                delta = currentDelta;
             }
 
             root = root.val >= target ? root.left : root.right;

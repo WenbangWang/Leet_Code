@@ -1,0 +1,70 @@
+Follow 1：N consecutive trace消噪
+Follow 2：因为最开始是prefix做的比较，这里问了postfix怎么处理
+这次是在CodeSignal里面写，需要run，看来他们家放弃用replit面试了？
+最后白人小哥说perfect solution，这轮应该没啥问题
+
+// Problem: Converting stack samples to a trace
+
+// Sampling profilers are a performance analysis tool for finding the slow parts
+// of your code by periodically sampling the entire call stack (lots of code
+// might run between samples). In our problem the samples will be a list of
+// Samples of a float timestamp and a list of function names, in order by
+// timestamp, like this:
+
+struct Sample {
+  double ts;
+  std::vector<std::string> stack;
+};
+
+// Sometimes it's nice to visualize these samples on a chronological timeline of
+// the call stack using a trace visualizer UI. To do this we need to convert
+// the samples into a list of start and end events for each function call. The
+// events should be in a list order such that a nested function call's end event
+// is before the enclosing call's end event. Assume call frames in the last
+// sample haven't finished. The resulting events should use the Event type:
+
+struct Event {
+  std::string kind;
+  double ts;
+  std::string name;
+};
+
+std::vector<Event> convertToTrace(const std::vector<Sample> &samples) {
+  // TODO for you: actually convert the samples list to events
+  events.push_back(Event{"start", 1.0, "main"});
+  events.push_back(Event{"start", 2.5, "func1"});
+  events.push_back(Event{"end", 3.1, "func1"});
+  return events;
+}
+int main() {
+  Sample s1{1.0, {"main"}};
+  Sample s2{2.5, {"main", "func1"}};
+  Sample s3{3.1, {"main"}};
+
+  std::vector<Sample> samples = {s1, s2, s3};
+  auto events = convertToTrace(samples);
+
+  for (const auto &e : events) {
+    std::cout << e.kind << " " << e.ts << " " << e.name << "\n";
+  }
+  cout << "code end" << endl;
+  return 0;
+}
+
+
+然后写一些test cases。我觉得需要注意的有几点：一是如果两次的stack一样的处理，还有就是对于recrusive call的情况，还有一点需要注意的是如果在end的时候有多个functions，需要倒序打印，因为inner的function会先end。例如下面的例子，start的顺序是f1,f2,f3，但是end的顺序是f3, f2, f1.
+  Sample s2{1, {"main"}};
+  Sample s3{2, {"main", "f1", "f2", "f3"}};
+  Sample s4{3, {"main"}};
+
+
+
+// ### Waiting for multiple matching stacks
+
+// Sometimes our samples will just be on some tiny leaf function that executes for a minimal amount of time but they'll show up in the trace. What if we pruned it down by only emitting events for function calls that appear in N consecutive samples for configurable N?
+
+// You still need to emit consistent events, and use the same definition for what constitutes a single call as in the first part. There are many very different working solutions but they're all inspired by similar insights as the previous part.
+
+// You can decide if you want to use the 1st or Nth timestamp for the start time of your events.
+
+Followup的时候面试官强调需要注意recursive call的情况，例如sample是下面的case，这个stack里面a不能看作出现两次。{ Sample{0.0, {"a", "b", "a", "c"}} };

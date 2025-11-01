@@ -45,29 +45,22 @@ public class No1209 {
         Deque<Node> queue = new LinkedList<>();
 
         for (char c : s.toCharArray()) {
-            if (queue.isEmpty()) {
-                queue.offer(new Node(c));
-            } else {
-                Node last = queue.peekLast();
+            Node last;
+            if (!queue.isEmpty() && (last = queue.peekLast()).c == c) {
+                last.count++;
 
-                if (last.c == c) {
-                    if (last.count < k - 1) {
-                        queue.offer(new Node(c, last.count + 1));
-                    } else {
-                        for (int i = 0; i < last.count; i++) {
-                            queue.removeLast();
-                        }
-                    }
-                } else {
-                    queue.offer(new Node(c));
+                if (last.count == k) {
+                    queue.pollLast();
                 }
+            } else {
+                queue.offer(new Node(c));
             }
         }
 
         StringBuilder result = new StringBuilder(queue.size());
 
         for (Node node : queue) {
-            result.append(node.c);
+            result.append(String.valueOf(node.c).repeat(node.count));
         }
 
         return result.toString();

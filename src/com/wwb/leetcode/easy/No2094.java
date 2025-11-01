@@ -53,30 +53,30 @@ public class No2094 {
 
         List<Integer> res = new ArrayList<>();
 
-        for (int i = 1; i <= 9; i++) {
-            if (counts[i] == 0) {
+        for (int hundred = 1; hundred <= 9; hundred++) {
+            if (counts[hundred] == 0) {
                 continue;
             }
-            counts[i]--;
+            counts[hundred]--;
 
-            for (int j = 0; j <= 9; j++) {
-                if (counts[j] == 0) {
+            for (int ten = 0; ten <= 9; ten++) {
+                if (counts[ten] == 0) {
                     continue;
                 }
-                counts[j]--;
+                counts[ten]--;
 
-                for (int k = 0; k <= 8; k += 2) {
-                    if (counts[k] == 0) {
+                for (int digit = 0; digit <= 8; digit += 2) {
+                    if (counts[digit] == 0) {
                         continue;
                     }
 
-                    res.add(i * 100 + j * 10 + k);
+                    res.add(hundred * 100 + ten * 10 + digit);
                 }
 
-                counts[j]++;
+                counts[ten]++;
             }
 
-            counts[i]++;
+            counts[hundred]++;
         }
 
         return res.stream().mapToInt(Integer::intValue).toArray();

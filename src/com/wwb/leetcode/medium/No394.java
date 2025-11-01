@@ -41,24 +41,17 @@ public class No394 {
     public String decodeString(String s) {
         StringBuilder result = new StringBuilder();
         Deque<StringBuilder> queue = new ArrayDeque<>();
-        char[] charArray = s.toCharArray();
-        int index = 0;
         StringBuilder num = new StringBuilder();
 
         queue.offer(new StringBuilder());
 
-        while (index < charArray.length) {
-            char c = charArray[index];
-
+        for (char c : s.toCharArray()) {
             if (Character.isDigit(c)) {
                 num.append(c);
-                index++;
                 continue;
             }
 
             if (c == '[') {
-                // skip [
-                index++;
                 queue.offer(num);
                 // use for append the pattern
                 queue.offer(new StringBuilder());
@@ -72,13 +65,10 @@ public class No394 {
                 StringBuilder pattern = queue.pollLast();
                 StringBuilder patternCount = queue.pollLast();
                 queue.peekLast().append(pattern.toString().repeat(Integer.parseInt(patternCount.toString())));
-                // skip ]
-                index++;
                 continue;
             }
 
             queue.peekLast().append(c);
-            index++;
         }
 
         queue.forEach(result::append);

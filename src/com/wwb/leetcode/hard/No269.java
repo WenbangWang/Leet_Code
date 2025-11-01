@@ -1,10 +1,8 @@
 package com.wwb.leetcode.hard;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -56,12 +54,6 @@ import java.util.Set;
  * </pre>
  */
 public class No269 {
-    public static void main(String[] args) {
-        List<String> list = new java.util.ArrayList<>(List.of("e", "abcd"));
-        Collections.sort(list);
-        System.out.println(list);
-    }
-
     public String alienOrder(String[] words) {
         // Step 1: Initialize graph and inDegree map
         Map<Character, Set<Character>> graph = new HashMap<>();
@@ -113,9 +105,10 @@ public class No269 {
             for (char next : graph.get(c)) {
                 inDegree.put(next, inDegree.get(next) - 1);
 
-                if (inDegree.get(next) < 0) {
-                    return "";
-                }
+                // Don't really need this?
+//                if (inDegree.get(next) < 0) {
+//                    return "";
+//                }
 
                 if (inDegree.get(next) == 0) {
                     queue.offer(next);

@@ -4,9 +4,12 @@ import com.wwb.leetcode.utils.TreeNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.TreeMap;
 
 /**
@@ -86,6 +89,10 @@ import java.util.TreeMap;
  */
 public class No987 {
     public List<List<Integer>> verticalTraversal(TreeNode root) {
+        return solution1(root);
+    }
+
+    private List<List<Integer>> solution1(TreeNode root) {
         Map<Integer, List<CoordinatedNode>> map = new TreeMap<>();
         List<List<Integer>> result = new ArrayList<>();
 
@@ -94,6 +101,56 @@ public class No987 {
         for (List<CoordinatedNode> vertical : map.values()) {
             Collections.sort(vertical);
             result.add(vertical.stream().map(coordinatedNode -> coordinatedNode.node.val).toList());
+        }
+
+        return result;
+    }
+
+    private List<List<Integer>> solution2(TreeNode root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+
+        Queue<CoordinatedNode> nodeQueue = new LinkedList<>();
+        // key is the column index and
+        // value is the list of values in this column
+        Map<Integer, List<CoordinatedNode>> map = new HashMap<>();
+        int minCol = Integer.MAX_VALUE;
+        int maxCol = Integer.MIN_VALUE;
+
+        nodeQueue.add(new CoordinatedNode(root, 0, 0));
+
+        while (!nodeQueue.isEmpty()) {
+            CoordinatedNode coordinatedNode = nodeQueue.poll();
+
+            map.putIfAbsent(coordinatedNode.column, new ArrayList<>());
+            map.get(coordinatedNode.column).add(coordinatedNode);
+
+            minCol = Math.min(minCol, coordinatedNode.column);
+            maxCol = Math.max(maxCol, coordinatedNode.column);
+
+            if (coordinatedNode.node.left != null) {
+                nodeQueue.add(new CoordinatedNode(
+                    coordinatedNode.node.left,
+                    coordinatedNode.row + 1,
+                    coordinatedNode.column - 1
+                ));
+            }
+
+            if (coordinatedNode.node.right != null) {
+                nodeQueue.add(new CoordinatedNode(
+                    coordinatedNode.node.right,
+                    coordinatedNode.row + 1,
+                    coordinatedNode.column + 1
+                ));
+            }
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+
+        for (int i = minCol; i <= maxCol; i++) {
+            Collections.sort(map.get(i));
+            result.add(map.get(i).stream().map(coordinatedNode -> coordinatedNode.node.val).toList());
         }
 
         return result;

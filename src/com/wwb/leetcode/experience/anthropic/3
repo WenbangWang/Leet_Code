@@ -1,0 +1,16 @@
+店面 duplicate files 地里dp基本上是 昂赛的coding，没准备，碰到的时候慌了一下
+
+昂赛
+coding：web crawler，老题了，后续async case的时候没跑通，自己写的async html parser不认识0x89 codec。最后没时间改了。虽然面试官说不用担心总体是对的，但估计这个挂了， 建议大家能用threadpool就用threadpool吧，别自己写async parser
+
+
+
+culture：怎么处理feedback that emotionally hard to accept，起了冲突最后发现自己是错的，感觉可以照着Stripe的那些principal准备（毕竟老总表妹从Stripe带来的culture）
+
+design：inference API，问的很细，scaling，monitoring，gpu utilization，given traffic估算多少GPU
+
+project：做了个ppt 25分钟present，和面试官谈笑风生，感觉这轮面的好，还给了我一些接下来的tips
+
+hm：BQ，问past project，感觉像是例行公事，上来就说这轮虽说约了55分钟但是只会用30分钟
+
+总体感觉除了coding因为codec没跑出来别的面的都还行。

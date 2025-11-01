@@ -23,4 +23,21 @@ public class No121 {
 
         return maxProfit;
     }
+
+    public int minRoundTrip(int[] depart, int[] arrive) {
+        int n = depart.length;
+        if (n == 0 || arrive.length != n) {
+            return -1;
+        }
+
+        int minDepart = depart[0];
+        int result = Integer.MAX_VALUE;
+
+        for (int j = 1; j < n; j++) { // must return after departure
+            result = Math.min(result, minDepart + arrive[j]);
+            minDepart = Math.min(minDepart, depart[j]);
+        }
+
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
 }

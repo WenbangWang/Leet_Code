@@ -22,6 +22,8 @@ public class No301 {
         return solution2(s);
     }
 
+    // O(2^N) where 2^N is to decide whether we want to include the current character or not
+    // space O(2^N)
     private List<String> solution1(String s) {
         if (s == null) {
             return Collections.emptyList();
@@ -79,6 +81,7 @@ public class No301 {
         return count == 0;
     }
 
+    // similar to bfs but should be more efficient because we pruned a lot during recursion using the extra variables.
     private List<String> solution2(String s) {
         if (s == null) {
             return Collections.emptyList();

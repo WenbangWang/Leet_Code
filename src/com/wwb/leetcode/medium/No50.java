@@ -24,6 +24,7 @@ public class No50 {
         return result / x;
     }
 
+    // O(logN)
     private double solution2(double x, int n) {
         if (n < 0) {
             n = -n;
@@ -32,7 +33,7 @@ public class No50 {
 
         double result = 1;
 
-        for (; n != 0; n /= 2) {
+        for (; n != 0; n >>>= 1) {
             if ((n & 1) != 0) {
                 result *= x;
             }

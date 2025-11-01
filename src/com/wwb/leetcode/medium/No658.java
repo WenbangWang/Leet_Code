@@ -42,8 +42,8 @@ public class No658 {
 
         while (left < right) {
             int mid = (right - left) / 2 + left;
-            // x > (A[mid + k] + A[mid])/2
-            // cannot use division since it might lose precision
+            // x - arr[mid] → distance from left edge of the window to x
+            // arr[mid + k] - x → distance from element just outside the right edge to x.
             if (x - arr[mid] > arr[mid + k] - x) {
                 left = mid + 1;
             } else {

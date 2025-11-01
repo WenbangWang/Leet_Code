@@ -22,41 +22,81 @@ public class No31 {
         }
 
         int length = num.length;
-        int partitionIndex = -1;
+        int pivot = -1;
         int changeIndex = -1;
+        // find the non-increasing (weakly decreasing) suffix
+        // and take the left of the head of the suffix as the pivot
         for (int i = length - 2; i >= 0; i--) {
             if (num[i + 1] > num[i]) {
-                partitionIndex = i;
+                pivot = i;
                 break;
             }
         }
 
-        if (partitionIndex == -1) {
+        if (pivot == -1) {
             Arrays.sort(num);
             return;
         }
 
+        // find the rightmost number which is just greater than the pivot
         for (int i = length - 1; i >= 0; i--) {
-            if (num[i] > num[partitionIndex]) {
+            if (num[i] > num[pivot]) {
                 changeIndex = i;
                 break;
             }
         }
 
-        this.swap(num, partitionIndex, changeIndex);
+        this.swap(num, pivot, changeIndex);
 
-        int start = partitionIndex + 1;
-        int end = length - 1;
+        reverse(num, pivot + 1, length - 1);
+    }
 
-        while (start < end) {
-            swap(num, start++, end--);
+    public void previousPermutation(int[] num) {
+        if (num == null) {
+            return;
         }
+
+        int length = num.length;
+        int pivot = -1;
+        int changeIndex = -1;
+
+        // find the non-decreasing (weakly increasing) suffix
+        // and take the left of the head of the suffix as the pivot
+        for (int i = length - 2; i >= 0; i--) {
+            if (num[i] > num[i + 1]) {
+                pivot = i;
+                break;
+            }
+        }
+
+        if (pivot == -1) {
+            Arrays.sort(num);
+            return;
+        }
+
+        // find the rightmost number which is just smaller than the pivot
+        for (int i = length - 1; i >= 0; i--) {
+            if (num[i] < num[pivot]) {
+                changeIndex = i;
+                break;
+            }
+        }
+
+        this.swap(num, pivot, changeIndex);
+
+        reverse(num, pivot + 1, length - 1);
     }
 
     private void swap(int[] array, int i, int j) {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+
+    private void reverse(int[] array, int start, int end) {
+        while (start < end) {
+            swap(array, start++, end--);
+        }
     }
 }
 /*

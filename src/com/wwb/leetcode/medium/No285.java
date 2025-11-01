@@ -10,15 +10,35 @@ import com.wwb.leetcode.utils.TreeNode;
  */
 public class No285 {
     public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
-        if(root == null) {
-            return null;
+        if (p == null) return null;
+
+        // Case 1: right child exists
+        if (p.right != null) {
+            return leftmost(p.right);
         }
 
-        if(root.val <= p.val) {
-            return inorderSuccessor(root.right, p);
+        // Case 2: no right child -> search from root
+        TreeNode successor = null;
+        TreeNode curr = root;
+
+        while (curr != null) {
+            if (p.val < curr.val) {
+                successor = curr;   // possible successor
+                curr = curr.left;
+            } else if (p.val > curr.val) {
+                curr = curr.right;
+            } else {
+                break; // found node p
+            }
         }
 
-        TreeNode left = inorderSuccessor(root.left, p);
-        return left != null ? left: root;
+        return successor;
+    }
+
+    private TreeNode leftmost(TreeNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 }

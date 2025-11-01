@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * You are given a 2D string array responses where each responses[i] is an array of strings representing survey responses from the ith day.
@@ -53,6 +52,8 @@ import java.util.TreeSet;
  * </pre>
  */
 public class No3527 {
+    // O(N * L) where L is the average length of a response.
+    // this is the worst case when the count tie every time.
     public String findCommonResponse(List<List<String>> responses) {
         return doFindCommonResponse(responses.stream().map(response -> (Set<String>) new HashSet<>(response)).toList());
     }
@@ -60,23 +61,25 @@ public class No3527 {
     private String doFindCommonResponse(List<Set<String>> responses) {
         Map<String, Integer> responseToCount = new HashMap<>();
         int max = Integer.MIN_VALUE;
+        String best = null;
 
         for (Set<String> response : responses) {
             for (String r : response) {
-                responseToCount.put(r, responseToCount.getOrDefault(r, 0) + 1);
-                max = Math.max(max, responseToCount.get(r));
+                int count = responseToCount.getOrDefault(r, 0) + 1;
+                responseToCount.put(r, count);
+
+                if (count > max) {
+                    max = count;
+                    best = r;
+                } else if (count == max) {
+                    if (best == null || r.compareTo(best) < 0) {
+                        best = r;
+                    }
+                }
             }
 
         }
 
-        TreeSet<String> heap = new TreeSet<>();
-
-        for (Map.Entry<String, Integer> entry : responseToCount.entrySet()) {
-            if (entry.getValue() == max) {
-                heap.add(entry.getKey());
-            }
-        }
-
-        return heap.last();
+        return best;
     }
 }

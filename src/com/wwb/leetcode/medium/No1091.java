@@ -16,30 +16,32 @@ import java.util.Queue;
  * <p>
  * <p>
  * <p>
+ * <pre>
  * Example 1:
  *
  * <img src="../doc-files/1091_1.png" />
- * <p>
+ *
  * Input: grid = [[0,1],[1,0]]
  * Output: 2
  * Example 2:
  *
  * <img src="../doc-files/1091_1.png" />
- * <p>
+ *
  * Input: grid = [[0,0,0],[1,1,0],[1,1,0]]
  * Output: 4
  * Example 3:
- * <p>
+ *
  * Input: grid = [[1,0,0],[1,1,0],[1,1,0]]
  * Output: -1
- * <p>
- * <p>
+ *
+ *
  * Constraints:
- * <p>
+ *
  * n == grid.length
  * n == grid[i].length
  * 1 <= n <= 100
  * grid[i][j] is 0 or 1
+ * </pre>
  */
 public class No1091 {
     public int shortestPathBinaryMatrix(int[][] grid) {

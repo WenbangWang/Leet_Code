@@ -46,25 +46,25 @@ public class No5 {
     public String longestPalindrome(String s) {
         int length = s.length();
         int longestLength = 0;
-        int longestIndex = 0;
+        int longestEnd = 0;
 
-        for (int currentIndex = 0; currentIndex < length; currentIndex++) {
-            if (isPalindrome(s, currentIndex - longestLength, currentIndex)) {
+        for (int end = 0; end < length; end++) {
+            if (isPalindrome(s, end - longestLength, end)) {
                 longestLength++;
-                longestIndex = currentIndex;
-            } else if (currentIndex - longestLength - 1 >= 0 && isPalindrome(
+                longestEnd = end;
+            } else if (end - longestLength - 1 >= 0 && isPalindrome(
                 s,
-                currentIndex - longestLength - 1,
-                currentIndex
+                end - longestLength - 1,
+                end
             ))
             {
                 longestLength += 2;
-                longestIndex = currentIndex;
+                longestEnd = end;
             }
         }
 
-        longestIndex++;
-        return s.substring(longestIndex - longestLength, longestIndex);
+        longestEnd++;
+        return s.substring(longestEnd - longestLength, longestEnd);
     }
 
     private boolean isPalindrome(String str, int start, int end) {

@@ -17,40 +17,22 @@ package com.wwb.leetcode.medium;
 public class No162 {
 
     public int findPeakElement(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
+        int start = 0;
+        int end = nums.length - 1;
 
-        return binarySearch(nums, 0, nums.length - 1);
-    }
+        while (start < end) {
+            int mid = start + (end - start) / 2;
 
-    private int binarySearch(int[] nums, int start, int end) {
-        if (start == end) {
-            return start;
-        }
-
-        if (start + 1 == end) {
-            if (nums[start] > nums[end]) {
-                return start;
+            if (nums[mid] < nums[mid + 1]) {
+                // Peak is on the end
+                start = mid + 1;
+            } else {
+                // Peak is on the start or at mid
+                end = mid;
             }
-            return end;
         }
 
-        int mid = (end - start) / 2 + start;
-        int pre = mid - 1;
-        int next = mid + 1;
-
-        // mid is the peak
-        if (nums[mid] > nums[pre] && nums[mid] > nums[next]) {
-            return mid;
-        }
-
-        // peak on the left
-        if (nums[mid] < nums[pre] && nums[mid] > nums[next]) {
-            return binarySearch(nums, start, pre);
-        }
-
-        // peak on the right
-        return binarySearch(nums, next, end);
+        // start == end pointing to a peak
+        return start;
     }
 }

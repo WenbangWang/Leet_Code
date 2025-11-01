@@ -38,13 +38,15 @@ public class No70 {
             return 1;
         }
 
-        int current = 1;
-        int previous = 1;
+        int oneStepBefore = 1;  // f(1)
+        int twoStepsBefore = 1; // f(0)
+        int current = 0;
 
+        // Bottom-up iteration
         for (int i = 2; i <= n; i++) {
-            int temp = current;
-            current += previous;
-            previous = temp;
+            current = oneStepBefore + twoStepsBefore;
+            twoStepsBefore = oneStepBefore;
+            oneStepBefore = current;
         }
 
         return current;

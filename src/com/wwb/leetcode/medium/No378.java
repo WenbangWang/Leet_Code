@@ -40,7 +40,9 @@ public class No378 {
             minHeap.offer(new Tuple(0, column, matrix[0][column]));
         }
 
-        for (int row = 0; row < k - 1; row++) {
+        // pop the smallest element from the heap k - 1 times
+        // so that the peek of the heap is the kth smallest element
+        for (int i = 0; i < k - 1; i++) {
             Tuple tuple = minHeap.poll();
 
             if (tuple.row == numberOfRows - 1) {

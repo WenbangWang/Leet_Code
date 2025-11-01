@@ -57,6 +57,10 @@ import java.util.Queue;
 public class No23 {
 
     public ListNode mergeKLists(ListNode[] lists) {
+        return solution1(lists);
+    }
+
+    private ListNode solution1(ListNode[] lists) {
         if (lists == null || lists.length == 0) {
             return null;
         }
@@ -83,7 +87,48 @@ public class No23 {
             current = node;
         }
 
-        current.next = null;
+        return start.next;
+    }
+
+    private ListNode solution2(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+
+        return merge(lists, 0, lists.length - 1);
+    }
+
+    private ListNode merge(ListNode[] lists, int start, int end) {
+        if (start == end) {
+            return lists[start];
+        }
+
+        if (start + 1 == end) {
+            return merge(lists[start], lists[end]);
+        }
+
+        int mid = start + (end - start) / 2;
+
+        return merge(merge(lists, start, mid), merge(lists, mid + 1, end));
+    }
+
+    private ListNode merge(ListNode l1, ListNode l2) {
+        ListNode start = new ListNode(-1);
+        ListNode current = start;
+
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+
+            current = current.next;
+        }
+
+        current.next = l1 == null ? l2 : l1;
 
         return start.next;
     }

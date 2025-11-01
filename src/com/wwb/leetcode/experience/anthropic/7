@@ -1,0 +1,7 @@
+https://www.1point3acres.com/bbs/thread-1145567-1-1.html
+
+大概考察了怎么update model的control plane内容，本不是inference system的一部分但是基本讨论了一下。
+dive deep了一下cache的部分，我说cache prompt的时候，用vectorDB，他简单问了similarity check是怎么做的，以及用key-value DB行不行，肯定是行的只是加个partition range。
+我没答好，也被dive deep最多的竟然是在rate limiter里面，他问我如果流量突发过大，如何给用户429，我一开始觉得是要考察rate limiter具体的方法，就说我们可以用token bucket一类的，后来发现他是想讨论如何动态来调整rate limit，比如现在call rate正常，但是如果突然GPU cluster里面有一半down 掉了，如何动态让rate limit收紧。
+我说的是，如果GPU cluster里面有一半down 掉了，那应该先backpress在aggregator那个地方，降低poller rate，用户首先体会到long latency，然后我们需要monitor aggregator的SQS/kafka MQ的queue size，根据unread size来动态调整rate。
+有点也被trick了，他问我所有event是不是都在一个queue里面我说是，我没反应过来，他也没说话，事后想想肯定不是，一个tier的user应该在一个queue （paid user和unpaid user的queue区分开，这样rate limit是不一样的）

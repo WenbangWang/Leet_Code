@@ -34,7 +34,14 @@ package com.wwb.leetcode.medium;
  * 0 <= k <= nums.length
  */
 public class No1004 {
+    // For each nums[end], try to find the longest subarray.
+    // If nums[start] ~ nums[end] has zeros <= K, we continue to increment end.
+    // If nums[start] ~ nums[end] has zeros > K, we increment start (as well as end).
     public int longestOnes(int[] nums, int k) {
+        return solution1(nums, k);
+    }
+
+    private int solution1(int[] nums, int k) {
         int start = 0;
         int end = 0;
 
@@ -49,5 +56,29 @@ public class No1004 {
         }
 
         return end - start;
+    }
+
+    private int solution2(int[] nums, int k) {
+        int start = 0;
+        int maxLen = 0;
+
+        for (int end = 0; end < nums.length; end++) {
+            if (nums[end] == 0) {
+                k--; // use one flip
+            }
+
+            // shrink from left until window is valid again
+            while (k < 0) {
+                if (nums[start] == 0) {
+                    k++;
+                }
+                start++;
+            }
+
+            // update max length
+            maxLen = Math.max(maxLen, end - start + 1);
+        }
+
+        return maxLen;
     }
 }

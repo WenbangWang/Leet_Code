@@ -1,0 +1,11 @@
+https://www.1point3acres.com/bbs/thread-1143118-1-1.html
+
+店面一轮：问technical project。把project 讲懂，沟通清楚对方不明白的点然后反馈。一般来讲你是good listener都不会有问题。
+
+店面第二轮： system design：你的data center需要从外界下载一个ML model，然后在 data center内部distribute到100个电脑上。data center和外界的带宽是10G/s,内部之间任何一个电脑的上传下载加起来也只能是10G。问你怎么做到最快的把ML model download到一个data center的电脑上，然后distribute到所有其他电脑上。我的解法是把所有电脑串联在一起，然后每一个电脑从上游下载的同时把文件传递给下一个电脑，就像管道输水一样。然后设计下怎么coordinate，假如有一个电脑坏了怎么办之类的general design question。
+
+店面第三轮：cultural 面。就是为什么要加入人类学。你相信AI会颠覆世界吗，如果是的话，security方面你愿不愿意牺牲自己的利益来确保AI不毁灭人类。必须表现出你真的相信AI。要不这轮会挂人的。建议看Lex的采访，看了之后就会有自己的理解。我这次面试人类学，看了这些资料后，真的有点担心我作为traditional SDE 的job security。
+
+店面第四轮：HM面。就是聊各种behavior。没什么特别注意的地方。
+
+店面第五轮：stack那道题。follow up的时间不够了。所以大家一定要练习下follow up。就是给定一个N，所有连续出现的function call在N以下时，不要generate相应的event。我应该是挂在了这道题上。因为我在装第一次看到这道题，去跟面试官沟通题目的意思，举例子说明是不是这样理解的，然后没时间写follow up了。（我觉得不走这些流程太假了，除非日常就用这样的profiler，哪有可能看完文字描述直接写的）。Anyway，大家一定要熟练这个follow up。

@@ -42,7 +42,7 @@ public class No354 {
         int result = 0;
         for (int i = 0; i < envelopes.length; i++) {
             int height = envelopes[i][1];
-            int insertIndex = binarySearch(dp, height, result - 1);
+            int insertIndex = binarySearch(dp, height, result);
 
             if (insertIndex == result) {
                 result++;
@@ -57,13 +57,13 @@ public class No354 {
     private int binarySearch(int[] dp, int height, int end) {
         int start = 0;
 
-        while (start <= end) {
+        while (start < end) {
             int mid = (end - start) / 2 + start;
 
             if (dp[mid] < height) {
                 start = mid + 1;
             } else {
-                end = mid - 1;
+                end = mid;
             }
         }
         return start;

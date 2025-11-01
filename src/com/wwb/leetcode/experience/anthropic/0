@@ -33,26 +33,32 @@ s2 = [
   
   
 Q4 Median
+Given a very large dataset and an array of machines, properly assign workloads to machines to find the mode of the dataset
+
+
+Follow-up: find the median for the same dataset
 Q5 ?
 Q6 tokenize
 
 https://www.1point3acres.com/bbs/thread-1111070-1-1.html
 
+第一部分读code, 大致就是给了一个tokenize和一个detokenize的method，让我先读一下明白code是在干啥，然后问我这个tokenize的方式有什么问题。代码大致如下。
+
 def tokenize(text: str, vocab: dict):
   tokens = []
   key = ""
   for i in range(len(text)):
-  key += text[i]
-  if key in vocab:
-    tokens.append(vocab[key])
-    key = ""
+    key += text[i]
+    if key in vocab:
+      tokens.append(vocab[key])
+      key = ""
   return tokens
 
 def detokenize(tokens, vocab: dict):
   text = ""
   reversed_vocab = {value: key for key, value in vocab.items()}
   for token in tokens:
-  text += reversed_vocab[token]
+    text += reversed_vocab[token]
 
 
   return text
@@ -72,7 +78,8 @@ detokenize(token, vocab)
 这个似乎是比较简单的文本与处理，就是把一段text转换成code。我读的时候其实很困惑比如text和vocab都是input那vocab是如何决定的之类的，面试官的意思大致就是they can be anything。 我说代码的问题是如果vocab里面没有能cover given text的character的那这个tokenize不work。然后就move on到下一个环境。
 
 
-第二个环节是code review，又给了一段代码，是在之前版本的基础上加了一点，大致就是在tokenize method的for loop结束之后多了一个if key不在vocab里面，append一个-1在tokens里然后return (something like "      tokens.append(vocab.get("UNK", -1))"。然后给的vocab里面多了个UNK：-1vocab = {
+第二个环节是code review，又给了一段代码，是在之前版本的基础上加了一点，大致就是在tokenize method的for loop结束之后多了一个if key不在vocab里面，append一个-1在tokens里然后return (something like "      tokens.append(vocab.get("UNK", -1))"。然后给的vocab里面多了个UNK：-1
+vocab = {
   "a": 1,
   "b": 2,
   "cd": 3,
@@ -87,7 +94,8 @@ UNK是个啥？（我面试之后才反应过来这tm是UNKNOWN的缩写）text�
 然后interviewer说ok差不多了我们move on。
 
 
-最后一个环节是让我自己implement tokenize，目的是handle text里面的character没法被vocab里面的key value cover的情况，保证tokenize和detokenize还能work。总之这一轮我的困惑达到顶峰，发挥的非常糟糕（主要没搞明白这个tokenize到底是为了啥以及UNK是啥意思），面完之后research了一下我觉得稍微加一个else 就可以了def tokenize(text: str, vocab: dict):
+最后一个环节是让我自己implement tokenize，目的是handle text里面的character没法被vocab里面的key value cover的情况，保证tokenize和detokenize还能work。总之这一轮我的困惑达到顶峰，发挥的非常糟糕（主要没搞明白这个tokenize到底是为了啥以及UNK是啥意思），面完之后research了一下我觉得稍微加一个else 就可以了
+def tokenize(text: str, vocab: dict):
   tokens = []
   key = ""
   for i in range(len(text)):
@@ -113,13 +121,13 @@ Your task is to implement a simplified version of an in-memory database. Plan yo
 Solving this task consists of several levels. Subsequent levels are opened when the current level is correctly solved. You always have access to the data for the current and all previous levels.
 Requirements
 Your task is to implement a simplified version of a banking system. Plan your design according to the level specifications below:
-Level 1: In-memory database should support basic operations to manipulate records, fields, and values ​​within fields.
+Level 1: In-memory database should support basic operations to manipulate records, fields, and values within fields.
 Level 2: In-memory database should support displaying a record's fields based on a filter.
 Level 3: In-memory database should support the TTL (Time-To-Live) settings for records.
-Level 4: In-memory database should support look-back operations to retrieve values ​​stored at a specific timestamp in the past.
+Level 4: In-memory database should support look-back operations to retrieve values stored at a specific timestamp in the past.
 To move to the next level, you need to pass all the tests at this level.
 Note
-You will receive a list of queries to the system, and the final output should be an array of strings representing the returned values ​​of all queries. Each query will only call one operation.
+You will receive a list of queries to the system, and the final output should be an array of strings representing the returned values of all queries. Each query will only call one operation.
 
 Level 1
 The basic level of the in-memory database contains records. Each record can be accessed with a unique identifier key, which is of string type. A record contains several field-value pairs, with field as string type and value as integer type. All operations have a timestamp parameter — a stringified timestamp in milliseconds. It is guaranteed that all timestamps are unique and are in a range from 1 to 109. Operations will be given in order of strictly increasing timestamps. Timestamps will be needed starting from Level 3.
@@ -163,7 +171,7 @@ An array of queries to the system. It is guaranteed that all the queries paramet
 Guaranteed constraints:
 1 ≤ queries.length ≤ 500.
 [output]array.string
-An array of strings representing the returned values ​​of queries.
+An array of strings representing the returned values of queries.
 
 
 Test

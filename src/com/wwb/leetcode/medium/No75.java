@@ -50,12 +50,15 @@ public class No75 {
 
         while (index <= end) {
             if (nums[index] == 0) {
-                swap(nums, start++, index);
+                swap(nums, start, index);
+                index++;
+                start++;
             } else if (nums[index] == 2) {
-                swap(nums, end--, index);
+                swap(nums, end, index);
+                end--;
+            } else {
+                index++;
             }
-
-            index++;
         }
     }
 

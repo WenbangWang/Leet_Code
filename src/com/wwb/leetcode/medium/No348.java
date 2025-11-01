@@ -76,11 +76,11 @@ public class No348 {
             cols[col] += value;
 
             if (row == col) {
-                diag++;
+                diag += value;
             }
 
             if (row + col == n - 1) {
-                antiDiag++;
+                antiDiag += value;
             }
 
             if (Math.abs(rows[row]) == n || Math.abs(cols[col]) == n || Math.abs(diag) == n || Math.abs(antiDiag) == n) {

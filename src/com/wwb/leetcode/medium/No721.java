@@ -66,10 +66,11 @@ public class No721 {
         for (var account : accounts) {
             var firstEmail = account.get(1);
 
+            neighbors.putIfAbsent(firstEmail, new HashSet<>());
+
             for (int i = 2; i < account.size(); i++) {
                 var email = account.get(i);
 
-                neighbors.putIfAbsent(firstEmail, new HashSet<>());
                 neighbors.putIfAbsent(email, new HashSet<>());
 
                 neighbors.get(firstEmail).add(email);

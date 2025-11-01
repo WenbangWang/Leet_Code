@@ -3,6 +3,8 @@ package com.wwb.leetcode.medium;
 import com.wwb.leetcode.utils.TreeNode;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -43,6 +45,36 @@ public class No199 {
         List<Integer> result = new ArrayList<>();
 
         rightSideView(root, result, 0);
+
+        return result;
+    }
+
+    private List<Integer> solution3(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Deque<TreeNode> level = new LinkedList<>();
+
+        if (root != null) {
+            level.add(root);
+        }
+
+        while (!level.isEmpty()) {
+            result.add(level.peekLast().val);
+            Deque<TreeNode> nextLevel = new LinkedList<>();
+
+            while (!level.isEmpty()) {
+                TreeNode node = level.poll();
+
+                if (node.left != null) {
+                    nextLevel.offer(node.left);
+                }
+
+                if (node.right != null) {
+                    nextLevel.offer(node.right);
+                }
+            }
+
+            level = nextLevel;
+        }
 
         return result;
     }

@@ -36,14 +36,6 @@ public class No536 {
     }
 
     private TreeNode str2tree(String s, int[] index) {
-//        if (index[0] == s.length()) {
-//            return null;
-//        }
-//
-//        if (!Character.isDigit(s.charAt(index[0]))) {
-//            return null;
-//        }
-
         int num = 0;
         int sign = 1;
 
@@ -52,7 +44,7 @@ public class No536 {
             index[0]++;
         }
 
-        while (Character.isDigit(s.charAt(index[0]))) {
+        while (index[0] < s.length() && Character.isDigit(s.charAt(index[0]))) {
             num *= 10;
             num += (s.charAt(index[0]) - '0');
 
@@ -61,7 +53,7 @@ public class No536 {
 
         TreeNode node = new TreeNode(num * sign);
 
-        if (s.charAt(index[0]) == '(') {
+        if (index[0] < s.length() && s.charAt(index[0]) == '(') {
             // skip (
             index[0]++;
 
@@ -71,7 +63,7 @@ public class No536 {
             index[0]++;
         }
 
-        if (s.charAt(index[0]) == '(') {
+        if (index[0] < s.length() && s.charAt(index[0]) == '(') {
             // skip (
             index[0]++;
 

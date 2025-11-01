@@ -39,7 +39,6 @@ public class No126 {
         Map<String, List<String>> incomingEdges = new HashMap<>();
         Map<String, Integer> ladders = new HashMap<>();
         Queue<String> queue = new LinkedList<>();
-        int length = beginWord.length();
         int min = Integer.MAX_VALUE;
 
         queue.offer(beginWord);

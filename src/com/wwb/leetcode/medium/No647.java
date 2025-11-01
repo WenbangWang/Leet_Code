@@ -65,7 +65,7 @@ public class No647 {
 
         int result = 0;
 
-        for (int mid = 0; mid < s.length() - 1; mid++) {
+        for (int mid = 0; mid < s.length(); mid++) {
             // odd length
             result += countPalindrome(s, mid, mid);
             // even length

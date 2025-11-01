@@ -42,39 +42,39 @@ public class No68 {
         }
 
         List<String> rows = new ArrayList<>();
-        int index = 0;
+        int start = 0;
         int length = words.length;
 
-        while (index < length) {
-            int currentLength = words[index].length();
-            int last = index + 1;
+        while (start < length) {
+            int currentLength = words[start].length();
+            int runner = start + 1;
 
-            while (last < length) {
-                int lastLength = words[last].length();
-                int slots = last - index;
-                if (currentLength + lastLength + slots > maxWidth) {
+            while (runner < length) {
+                int runnerLength = words[runner].length();
+                int slots = runner - start;
+                if (currentLength + runnerLength + slots > maxWidth) {
                     break;
                 }
-                currentLength += lastLength;
-                last++;
+                currentLength += runnerLength;
+                runner++;
             }
 
             StringBuilder stringBuilder = new StringBuilder(maxWidth);
-            int slots = last - index - 1;
+            int slots = runner - start - 1;
 
             // last row or a single word consists a row
-            if (last == length || slots == 0) {
-                stringBuilder.append(Arrays.stream(words, index, last).collect(Collectors.joining(" ")));
+            if (runner == length || slots == 0) {
+                stringBuilder.append(Arrays.stream(words, start, runner).collect(Collectors.joining(" ")));
 
                 stringBuilder.append(" ".repeat(maxWidth - stringBuilder.length()));
             } else {
                 int numberOfSpaces = (maxWidth - currentLength) / slots;
                 int numberOfExtraSpaces = (maxWidth - currentLength) % slots;
 
-                for (int i = index; i < last; i++) {
+                for (int i = start; i < runner; i++) {
                     stringBuilder.append(words[i]);
 
-                    if (i < last - 1) {
+                    if (i < runner - 1) {
                         int numberOfActualSpaces = numberOfSpaces;
                         if (numberOfExtraSpaces > 0) {
                             numberOfActualSpaces++;
@@ -87,7 +87,7 @@ public class No68 {
             }
 
             rows.add(stringBuilder.toString());
-            index = last;
+            start = runner;
         }
 
         return rows;

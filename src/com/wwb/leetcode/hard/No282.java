@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class No282 {
 
+    // O(4^N * N)
     public List<String> addOperators(String num, int target) {
         if (num == null || num.isEmpty()) {
             return Collections.emptyList();

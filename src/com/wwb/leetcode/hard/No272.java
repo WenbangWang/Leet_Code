@@ -7,30 +7,30 @@ import java.util.*;
 /**
  * Given the root of a binary search tree, a target value, and an integer k,
  * return the k values in the BST that are closest to the target. You may return the answer in any order.
- *
+ * <p>
  * You are guaranteed to have only one unique set of k values in the BST that are closest to the target.
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Example 1:
- *
- *
+ * <p>
+ * <p>
  * Input: root = [4,2,5,1,3], target = 3.714286, k = 2
  * Output: [4,3]
  * Example 2:
- *
+ * <p>
  * Input: root = [1], target = 0.000000, k = 1
  * Output: [1]
- *
- *
+ * <p>
+ * <p>
  * Constraints:
- *
+ * <p>
  * The number of nodes in the tree is n.
  * 1 <= k <= n <= 10^4.
  * 0 <= Node.val <= 10^9
  * -10^9 <= target <= 10^9
- *
- *
+ * <p>
+ * <p>
  * Follow up: Assume that the BST is balanced. Could you solve it in less than O(n) runtime (where n = total nodes)?
  */
 public class No272 {
@@ -97,11 +97,11 @@ public class No272 {
         var successors = getSuccessors(root, target);
 
         // If the target equals to a value of a node, we should pop that node from one of the two stacks.
-        if(!successors.isEmpty() && !predecessors.isEmpty() && successors.peek().val == predecessors.peek().val) {
+        if (!successors.isEmpty() && !predecessors.isEmpty() && successors.peek().val == predecessors.peek().val) {
             getNextPredecessor(predecessors);
         }
 
-        while(k != 0) {
+        while (k != 0) {
             // This shouldn't happen
             if (predecessors.isEmpty() && successors.isEmpty()) {
                 return result;
@@ -136,7 +136,7 @@ public class No272 {
     private Stack<TreeNode> getPredecessors(TreeNode node, double target) {
         Stack<TreeNode> stack = new Stack<>();
 
-        while(node != null) {
+        while (node != null) {
             if (node.val == target) {
                 stack.push(node);
                 break;
@@ -155,7 +155,7 @@ public class No272 {
         var predecessor = predecessors.pop();
         var current = predecessor.left;
 
-        while(current != null) {
+        while (current != null) {
             predecessors.push(current);
             // Since we moved to the left subtree outside the loop
             // all nodes on the right side of the left subtree
@@ -169,7 +169,7 @@ public class No272 {
     private Stack<TreeNode> getSuccessors(TreeNode node, double target) {
         Stack<TreeNode> stack = new Stack<>();
 
-        while(node != null) {
+        while (node != null) {
             if (node.val == target) {
                 stack.push(node);
                 break;
@@ -188,7 +188,7 @@ public class No272 {
         var successor = successors.pop();
         var current = successor.right;
 
-        while(current != null) {
+        while (current != null) {
             successors.push(current);
             // Since we moved to the right subtree outside the loop
             // all nodes on the left side of the right subtree
@@ -238,11 +238,11 @@ public class No272 {
         TreeNode head;
         TreeNode tail;
 
-        Pair (TreeNode node) {
+        Pair(TreeNode node) {
             this(node, node);
         }
 
-        Pair (TreeNode head, TreeNode tail) {
+        Pair(TreeNode head, TreeNode tail) {
             this.head = head;
             this.tail = tail;
         }
