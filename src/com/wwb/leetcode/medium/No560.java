@@ -31,13 +31,10 @@ public class No560 {
         Map<Integer, Integer> sumToCount = new HashMap<>();
         int result = 0;
         int sum = 0;
+        sumToCount.put(0, 1);
 
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
-
-            if (sum == k) {
-                result++;
-            }
 
             result += sumToCount.getOrDefault(sum - k, 0);
 

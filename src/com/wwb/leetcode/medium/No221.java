@@ -62,4 +62,35 @@ public class No221 {
 
         return result * result;
     }
+
+    private int solution3(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int result = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // convert char to int (0 or 1)
+                if (matrix[i][j] == '1') {
+                    // only compute dp if not on first row/col
+                    if (i > 0 && j > 0) {
+                        int top = matrix[i - 1][j] - '0';
+                        int left = matrix[i][j - 1] - '0';
+                        int topLeft = matrix[i - 1][j - 1] - '0';
+                        int curr = Math.min(top, Math.min(left, topLeft)) + 1;
+                        // store back as char
+                        matrix[i][j] = (char) (curr + '0');
+                    }
+                    // update max side
+                    result = Math.max(result, matrix[i][j] - '0');
+                }
+            }
+        }
+
+        return result * result;
+    }
 }

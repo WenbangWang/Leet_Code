@@ -19,6 +19,7 @@ package com.wwb.leetcode.medium;
  */
 public class No79 {
 
+    // time complexity O(m * n * 3^L) l is the length of word
     public boolean exist(char[][] board, String word) {
         // return solution1(board, word);
         return solution2(board, word);

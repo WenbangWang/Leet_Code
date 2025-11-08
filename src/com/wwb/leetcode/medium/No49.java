@@ -27,51 +27,38 @@ public class No49 {
             return Collections.emptyList();
         }
 
-        Arrays.sort(strs);
         Map<String, List<String>> sortedStrs = new HashMap<>();
 
         for(String str : strs) {
-            char[] charArray = str.toCharArray();
-            Arrays.sort(charArray);
-            String sortedStr = new String(charArray);
+            String sortedStr = sort2(str);
 
-            if (!sortedStrs.containsKey(sortedStr)) {
-                sortedStrs.put(sortedStr, new ArrayList<>());
-            }
+            sortedStrs.putIfAbsent(sortedStr, new ArrayList<>());
+
             sortedStrs.get(sortedStr).add(str);
         }
 
         return new ArrayList<>(sortedStrs.values());
     }
 
-    public List<String> anagrams(String[] strs) {
-        List<String> result = new ArrayList<>();
-        Map<String, List<String>> sortedStrs = new HashMap<>();
+    private String sort1(String s) {
+        char[] charArray = s.toCharArray();
+        Arrays.sort(charArray);
+        return new String(charArray);
+    }
 
-        for(String str : strs) {
-            char[] charArray = str.toCharArray();
-            Arrays.sort(charArray);
-            String sortedStr = new String(charArray);
-            List<String> anagrams = sortedStrs.get(sortedStr);
+    private String sort2(String s) {
+        int[] bucket = new int[26];
 
-            if(anagrams == null) {
-                anagrams = new ArrayList<>();
-                anagrams.add(str);
-                sortedStrs.put(sortedStr, anagrams);
-            } else {
-                anagrams.add(str);
-            }
+        for (char c : s.toCharArray()) {
+            bucket[c - 'a']++;
         }
 
-        for(Map.Entry<String, List<String>> entry : sortedStrs.entrySet()) {
-            List<String> anagrams = entry.getValue();
-            int size = anagrams.size();
+        StringBuilder sb = new StringBuilder(s.length());
 
-            if(size > 1) {
-                result.addAll(anagrams);
-            }
+        for (int i = 0; i < 26; i++) {
+            sb.append(String.valueOf(i + 'a').repeat(bucket[i]));
         }
 
-        return result;
+        return sb.toString();
     }
 }

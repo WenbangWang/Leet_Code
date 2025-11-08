@@ -1,7 +1,262 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="BookmarksManager">
-
+<?xml version="1.0" encoding="UTF-8"?><component name="BookmarksManager">
+        
     <option name="groups">
+              
+        <GroupState>
+                    
+            <option name="bookmarks">
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No17.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No21.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No49.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No79.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No200.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No209.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No221.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No240.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No253.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No325.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No560.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No680.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/hard/No862.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No973.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No977.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No1047.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1091.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1152.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1926.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+            </option>
+                    
+            <option name="name" value="whatnot"/>
+                  
+        </GroupState>
               
         <GroupState>
                     
@@ -1024,6 +1279,19 @@
                                 
                     <attributes>
                                       
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/hard/No272.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/hard/No282.java"/>
                                     
                     </attributes>
@@ -1271,6 +1539,19 @@
                                 
                     <attributes>
                                       
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No424.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No426.java"/>
                                     
                     </attributes>
@@ -1311,6 +1592,19 @@
                     <attributes>
                                       
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/hard/No480.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No487.java"/>
                                     
                     </attributes>
                                 
@@ -6636,6 +6930,19 @@
                                 
                     <attributes>
                                       
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No424.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No433.java"/>
                                     
                     </attributes>
@@ -6884,6 +7191,19 @@
                     <attributes>
                                       
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1143.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1152.java"/>
                                     
                     </attributes>
                                 
@@ -7916,6 +8236,19 @@
                     <attributes>
                                       
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1094.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1152.java"/>
                                     
                     </attributes>
                                 
@@ -9108,6 +9441,19 @@
                     <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
                               
                 </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1926.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
             </option>
                     
             <option name="name" value="bfs"/>
@@ -10037,6 +10383,19 @@
                     <attributes>
                                       
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No409.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No424.java"/>
                                     
                     </attributes>
                                 
@@ -12147,7 +12506,33 @@
                                 
                     <attributes>
                                       
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1152.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
                         <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/easy/No1539.java"/>
+                                    
+                    </attributes>
+                                
+                    <option name="description" value=""/>
+                                
+                    <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider"/>
+                              
+                </BookmarkState>
+                <BookmarkState>
+                                
+                    <attributes>
+                                      
+                        <entry key="url" value="file://$PROJECT_DIR$/src/com/wwb/leetcode/medium/No1926.java"/>
                                     
                     </attributes>
                                 

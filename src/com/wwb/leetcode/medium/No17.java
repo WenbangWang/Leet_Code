@@ -16,6 +16,18 @@ import java.util.List;
  * Although the above answer is in lexicographical order, your answer could be in any order you want.
  */
 public class No17 {
+    private static final String[] KEYS = {
+        "",     // 0
+        "",     // 1
+        "abc",  // 2
+        "def",  // 3
+        "ghi",  // 4
+        "jkl",  // 5
+        "mno",  // 6
+        "pqrs", // 7
+        "tuv",  // 8
+        "wxyz"  // 9
+    };
 
     public List<String> letterCombinations(String digits) {
 //        return solution1(digits);
@@ -84,5 +96,29 @@ public class No17 {
         }
 
         return result;
+    }
+
+    // time complexity O(m^n) n is the length of digits, m can be as much as 4
+    // space complexity O(n) for recursion stack and O(m^n) for result
+    private List<String> solution3(String digits) {
+        List<String> result = new ArrayList<>();
+        if (digits == null || digits.isEmpty()) {
+            return result;
+        }
+        backtrack(digits, 0, new StringBuilder(), result);
+        return result;
+    }
+
+    private void backtrack(String digits, int index, StringBuilder sb, List<String> result) {
+        if (index == digits.length()) {
+            result.add(sb.toString());
+            return;
+        }
+        int digit = digits.charAt(index) - '0';
+        for (char ch : KEYS[digit].toCharArray()) {
+            sb.append(ch);
+            backtrack(digits, index + 1, sb, result);
+            sb.deleteCharAt(sb.length() - 1); // backtrack
+        }
     }
 }
