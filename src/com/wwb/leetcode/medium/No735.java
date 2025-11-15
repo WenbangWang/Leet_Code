@@ -4,16 +4,17 @@ import java.util.Stack;
 
 /**
  * We are given an array asteroids of integers representing asteroids in a row.
- *
+ * <p>
  * For each asteroid, the absolute value represents its size,
  * and the sign represents its direction (positive meaning right, negative meaning left).
  * Each asteroid moves at the same speed.
- *
+ * <p>
  * Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode.
  * If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
  *
  *
  *
+ * <pre>
  * Example 1:
  *
  * Input: asteroids = [5,10,-5]
@@ -36,6 +37,7 @@ import java.util.Stack;
  * 2 <= asteroids.length <= 10^4
  * -1000 <= asteroids[i] <= 1000
  * asteroids[i] != 0
+ * </pre>
  */
 public class No735 {
     public int[] asteroidCollision(int[] asteroids) {
@@ -50,7 +52,7 @@ public class No735 {
             // stack goes right and queue goes left
 
             // asteroid in queue wins
-            while(!stack.isEmpty() && stack.peek() > 0 && stack.peek() + asteroid < 0) {
+            while (!stack.isEmpty() && stack.peek() > 0 && stack.peek() + asteroid < 0) {
                 stack.pop();
             }
 
@@ -64,7 +66,7 @@ public class No735 {
         int[] result = new int[stack.size()];
         int index = stack.size() - 1;
 
-        while(!stack.isEmpty()) {
+        while (!stack.isEmpty()) {
             result[index--] = stack.pop();
         }
 

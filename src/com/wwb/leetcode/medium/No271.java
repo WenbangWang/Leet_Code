@@ -62,9 +62,11 @@ import java.util.List;
  */
 public class No271 {
     public class Codec {
+        private static final int MASK = (1 << 16) - 1;
+
         // Encodes a list of strings to a single string.
         public String encode(List<String> strs) {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(strs.stream().mapToInt(String::length).sum() + strs.size() * 2);
             for(String s: strs) {
                 sb.append(intToString(s.length()));
                 sb.append(s);
@@ -87,22 +89,21 @@ public class No271 {
 
         // Encodes string length to bytes string
         private String intToString(int x) {
-            char[] bytes = new char[2];
-            int mask = (1 << 16) - 1;
+            char[] chars = new char[2];
 
-            for(int i = 1; i >= 0; i--) {
-                bytes[1 - i] = (char) (x >> (i * 16) & mask);
-            }
-            return new String(bytes);
+            chars[0] = (char) (x >> 16);
+            chars[1] = (char) (x & MASK);
+            return new String(chars);
         }
 
         // Decodes bytes string to integer
         private int stringToInt(String bytesStr) {
             int result = 0;
 
-            for(int i = 0; i < bytesStr.length(); i++) {
-                result = (result << 16) + (int) bytesStr.charAt(i);
-            }
+            result += (int) bytesStr.charAt(0);
+            result <<= 16;
+            result += (int) bytesStr.charAt(1);
+
             return result;
         }
     }

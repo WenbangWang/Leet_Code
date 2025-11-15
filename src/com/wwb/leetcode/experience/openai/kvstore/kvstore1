@@ -1,0 +1,42 @@
+import json
+
+class KVStoreMultiFile:
+        MAX_FILE_SIZE = 1024  # bytes
+
+    def __init__(self, fs):
+            self.fs = fs
+        self.data = {}
+
+    def put(self, key: str, value: str):
+            self.data[key] = value
+
+    def get(self, key: str):
+            return self.data.get(key)
+
+    def save(self):
+            """Serialize dict → JSON → bytes → split into multiple files."""
+        blob = json.dumps(self.data).encode('utf-8')
+        total_parts = (len(blob) + self.MAX_FILE_SIZE - 1) // self.MAX_FILE_SIZE
+
+        for i in range(total_parts):
+                start = i * self.MAX_FILE_SIZE
+            end = min(len(blob), start + self.MAX_FILE_SIZE)
+            part = blob[start:end]
+            self.fs.save_blob(f"store_{i}", part)
+
+    def restore(self):
+            """Read multiple files → concatenate → JSON decode."""
+        chunks = []
+        i = 0
+        while True:
+                part = self.fs.get_blob(f"store_{i}")
+            if part is None:
+                    break
+            chunks.append(part)
+            i += 1
+
+        if not chunks:
+                return
+        blob = b"".join(chunks)
+        json_str = blob.decode('utf-8')
+        self.data = json.loads(json_str)
