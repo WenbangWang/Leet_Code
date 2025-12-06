@@ -1,5 +1,7 @@
 package com.wwb.leetcode.other.openai.inmemorydb;
 
+import com.wwb.leetcode.other.openai.inmemorydb.core.Table;
+
 import java.util.HashMap;
 import java.util.Map;
 

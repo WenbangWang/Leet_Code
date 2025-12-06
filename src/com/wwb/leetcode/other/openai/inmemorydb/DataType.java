@@ -12,6 +12,7 @@ public enum DataType {
     STRING {
         @Override
         public Comparator<Object> comparator() {
+            Comparator.comparing(o -> (String) o);
             return Comparator.comparing(o -> (String) o, Comparator.nullsFirst(String::compareTo));
         }
     },

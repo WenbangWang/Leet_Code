@@ -1,5 +1,7 @@
 package com.wwb.leetcode.other.openai.inmemorydb;
 
+import com.wwb.leetcode.other.openai.inmemorydb.core.Condition;
+
 public class Demo {
     public static void main(String[] args) {
         DatabaseEngine db = new DatabaseEngine();

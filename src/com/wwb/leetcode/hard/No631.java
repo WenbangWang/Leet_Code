@@ -221,6 +221,12 @@ public class No631 {
                 }
             }
 
+            for (Cell dep : formula.keySet()) {
+                if (hasCycle(cell, dep)) {
+                    throw new IllegalArgumentException("Cycle detected in formula");
+                }
+            }
+
             cell.formula = formula;
             for (Cell dep : formula.keySet()) {
                 dependents.computeIfAbsent(dep, k -> new HashSet<>()).add(cell);
@@ -269,6 +275,24 @@ public class No631 {
             int c = s.charAt(0) - 'A' + 1;
             int r = Integer.parseInt(s.substring(1));
             return table[r][c];
+        }
+
+        private boolean hasCycle(Cell start, Cell target) {
+            // Does adding edge start -> target create a cycle?
+            // Then there must already be a path target -> start.
+            return dfsHasPath(target, start, new HashSet<>());
+        }
+
+        private boolean dfsHasPath(Cell cur, Cell goal, Set<Cell> visited) {
+            if (cur.equals(goal)) return true;
+            if (!dependents.containsKey(cur)) return false;
+
+            for (Cell nxt : dependents.get(cur)) {
+                if (visited.add(nxt)) {
+                    if (dfsHasPath(nxt, goal, visited)) return true;
+                }
+            }
+            return false;
         }
     }
 }

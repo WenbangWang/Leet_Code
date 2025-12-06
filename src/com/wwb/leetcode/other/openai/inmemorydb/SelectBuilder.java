@@ -1,5 +1,10 @@
 package com.wwb.leetcode.other.openai.inmemorydb;
 
+import com.wwb.leetcode.other.openai.inmemorydb.core.Column;
+import com.wwb.leetcode.other.openai.inmemorydb.core.Condition;
+import com.wwb.leetcode.other.openai.inmemorydb.core.Row;
+import com.wwb.leetcode.other.openai.inmemorydb.core.Table;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.wwb.leetcode.other.openai.inmemorydb;
+package com.wwb.leetcode.other.openai.inmemorydb.core;
 
 import java.util.Collections;
 import java.util.HashMap;

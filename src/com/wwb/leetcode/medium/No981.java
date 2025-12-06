@@ -1,7 +1,14 @@
 package com.wwb.leetcode.medium;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 /**
@@ -44,29 +51,224 @@ import java.util.TreeMap;
  */
 public class No981 {
     private static class TimeMap {
-        private Map<String, TreeMap<Integer, String>> store;
+        private static final int MAX_FILE_SIZE = 100; // simulate bytes
+
+        private Map<String, NavigableMap<Long, String>> store;
+
+        private final List<FileMeta> metadata;
+        private final Map<String, List<FileMeta>> keyToFiles = new HashMap<>();
 
         public TimeMap() {
+            // use ConcurrentHashMap for thread safety
             this.store = new HashMap<>();
+            this.metadata = new ArrayList<>();
         }
 
-        public void set(String key, String value, int timestamp) {
-            this.store.putIfAbsent(key, new TreeMap<>());
-            this.store.get(key).put(timestamp, value);
+        public void set(String key, String value, long timestamp) {
+            // use ConcurrentNavigableMap for thread safety
+            this.store.computeIfAbsent(key, k -> new TreeMap<>()).put(timestamp, value);
         }
 
-        public String get(String key, int timestamp) {
+        public String get(String key, long timestamp) {
             if (!this.store.containsKey(key)) {
                 return "";
             }
 
-            Integer floorTimestamp = this.store.get(key).floorKey(timestamp);
+            Long floorTimestamp = this.store.get(key).floorKey(timestamp);
 
             if (floorTimestamp == null) {
                 return "";
             }
 
             return this.store.get(key).get(floorTimestamp);
+        }
+
+        // -------------------
+        // On-demand get
+        // -------------------
+//        public String get(String key, long timestamp) {
+//            List<FileMeta> files = keyToFiles.get(key);
+//            if (files == null) return null;
+//
+//            for (FileMeta fm : files) {
+//                VersionEntry ve = readFloorVersionFromFile(fm, key, timestamp);
+//                if (ve != null) return ve.value;
+//            }
+//            return null;
+//        }
+
+        public void serialize() throws IOException {
+            metadata.clear();
+            keyToFiles.clear();
+
+            ByteBuffer currentFileBuffer = ByteBuffer.allocate(MAX_FILE_SIZE);
+            FileMeta currentMeta = new FileMeta("file0");
+            int fileIndex = 0;
+
+            for (Map.Entry<String, NavigableMap<Long, String>> entry : store.entrySet()) {
+                String key = entry.getKey();
+                NavigableMap<Long, String> versions = entry.getValue();
+
+                for (Map.Entry<Long, String> ve : versions.entrySet()) {
+                    byte[] keyBytes = key.getBytes();
+                    byte[] valBytes = ve.getValue().getBytes();
+                    int entrySize = 4 + keyBytes.length + 8 + 4 + valBytes.length;
+
+                    if (currentFileBuffer.position() + entrySize > MAX_FILE_SIZE) {
+                        // flush current file
+                        writeFile(currentMeta.fileName, Arrays.copyOf(currentFileBuffer.array(), currentFileBuffer.position()));
+                        currentMeta.fileSize = currentFileBuffer.position();
+                        metadata.add(currentMeta);
+
+                        // reset buffer and metadata
+                        fileIndex++;
+                        currentFileBuffer = ByteBuffer.allocate(MAX_FILE_SIZE);
+                        currentMeta = new FileMeta("file" + fileIndex);
+                    }
+
+                    long offset = currentFileBuffer.position();
+                    currentMeta.keyVersionOffset.computeIfAbsent(key, k -> new TreeMap<>())
+                        .put(ve.getKey(), offset);
+
+                    currentFileBuffer.putInt(keyBytes.length);
+                    currentFileBuffer.put(keyBytes);
+                    currentFileBuffer.putLong(ve.getKey());
+                    currentFileBuffer.putInt(valBytes.length);
+                    currentFileBuffer.put(valBytes);
+                }
+            }
+
+            // flush last file
+            if (currentFileBuffer.position() > 0) {
+                writeFile(currentMeta.fileName, Arrays.copyOf(currentFileBuffer.array(), currentFileBuffer.position()));
+                currentMeta.fileSize = currentFileBuffer.position();
+                metadata.add(currentMeta);
+            }
+
+            // build key→files index
+            for (FileMeta fm : metadata) {
+                for (String key : fm.keyVersionOffset.keySet()) {
+                    keyToFiles.computeIfAbsent(key, k -> new ArrayList<>()).add(fm);
+                }
+            }
+        }
+
+
+        public void deserializeMetadata(List<FileMeta> metaFromDisk) {
+            metadata.clear();
+            metadata.addAll(metaFromDisk);
+            keyToFiles.clear();
+            for (FileMeta fm : metadata) {
+                for (String key : fm.keyVersionOffset.keySet()) {
+                    keyToFiles.computeIfAbsent(key, k -> new ArrayList<>()).add(fm);
+                }
+            }
+        }
+
+        // -------------------
+        // Low-level single version reader
+        // -------------------
+        private VersionEntry readSingleVersion(byte[] fileBytes, long offset) {
+            ByteBuffer buf = ByteBuffer.wrap(fileBytes);
+            buf.position((int) offset);
+
+            int keyLen = buf.getInt();
+            byte[] keyBytes = new byte[keyLen];
+            buf.get(keyBytes);
+            String key = new String(keyBytes);
+
+            long ts = buf.getLong();
+            int valLen = buf.getInt();
+            byte[] valBytes = new byte[valLen];
+            buf.get(valBytes);
+            String value = new String(valBytes);
+
+            return new VersionEntry(key, ts, value);
+        }
+
+        // -------------------
+        // Read all versions from a single file
+        // -------------------
+        private void readAllVersionsFromFile(FileMeta fm, String key,
+                                             NavigableMap<Long, String> result) {
+            TreeMap<Long, Long> tsToOffset = fm.keyVersionOffset.get(key);
+            if (tsToOffset == null || tsToOffset.isEmpty()) return;
+
+            byte[] fileBytes = readFile(fm.fileName);
+
+            for (Map.Entry<Long, Long> e : tsToOffset.entrySet()) {
+                VersionEntry ve = readSingleVersion(fileBytes, e.getValue());
+                if (!ve.key.equals(key) || ve.timestamp != e.getKey()) {
+                    throw new RuntimeException("Corrupted data at offset " + e.getValue());
+                }
+                result.put(ve.timestamp, ve.value);
+            }
+        }
+
+        // -------------------
+        // Read largest version ≤ timestamp
+        // -------------------
+        private VersionEntry readFloorVersionFromFile(FileMeta fm, String key, long timestamp) {
+            TreeMap<Long, Long> tsToOffset = fm.keyVersionOffset.get(key);
+            if (tsToOffset == null || tsToOffset.isEmpty()) return null;
+
+            Map.Entry<Long, Long> floorEntry = tsToOffset.floorEntry(timestamp);
+            if (floorEntry == null) return null;
+
+            byte[] fileBytes = readFile(fm.fileName);
+            VersionEntry ve = readSingleVersion(fileBytes, floorEntry.getValue());
+            if (!ve.key.equals(key) || ve.timestamp != floorEntry.getKey()) return null;
+            return ve;
+        }
+
+        // -------------------
+        // Full deserialize
+        // -------------------
+        public void deserializeAll() {
+            store.clear();
+            for (String key : keyToFiles.keySet()) {
+                NavigableMap<Long, String> versions = new TreeMap<>();
+                for (FileMeta fm : keyToFiles.get(key)) {
+                    readAllVersionsFromFile(fm, key, versions);
+                }
+                store.put(key, versions);
+            }
+        }
+
+        // -------------------
+        // Placeholder file operations
+        // -------------------
+        private void writeFile(String fileName, byte[] data) {
+            // assume this writes bytes to file system
+        }
+
+        private byte[] readFile(String fileName) {
+            // assume this reads bytes from file system
+            return new byte[0];
+        }
+    }
+
+    public static class FileMeta implements Serializable {
+        String fileName;
+        long fileSize;
+        Map<String, TreeMap<Long, Long>> keyVersionOffset = new HashMap<>();
+
+        public FileMeta(String fileName) {
+            this.fileName = fileName;
+            this.fileSize = 0;
+        }
+    }
+
+
+    private static class VersionEntry {
+        String key;
+        long timestamp;
+        String value;
+
+        VersionEntry(String key, long timestamp, String value) {
+            this.key = key;
+            this.timestamp = timestamp;
+            this.value = value;
         }
     }
 

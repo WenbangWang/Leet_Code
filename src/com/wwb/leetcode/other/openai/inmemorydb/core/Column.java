@@ -1,4 +1,6 @@
-package com.wwb.leetcode.other.openai.inmemorydb;
+package com.wwb.leetcode.other.openai.inmemorydb.core;
+
+import com.wwb.leetcode.other.openai.inmemorydb.DataType;
 
 public class Column {
     private final String name;

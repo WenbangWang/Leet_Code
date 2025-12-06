@@ -1,6 +1,6 @@
 package com.wwb.leetcode.other.openai.gpucredit;
 
-public class CreditToken {
+public class CreditToken implements Comparable<CreditToken> {
     final int amount;
     final int startTime;
     final int expiration;
@@ -23,5 +23,10 @@ public class CreditToken {
 
     boolean isExpired(int timestamp) {
         return timestamp > startTime + expiration;
+    }
+
+    @Override
+    public int compareTo(CreditToken o) {
+        return Integer.compare(this.startTime + this.expiration, o.startTime + o.expiration);
     }
 }

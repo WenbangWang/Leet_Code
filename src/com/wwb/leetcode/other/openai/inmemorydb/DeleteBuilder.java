@@ -1,5 +1,8 @@
 package com.wwb.leetcode.other.openai.inmemorydb;
 
+import com.wwb.leetcode.other.openai.inmemorydb.core.Condition;
+import com.wwb.leetcode.other.openai.inmemorydb.core.Table;
+
 public class DeleteBuilder {
     private final DatabaseEngine engine;
     private Condition condition;

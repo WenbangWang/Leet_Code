@@ -16,6 +16,7 @@ public class GPUCredit {
         CreditToken credit = new CreditToken(amount, timestamp, expiration);
         credits.computeIfAbsent(
             creditId,
+            // PriorityBlockingQueue
             k -> new PriorityQueue<>(Comparator.comparingInt(c -> c.startTime + c.expiration))
         ).offer(credit);
     }
