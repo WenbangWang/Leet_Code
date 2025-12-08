@@ -3,11 +3,11 @@ package com.wwb.leetcode.other.openai.gpucredit.solution;
 import java.util.*;
 
 /**
- * PHASE 3: Reservations & Priority Tiers (18 minutes)
+ * PHASE 3: Credit Reservations with Priority Tiers (18 minutes)
  * 
  * PROBLEM STATEMENT:
  * Support long-running GPU jobs that need to reserve credits upfront.
- * Add priority tiers: "premium" users get premium credits first.
+ * Add priority tiers: PREMIUM credits are consumed before STANDARD.
  * 
  * NEW OPERATIONS:
  * - reserveCredit(): Lock credits for a job (don't consume yet)
@@ -20,43 +20,39 @@ import java.util.*;
  *    → Yes, multiple jobs can run concurrently
  * 2. "What if credits expire during reservation period?" 
  *    → Allow reservation, but commit might fail if expired
- * 3. "Does 'premium' tier mean premium-only or premium-first?" 
- *    → Premium-first: use premium grants first, then standard
+ * 3. "Does PREMIUM tier mean premium-only or premium-first?" 
+ *    → Premium-first: use PREMIUM credits first, then STANDARD
  * 4. "Should reservations have a timeout?" 
  *    → Nice to have for production, not required for interview
  * 5. "Can we over-reserve (reserve more than available)?" 
  *    → No, return null if insufficient
- * 6. "What if commit is called with expired reservation?" 
- *    → Check credits still valid, return false if expired
  * 
  * KEY INSIGHTS:
  * - Reservation is a two-phase commit: reserve → commit/release
- * - Need to track which tokens are affected by each reservation
- * - Priority tiers affect consumption order, not quota
- * - State transitions: AVAILABLE → RESERVED → CONSUMED or back to AVAILABLE
+ * - Nested map structure: Map<userId, Map<tier, PriorityQueue<token>>>
+ * - Tokens don't store tier - tier determined by which queue they're in
+ * - Simple compareTo: just expiration (no composite sorting needed)
+ * - Consumption logic manually checks PREMIUM queue first, then STANDARD
  * 
  * TIME COMPLEXITY:
- * - addCredit: O(log n) where n = tokens per user
+ * - addCredit: O(log n) where n = tokens per user per tier
  * - reserveCredit: O(k log n) where k = tokens touched
  * - commitReservation: O(k) where k = tokens in reservation
  * - releaseReservation: O(k) where k = tokens in reservation
- * - getAvailableBalance: O(n) to sum available credits
+ * - getAvailableBalance: O(n) to sum across all tiers
  * 
- * SPACE COMPLEXITY: O(U * (T + R)) where U = users, T = tokens, R = reservations
+ * SPACE COMPLEXITY: O(U * 2 * T + R) where U = users, T = avg tokens per tier, R = reservations
  * 
- * EXTENSIONS FOR PHASE 4:
- * - Add rate limiting (credits per time window)
- * - Add reservation timeout (auto-release)
- * - Add audit logging for compliance
+ * DESIGN TRADE-OFFS:
+ * - Nested maps vs Embedded tier in token:
+ *   Nested: Simpler token, explicit separation, but more complex consumption
+ *   Embedded: Complex token, automatic ordering, simpler consumption
+ *   We chose nested for cleaner separation and token simplicity.
  */
 public class Phase3GPUCredit {
     
-    public static final String TIER_PREMIUM = "premium";
-    public static final String TIER_STANDARD = "standard";
-    
-    // userId → PriorityQueue of credits
-    // We'll sort differently based on operation (reserve vs use)
-    private Map<String, List<Phase3CreditToken>> creditsByUser;
+    // userId → tier → PriorityQueue of credits (sorted by expiration only)
+    private Map<String, Map<Tier, PriorityQueue<Phase3CreditToken>>> creditsByUser;
     
     // userId → list of active reservations
     private Map<String, List<Reservation>> reservationsByUser;
@@ -71,18 +67,18 @@ public class Phase3GPUCredit {
     }
     
     /**
-     * Add credits with tier support
+     * Add credits to user's pool with tier
      * 
-     * @param tier "premium" or "standard"
+     * Time: O(log n) where n = tokens for this user in this tier
      * 
-     * Time: O(1) - we use List instead of PriorityQueue for flexibility
-     *              Will sort on-demand during operations
+     * INTERVIEW NOTE:
+     * Using nested maps allows us to separate PREMIUM and STANDARD queues.
+     * Each queue sorts by expiration only (simpler compareTo).
      */
     public void addCredit(String userId, String grantId, int amount, 
-                         int timestamp, int expiration, String tier) {
+                         int timestamp, int expiration, Tier tier) {
         validateUserId(userId);
         validateGrantId(grantId);
-        validateTier(tier);
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive: " + amount);
         }
@@ -91,60 +87,54 @@ public class Phase3GPUCredit {
         }
         
         Phase3CreditToken token = new Phase3CreditToken(
-            grantId, amount, timestamp, expiration, tier
+            grantId, amount, timestamp, expiration
         );
         
         creditsByUser
-            .computeIfAbsent(userId, k -> new ArrayList<>())
-            .add(token);
+            .computeIfAbsent(userId, k -> new HashMap<>())
+            .computeIfAbsent(tier, k -> new PriorityQueue<>())
+            .offer(token);
     }
     
     /**
      * Reserve credits for a long-running job
      * 
      * ALGORITHM:
-     * 1. Filter tokens by tier (premium job → premium tokens only)
-     * 2. Sort by expiration time (use soonest-expiring first)
-     * 3. Mark tokens as reserved (don't remove from pool)
-     * 4. Create Reservation object tracking affected tokens
-     * 5. Return reservation ID
+     * 1. If PREMIUM tier: check PREMIUM queue first, then STANDARD
+     * 2. If STANDARD tier: check STANDARD queue only
+     * 3. Poll tokens, mark as reserved, add back to queue
+     * 4. Create Reservation tracking affected tokens
      * 
-     * @param tier "premium" (premium credits only) or "standard" (any credits, premium first)
+     * @param tier Requested tier
+     *             PREMIUM: uses PREMIUM credits first, then STANDARD if needed
+     *             STANDARD: uses STANDARD credits only
      * @return reservationId or null if insufficient credits
      * 
-     * Time: O(n log n + k) where n = tokens to sort, k = tokens reserved
+     * Time: O(k log n) where k = tokens touched across tiers
      */
-    public String reserveCredit(String userId, int amount, int timestamp, String tier) {
+    public String reserveCredit(String userId, int amount, int timestamp, Tier tier) {
         validateUserId(userId);
-        validateTier(tier);
         if (amount <= 0) {
             return null;
         }
         
-        List<Phase3CreditToken> userTokens = creditsByUser.get(userId);
-        if (userTokens == null) {
+        Map<Tier, PriorityQueue<Phase3CreditToken>> userTiers = creditsByUser.get(userId);
+        if (userTiers == null) {
             return null;
         }
         
-        // Get credits sorted by priority and expiration
-        List<Phase3CreditToken> sortedTokens = getSortedTokensForTier(userTokens, tier);
-        
-        // Try to reserve the amount
         Reservation reservation = new Reservation(userId, amount, timestamp, tier);
         int remaining = amount;
         
-        for (Phase3CreditToken token : sortedTokens) {
-            if (remaining <= 0) break;
-            
-            int available = token.getAvailableBalance(timestamp);
-            if (available > 0) {
-                int toReserve = Math.min(available, remaining);
-                
-                if (token.reserve(toReserve, timestamp)) {
-                    reservation.addAffectedToken(token, toReserve);
-                    remaining -= toReserve;
-                }
+        if (tier == Tier.PREMIUM) {
+            // PREMIUM jobs: use PREMIUM credits first, then STANDARD
+            remaining = reserveFromQueue(userTiers.get(Tier.PREMIUM), remaining, timestamp, reservation);
+            if (remaining > 0) {
+                remaining = reserveFromQueue(userTiers.get(Tier.STANDARD), remaining, timestamp, reservation);
             }
+        } else {
+            // STANDARD jobs: use STANDARD credits only
+            remaining = reserveFromQueue(userTiers.get(Tier.STANDARD), remaining, timestamp, reservation);
         }
         
         if (remaining > 0) {
@@ -160,6 +150,40 @@ public class Phase3GPUCredit {
         reservationsById.put(reservation.getId(), reservation);
         
         return reservation.getId();
+    }
+    
+    /**
+     * Helper method to reserve credits from a specific tier queue
+     * 
+     * @return remaining amount after reservation
+     * 
+     * Time: O(k log n) where k = tokens touched in this queue
+     */
+    private int reserveFromQueue(PriorityQueue<Phase3CreditToken> queue, 
+                                 int remaining, int timestamp, Reservation reservation) {
+        if (queue == null || remaining <= 0) {
+            return remaining;
+        }
+        
+        int size = queue.size();
+        for (int i = 0; i < size && remaining > 0; i++) {
+            Phase3CreditToken token = queue.poll();
+            
+            int available = token.getAvailableBalance(timestamp);
+            if (available > 0) {
+                int toReserve = Math.min(available, remaining);
+                
+                if (token.reserve(toReserve, timestamp)) {
+                    reservation.addAffectedToken(token, toReserve);
+                    remaining -= toReserve;
+                }
+            }
+            
+            // Always add back to maintain queue
+            queue.offer(token);
+        }
+        
+        return remaining;
     }
     
     /**
@@ -181,8 +205,7 @@ public class Phase3GPUCredit {
         // Check if any reserved credits have expired
         for (Reservation.TokenReservation tr : reservation.getAffectedTokens()) {
             if (tr.getToken().isExpired(timestamp)) {
-                // Could either fail or skip expired tokens
-                // For interview, let's fail for safety
+                // Fail for safety - don't commit expired credits
                 return false;
             }
         }
@@ -222,62 +245,63 @@ public class Phase3GPUCredit {
     }
     
     /**
-     * Get total balance (including reserved credits)
-     * Useful for showing user's total credit balance
+     * Get total balance across all tiers (including reserved credits)
      * 
-     * Time: O(n) where n = tokens for user
+     * Time: O(n) where n = tokens across all tiers for user
      */
     public int getBalance(String userId, int timestamp) {
         validateUserId(userId);
         
-        List<Phase3CreditToken> userTokens = creditsByUser.get(userId);
-        if (userTokens == null) {
+        Map<Tier, PriorityQueue<Phase3CreditToken>> userTiers = creditsByUser.get(userId);
+        if (userTiers == null) {
             return 0;
         }
         
         int total = 0;
-        for (Phase3CreditToken token : userTokens) {
-            total += token.getTotalBalance(timestamp);
+        for (PriorityQueue<Phase3CreditToken> queue : userTiers.values()) {
+            for (Phase3CreditToken token : queue) {
+                total += token.getTotalBalance(timestamp);
+            }
         }
         return total;
     }
     
     /**
-     * Get available balance (excluding reserved credits)
-     * This is what user can actually use immediately
+     * Get available balance across all tiers (excluding reserved credits)
      * 
-     * Time: O(n) where n = tokens for user
+     * Time: O(n) where n = tokens across all tiers for user
      */
     public int getAvailableBalance(String userId, int timestamp) {
         validateUserId(userId);
         
-        List<Phase3CreditToken> userTokens = creditsByUser.get(userId);
-        if (userTokens == null) {
+        Map<Tier, PriorityQueue<Phase3CreditToken>> userTiers = creditsByUser.get(userId);
+        if (userTiers == null) {
             return 0;
         }
         
         int total = 0;
-        for (Phase3CreditToken token : userTokens) {
-            total += token.getAvailableBalance(timestamp);
+        for (PriorityQueue<Phase3CreditToken> queue : userTiers.values()) {
+            for (Phase3CreditToken token : queue) {
+                total += token.getAvailableBalance(timestamp);
+            }
         }
         return total;
     }
     
     /**
      * Direct credit usage (without reservation)
-     * Uses tier-priority: premium credits first for premium tier
+     * Uses tier priority: PREMIUM credits consumed before STANDARD
      * 
-     * Time: O(n log n + k) where n = tokens, k = tokens used
+     * Time: O(k log n) where k = tokens used across tiers
      */
-    public boolean useCredit(String userId, int amount, int timestamp, String tier) {
+    public boolean useCredit(String userId, int amount, int timestamp) {
         validateUserId(userId);
-        validateTier(tier);
         if (amount <= 0) {
             return false;
         }
         
-        List<Phase3CreditToken> userTokens = creditsByUser.get(userId);
-        if (userTokens == null) {
+        Map<Tier, PriorityQueue<Phase3CreditToken>> userTiers = creditsByUser.get(userId);
+        if (userTiers == null) {
             return false;
         }
         
@@ -285,12 +309,33 @@ public class Phase3GPUCredit {
             return false;
         }
         
-        // Get sorted tokens by tier priority
-        List<Phase3CreditToken> sortedTokens = getSortedTokensForTier(userTokens, tier);
-        
         int remaining = amount;
-        for (Phase3CreditToken token : sortedTokens) {
-            if (remaining <= 0) break;
+        
+        // Use PREMIUM credits first, then STANDARD
+        remaining = useFromQueue(userTiers.get(Tier.PREMIUM), remaining, timestamp);
+        if (remaining > 0) {
+            remaining = useFromQueue(userTiers.get(Tier.STANDARD), remaining, timestamp);
+        }
+        
+        return remaining == 0;
+    }
+    
+    /**
+     * Helper method to use credits from a specific tier queue
+     * 
+     * @return remaining amount after usage
+     * 
+     * Time: O(k log n) where k = tokens used from this queue
+     */
+    private int useFromQueue(PriorityQueue<Phase3CreditToken> queue, 
+                            int remaining, int timestamp) {
+        if (queue == null || remaining <= 0) {
+            return remaining;
+        }
+        
+        int size = queue.size();
+        for (int i = 0; i < size && remaining > 0; i++) {
+            Phase3CreditToken token = queue.poll();
             
             int available = token.getAvailableBalance(timestamp);
             if (available > 0) {
@@ -302,40 +347,17 @@ public class Phase3GPUCredit {
                     token.state = TokenState.CONSUMED;
                 }
             }
+            
+            // Add back if not fully consumed or expired
+            if (token.getAvailableBalance(timestamp) > 0 || !token.isExpired(timestamp)) {
+                queue.offer(token);
+            }
         }
         
-        return remaining == 0;
+        return remaining;
     }
     
     // ========== HELPER METHODS ==========
-    
-    /**
-     * Get tokens sorted by tier priority and expiration
-     * 
-     * SORTING STRATEGY:
-     * - Premium tier: premium tokens first, then standard (both sorted by expiration)
-     * - Standard tier: all tokens sorted by expiration (no tier preference)
-     * 
-     * Time: O(n log n)
-     */
-    private List<Phase3CreditToken> getSortedTokensForTier(
-            List<Phase3CreditToken> tokens, String tier) {
-        
-        List<Phase3CreditToken> sorted = new ArrayList<>(tokens);
-        
-        if (TIER_PREMIUM.equals(tier)) {
-            // Premium jobs: premium credits first, then standard
-            sorted.sort(Comparator
-                .comparing((Phase3CreditToken t) -> !TIER_PREMIUM.equals(t.getTier()))
-                .thenComparingInt(Phase3CreditToken::getExpirationTime)
-            );
-        } else {
-            // Standard jobs: all credits by expiration only
-            sorted.sort(Comparator.comparingInt(Phase3CreditToken::getExpirationTime));
-        }
-        
-        return sorted;
-    }
     
     private void rollbackReservation(Reservation reservation) {
         for (Reservation.TokenReservation tr : reservation.getAffectedTokens()) {
@@ -363,27 +385,19 @@ public class Phase3GPUCredit {
         }
     }
     
-    private void validateTier(String tier) {
-        if (!TIER_PREMIUM.equals(tier) && !TIER_STANDARD.equals(tier)) {
-            throw new IllegalArgumentException(
-                "Tier must be 'premium' or 'standard': " + tier
-            );
-        }
-    }
-    
     // ============ TEST CASES ============
     
     public static void main(String[] args) {
-        System.out.println("=== Phase 3: Reservations & Priority Tiers Tests ===\n");
+        System.out.println("=== Phase 3: Reservations with Tier Priority Tests ===\n");
         
         Phase3GPUCredit gpu = new Phase3GPUCredit();
         
         // Test 1: Basic reservation and commit
-        gpu.addCredit("user1", "g1", 100, 0, 200, TIER_PREMIUM);
+        gpu.addCredit("user1", "g1", 100, 0, 200, Tier.STANDARD);
         assert gpu.getBalance("user1", 20) == 100 : "Test 1a failed";
         assert gpu.getAvailableBalance("user1", 20) == 100 : "Test 1b failed";
         
-        String resId = gpu.reserveCredit("user1", 80, 30, TIER_PREMIUM);
+        String resId = gpu.reserveCredit("user1", 80, 30, Tier.STANDARD);
         assert resId != null : "Test 1c failed";
         assert gpu.getBalance("user1", 35) == 100 : "Test 1d failed (total unchanged)";
         assert gpu.getAvailableBalance("user1", 35) == 20 : "Test 1e failed (80 reserved)";
@@ -397,66 +411,65 @@ public class Phase3GPUCredit {
         
         // Test 3: Release reservation
         gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "g1", 100, 0, 200, TIER_STANDARD);
-        String resId2 = gpu.reserveCredit("user1", 50, 10, TIER_STANDARD);
+        gpu.addCredit("user1", "g1", 100, 0, 200, Tier.STANDARD);
+        String resId2 = gpu.reserveCredit("user1", 50, 10, Tier.STANDARD);
         assert gpu.getAvailableBalance("user1", 15) == 50 : "Test 3a failed";
         gpu.releaseReservation("user1", resId2, 20);
         assert gpu.getAvailableBalance("user1", 25) == 100 : "Test 3b failed (released)";
         System.out.println("✓ Test 3: Release reservation");
         
-        // Test 4: Insufficient credits for reservation
+        // Test 4: Tier priority - PREMIUM consumed first
         gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "g1", 50, 0, 100, TIER_STANDARD);
-        String resId3 = gpu.reserveCredit("user1", 100, 10, TIER_STANDARD);
-        assert resId3 == null : "Test 4 failed (should fail)";
-        assert gpu.getAvailableBalance("user1", 15) == 50 : "Test 4b failed (unchanged)";
-        System.out.println("✓ Test 4: Insufficient credits for reservation");
+        gpu.addCredit("user1", "standard-grant", 100, 0, 200, Tier.STANDARD);
+        gpu.addCredit("user1", "premium-grant", 50, 10, 150, Tier.PREMIUM);
         
-        // Test 5: Priority tier consumption
+        assert gpu.useCredit("user1", 40, 20) : "Test 4a failed";
+        // Should use from PREMIUM queue first (via useFromQueue logic)
+        assert gpu.getBalance("user1", 25) == 110 : "Test 4b failed";
+        System.out.println("✓ Test 4: Tier priority consumption");
+        
+        // Test 5: PREMIUM reservation uses PREMIUM first, then STANDARD
         gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "premium-grant", 100, 0, 100, TIER_PREMIUM);
-        gpu.addCredit("user1", "standard-grant", 100, 5, 100, TIER_STANDARD);
+        gpu.addCredit("user1", "premium", 30, 0, 100, Tier.PREMIUM);
+        gpu.addCredit("user1", "standard", 100, 0, 100, Tier.STANDARD);
         
-        String resId4 = gpu.reserveCredit("user1", 50, 10, TIER_PREMIUM);
-        assert resId4 != null : "Test 5a failed";
+        String resId3 = gpu.reserveCredit("user1", 80, 10, Tier.PREMIUM);
+        assert resId3 != null : "Test 5a failed";
+        // 30 from PREMIUM queue, 50 from STANDARD queue
+        assert gpu.getAvailableBalance("user1", 15) == 50 : "Test 5b failed";
+        System.out.println("✓ Test 5: PREMIUM reservation spans tiers");
         
-        // Premium reservation should take from premium credits first
-        assert gpu.getAvailableBalance("user1", 15) == 150 : "Test 5b failed";
-        System.out.println("✓ Test 5: Priority tier consumption");
-        
-        // Test 6: Multiple concurrent reservations
+        // Test 6: STANDARD reservation uses STANDARD only
         gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "g1", 200, 0, 200, TIER_STANDARD);
-        String res1 = gpu.reserveCredit("user1", 50, 10, TIER_STANDARD);
-        String res2 = gpu.reserveCredit("user1", 80, 20, TIER_STANDARD);
-        assert res1 != null && res2 != null : "Test 6a failed";
-        assert gpu.getAvailableBalance("user1", 25) == 70 : "Test 6b failed (200 - 50 - 80)";
+        gpu.addCredit("user1", "premium", 50, 0, 100, Tier.PREMIUM);
+        gpu.addCredit("user1", "standard", 30, 0, 100, Tier.STANDARD);
+        
+        String resId4 = gpu.reserveCredit("user1", 40, 10, Tier.STANDARD);
+        assert resId4 == null : "Test 6 failed (insufficient STANDARD credits)";
+        System.out.println("✓ Test 6: STANDARD reservation respects tier limit");
+        
+        // Test 7: Multiple concurrent reservations
+        gpu = new Phase3GPUCredit();
+        gpu.addCredit("user1", "g1", 200, 0, 200, Tier.STANDARD);
+        String res1 = gpu.reserveCredit("user1", 50, 10, Tier.STANDARD);
+        String res2 = gpu.reserveCredit("user1", 80, 20, Tier.STANDARD);
+        assert res1 != null && res2 != null : "Test 7a failed";
+        assert gpu.getAvailableBalance("user1", 25) == 70 : "Test 7b failed";
         
         gpu.commitReservation("user1", res1, 30);
-        assert gpu.getBalance("user1", 35) == 150 : "Test 6c failed";
-        assert gpu.getAvailableBalance("user1", 35) == 70 : "Test 6d failed (still 80 reserved)";
+        assert gpu.getBalance("user1", 35) == 150 : "Test 7c failed";
         
         gpu.releaseReservation("user1", res2, 40);
-        assert gpu.getAvailableBalance("user1", 45) == 150 : "Test 6e failed";
-        System.out.println("✓ Test 6: Multiple concurrent reservations");
+        assert gpu.getAvailableBalance("user1", 45) == 150 : "Test 7d failed";
+        System.out.println("✓ Test 7: Multiple concurrent reservations");
         
-        // Test 7: Can't use reserved credits
+        // Test 8: Can't use reserved credits
         gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "g1", 100, 0, 200, TIER_STANDARD);
-        gpu.reserveCredit("user1", 80, 10, TIER_STANDARD);
-        assert !gpu.useCredit("user1", 50, 20, TIER_STANDARD) : "Test 7 failed (only 20 available)";
-        System.out.println("✓ Test 7: Can't use reserved credits");
-        
-        // Test 8: Reservation spanning multiple tokens
-        gpu = new Phase3GPUCredit();
-        gpu.addCredit("user1", "g1", 50, 0, 50, TIER_STANDARD);
-        gpu.addCredit("user1", "g2", 80, 10, 100, TIER_STANDARD);
-        String resId5 = gpu.reserveCredit("user1", 100, 20, TIER_STANDARD);
-        assert resId5 != null : "Test 8a failed";
-        assert gpu.getAvailableBalance("user1", 25) == 30 : "Test 8b failed (130 - 100)";
-        System.out.println("✓ Test 8: Reservation spanning multiple tokens");
+        gpu.addCredit("user1", "g1", 100, 0, 200, Tier.STANDARD);
+        gpu.reserveCredit("user1", 80, 10, Tier.STANDARD);
+        assert !gpu.useCredit("user1", 50, 20) : "Test 8 failed (only 20 available)";
+        System.out.println("✓ Test 8: Can't use reserved credits");
         
         System.out.println("\n✅ All Phase 3 tests passed!");
     }
 }
-

@@ -23,35 +23,22 @@ import java.util.UUID;
  *    → For auditing and debugging
  *    → Could implement timeout: auto-release after N hours
  * 
- * 3. Why immutable ID?
- *    → Prevents modification, acts as unique identifier
- *    → Using UUID ensures global uniqueness
- * 
- * INTERVIEW DISCUSSION:
- * Q: "What if credits expire during reservation?"
- * A: Two approaches:
- *    1. Prevent reservation if any credits would expire before expected completion
- *    2. Allow reservation but handle at commit time (fail if expired)
- *    Current implementation: Allow (more flexible)
- * 
- * Q: "Should reservations have a timeout?"
- * A: Yes, in production. Could add:
- *    - int timeoutDuration
- *    - Background thread to auto-release expired reservations
- *    - Or lazy cleanup during other operations
+ * 3. Why store tier?
+ *    → Track which tier of credits this reservation is using
+ *    → Useful for analytics and billing
  */
 public class Reservation {
     private final String id;
     private final String userId;
     private final int amount;
     private final int createdAt;
-    private final String tier;
+    private final Tier tier;
     
     // Track which tokens were affected by this reservation
     // Needed for commit/release operations
     private final List<TokenReservation> affectedTokens;
     
-    public Reservation(String userId, int amount, int timestamp, String tier) {
+    public Reservation(String userId, int amount, int timestamp, Tier tier) {
         this.id = UUID.randomUUID().toString();
         this.userId = userId;
         this.amount = amount;
@@ -76,7 +63,7 @@ public class Reservation {
         return createdAt;
     }
     
-    public String getTier() {
+    public Tier getTier() {
         return tier;
     }
     
@@ -113,9 +100,8 @@ public class Reservation {
     @Override
     public String toString() {
         return String.format(
-            "Reservation{id='%s', userId='%s', amount=%d, tier='%s', tokens=%d}",
-            id.substring(0, 8), userId, amount, tier, affectedTokens.size()
+            "Reservation{id='%s', userId='%s', tier=%s, amount=%d, tokens=%d}",
+            id.substring(0, 8), userId, tier, amount, affectedTokens.size()
         );
     }
 }
-

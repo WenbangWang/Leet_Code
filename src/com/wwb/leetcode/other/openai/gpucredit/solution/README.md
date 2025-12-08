@@ -78,11 +78,13 @@ int getGrantBalance(userId, grantId, timestamp)
 
 ---
 
-### **Phase 3: Reservations & Priority Tiers** (18 minutes)
-**Extension:** Reserve credits for long-running jobs. Support premium vs standard tiers.
+### **Phase 3: Reservations with Priority Tiers** (18 minutes)
+**Extension:** Reserve credits for long-running jobs + priority tier support.
 
 **New API:**
 ```java
+enum Tier { PREMIUM, STANDARD }
+
 void addCredit(userId, grantId, amount, timestamp, expiration, tier)
 String reserveCredit(userId, amount, timestamp, tier) → reservationId
 boolean commitReservation(userId, reservationId, timestamp)
@@ -94,12 +96,14 @@ int getAvailableBalance(userId, timestamp)  // Excludes reserved
 - **Two-phase commit:** reserve → commit/release
 - **State machine:** AVAILABLE → RESERVED → CONSUMED
 - **Separate tracking:** `used` vs `reserved` fields
-- **Priority:** Premium credits consumed first
+- **Tier enum:** Type-safe priority (PREMIUM before STANDARD)
+- **PriorityQueue:** Composite sort (tier first, then expiration)
 
 **Key Questions:**
 - "Can a user have multiple active reservations?"
 - "What if credits expire during reservation period?"
-- "Does 'premium' tier mean premium-only or premium-first?"
+- "Does PREMIUM mean premium-only or premium-first?" → Premium-first
+- "Why enum instead of String?" → Type safety, no typos
 
 ---
 
@@ -125,22 +129,34 @@ RateLimitStatus getRateLimitStatus(userId, timestamp)
 
 ## 💡 Key Design Decisions
 
-### 1. **Why PriorityQueue → List in Phase 3?**
-- Phase 1-2: Single sort criterion (expiration) → PriorityQueue
-- Phase 3: Multiple criteria (tier + expiration) → List with flexible sorting
-- Trade-off: List is O(n log n) but more flexible
+### 1. **Why nested maps for tiers in Phase 3?**
+- Phase 1-2: `Map<userId, PriorityQueue<Token>>`
+- Phase 3: `Map<userId, Map<tier, PriorityQueue<Token>>>`
+- Each tier has its own PriorityQueue (PREMIUM and STANDARD separated)
+- Token compareTo is simple (expiration only, no tier)
+- Consumption logic explicitly checks PREMIUM queue first, then STANDARD
+- More scalable for 3+ tiers (easy to add ENTERPRISE, BASIC, etc.)
 
 ### 2. **Why separate `used` and `reserved` fields?**
 - Reserved credits are tentative (might be released)
 - Enables accurate `getAvailableBalance()` calculation
 - Supports two-phase commit pattern
 
-### 3. **Why TokenState enum?**
+### 3. **Why Tier enum as map key instead of embedded in token?**
+- **Simpler token:** No tier field needed
+- **Explicit separation:** PREMIUM and STANDARD in different queues
+- **Simpler compareTo:** Just expiration, no composite sorting
+- **Type safety:** Enum prevents invalid tiers
+- **Scalable:** Easy to add more tiers (ENTERPRISE, BASIC, etc.)
+- **Flexible consumption:** Easy to change tier priority strategy
+
+### 4. **Why TokenState enum?**
 - Makes state transitions explicit and validatable
 - Prevents invalid operations (e.g., using consumed credits)
 - Easier debugging and auditing
+- Could extend with more states (PENDING, EXPIRED)
 
-### 4. **Why Sliding Window for rate limiting?**
+### 5. **Why Sliding Window for rate limiting?**
 - More accurate than fixed window (no burst at boundaries)
 - Trade-off: O(w) space vs O(1) for token bucket
 - Better for interview discussion
@@ -151,9 +167,9 @@ RateLimitStatus getRateLimitStatus(userId, timestamp)
 
 | Operation | Phase 1-2 | Phase 3 | Phase 4 |
 |-----------|-----------|---------|---------|
-| addCredit | O(log n) | O(1) | O(1) |
-| useCredit | O(k log n) | O(n log n + k) | O(n log n + k + w) |
-| reserveCredit | - | O(n log n + k) | Same |
+| addCredit | O(log n) | O(log n) | O(log n) |
+| useCredit | O(k log n) | O(k log n) | O(k log n + w) |
+| reserveCredit | - | O(k log n) | Same |
 | commitReservation | - | O(k) | O(k + w) |
 | getBalance | O(n) | O(n) | O(n) |
 
@@ -212,8 +228,8 @@ RateLimitStatus getRateLimitStatus(userId, timestamp)
 ## 🎓 What This Tests
 
 ### Technical Skills:
-- **Data Structures:** PriorityQueue, HashMap, List, Deque
-- **Algorithms:** FIFO by expiration, sliding window
+- **Data Structures:** PriorityQueue, HashMap, List, Enum
+- **Algorithms:** FIFO by expiration, sliding window (with PriorityQueue for out-of-order events)
 - **State Management:** State machines, lifecycle
 - **System Design:** Multi-tenancy, quotas, rate limiting
 
@@ -329,30 +345,49 @@ cd /Users/wenbwang/IdeaProjects/Leet_Code
 - Implement reservation system
 - Explain two-phase commit
 - Design state machine
-- Discuss trade-offs (PriorityQueue vs List)
+- Implement tier priority with composite compareTo
+- Discuss `used` vs `reserved` fields
 
 **Senior (All Phases):**
 - Implement rate limiting
 - Compare algorithms (sliding window vs token bucket)
+- Explain tier enum benefits
 - Discuss distributed systems (Redis)
-- Mention production concerns
+- Mention production concerns (caching, monitoring)
 
 ---
 
 ## 📖 Code Organization
 
-### Phase 1 Implementation Highlights:
+### Phase 1-2 Implementation:
 ```java
-// PriorityQueue sorted by expiration
-PriorityQueue<CreditToken> credits = new PriorityQueue<>(
-    Comparator.comparingInt(c -> c.startTime + c.expiration)
-);
+// Single PriorityQueue sorted by expiration
+Map<String, PriorityQueue<CreditToken>> creditsByUser;
 
-// FIFO consumption
-for (poll credits until amount satisfied) {
-    use from token;
-    add back if not fully consumed;
+// compareTo: simple
+return Integer.compare(this.getExpirationTime(), other.getExpirationTime());
+```
+
+### Phase 3 Nested Maps Design:
+```java
+// Nested maps: tier separation
+Map<String, Map<Tier, PriorityQueue<Phase3CreditToken>>> creditsByUser;
+//      └─user   └─tier  └─tokens sorted by expiration
+
+// Consumption strategy
+if (requestedTier == PREMIUM) {
+    // Use PREMIUM queue first, then STANDARD
+    remaining = consumeFrom(queues.get(PREMIUM), remaining);
+    if (remaining > 0) {
+        remaining = consumeFrom(queues.get(STANDARD), remaining);
+    }
+} else {
+    // STANDARD tier: use STANDARD queue only
+    remaining = consumeFrom(queues.get(STANDARD), remaining);
 }
+
+// Token compareTo: simple (no tier needed)
+return Integer.compare(this.getExpirationTime(), other.getExpirationTime());
 ```
 
 ### Phase 3 State Machine:

@@ -29,10 +29,10 @@ import java.util.*;
  *    - Pros: Simple, O(1) space per user
  *    - Cons: Burst at window boundaries (use 100 at t=59, 100 at t=61)
  * 
- * 2. SLIDING WINDOW:
- *    - Track all usage events in last 60 seconds
- *    - Pros: Accurate, no burst issues
- *    - Cons: O(k) space where k = events in window
+ * 2. SLIDING WINDOW (Our Implementation):
+ *    - Track all usage events in last 60 seconds using PriorityQueue
+ *    - Pros: Accurate, no burst issues, handles out-of-order events
+ *    - Cons: O(k log k) space and time where k = events in window
  * 
  * 3. TOKEN BUCKET:
  *    - Refill tokens at constant rate
@@ -44,11 +44,11 @@ import java.util.*;
  * 
  * TIME COMPLEXITY:
  * - setRateLimit: O(1)
- * - useCredit: O(n log n + k + w) where:
- *   * n = tokens to sort
- *   * k = tokens used
- *   * w = usage events in window (cleanup)
- * - getRateLimitStatus: O(w) where w = events in window
+ * - useCredit: O(k log n + w log w) where:
+ *   * k = credit tokens used
+ *   * n = total credit tokens
+ *   * w = usage events (add + cleanup in PriorityQueue)
+ * - getRateLimitStatus: O(w log w) where w = events (cleanup + sum)
  * 
  * SPACE COMPLEXITY: O(U * W) where U = users, W = avg events per window
  * 
@@ -56,7 +56,7 @@ import java.util.*;
  * - Add background cleanup for old usage events
  * - Consider distributed rate limiting (Redis)
  * - Add burst allowance (short-term spike tolerance)
- * - Different limits for different tiers (premium vs standard)
+ * - Different limits for different user types
  */
 public class Phase4GPUCredit extends Phase3GPUCredit {
     
@@ -89,17 +89,20 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
     /**
      * Override useCredit to add rate limiting
      * 
-     * Time: O(n log n + k + w) where w = cleanup of old usage events
+     * Time: O(k log n + w) where w = cleanup of old usage events
+     * 
+     * Note: We don't override the tier-based version since Phase 4 focuses on rate limiting.
+     *       In production, you'd add rate limiting to the tier-aware version too.
      */
     @Override
-    public boolean useCredit(String userId, int amount, int timestamp, String tier) {
+    public boolean useCredit(String userId, int amount, int timestamp) {
         // Check rate limit first
         if (!checkRateLimit(userId, amount, timestamp)) {
             return false;
         }
         
         // Proceed with normal credit usage
-        boolean success = super.useCredit(userId, amount, timestamp, tier);
+        boolean success = super.useCredit(userId, amount, timestamp);
         
         // Record usage if successful
         if (success) {
@@ -202,18 +205,24 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
     
     /**
      * Record successful credit usage for rate limiting
+     * 
+     * Time: O(log w) where w = events in queue
      */
     private void recordUsage(String userId, int amount, int timestamp) {
         RateLimit rateLimit = rateLimitsByUser.get(userId);
         if (rateLimit != null) {
-            rateLimit.usageHistory.add(new UsageEvent(amount, timestamp));
+            rateLimit.usageHistory.offer(new UsageEvent(amount, timestamp));
         }
     }
     
     /**
      * Remove usage events outside the 60-second sliding window
      * 
-     * Time: O(w) worst case, but typically O(k) where k = old events
+     * IMPORTANT: Using PriorityQueue ensures oldest events are at the head,
+     * even if events were inserted out of chronological order.
+     * 
+     * Time: O(k log n) where k = old events, n = total events
+     *       (Each poll is O(log n) to maintain heap)
      */
     private void cleanupOldUsage(RateLimit rateLimit, int timestamp) {
         while (!rateLimit.usageHistory.isEmpty()) {
@@ -221,7 +230,7 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
             if (oldest.timestamp < timestamp - 60) {
                 rateLimit.usageHistory.poll();
             } else {
-                break; // Rest are still in window
+                break; // Rest are still in window (PQ sorted by timestamp)
             }
         }
     }
@@ -240,27 +249,39 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
     
     /**
      * Rate limit configuration for a user
+     * 
+     * DESIGN NOTE:
+     * Using PriorityQueue (not Deque) because timestamps may arrive out of order.
+     * PriorityQueue maintains sorted order by timestamp automatically.
      */
     static class RateLimit {
         final int creditsPerMinute;
-        final Deque<UsageEvent> usageHistory;  // Sliding window of usage events
+        final PriorityQueue<UsageEvent> usageHistory;  // Sorted by timestamp
         
         RateLimit(int creditsPerMinute) {
             this.creditsPerMinute = creditsPerMinute;
-            this.usageHistory = new LinkedList<>();
+            this.usageHistory = new PriorityQueue<>();
         }
     }
     
     /**
      * Single credit usage event
+     * 
+     * Implements Comparable to work with PriorityQueue.
+     * Events are sorted by timestamp (oldest first).
      */
-    static class UsageEvent {
+    static class UsageEvent implements Comparable<UsageEvent> {
         final int amount;
         final int timestamp;
         
         UsageEvent(int amount, int timestamp) {
             this.amount = amount;
             this.timestamp = timestamp;
+        }
+        
+        @Override
+        public int compareTo(UsageEvent other) {
+            return Integer.compare(this.timestamp, other.timestamp);
         }
     }
     
@@ -295,23 +316,23 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
         Phase4GPUCredit gpu = new Phase4GPUCredit();
         
         // Test 1: Basic rate limiting
-        gpu.addCredit("user1", "g1", 1000, 0, 1000, TIER_STANDARD);
+        gpu.addCredit("user1", "g1", 1000, 0, 1000, Tier.STANDARD);
         gpu.setRateLimit("user1", 100);
         
-        assert gpu.useCredit("user1", 50, 10, TIER_STANDARD) : "Test 1a failed";
-        assert gpu.useCredit("user1", 50, 15, TIER_STANDARD) : "Test 1b failed";
-        assert !gpu.useCredit("user1", 1, 20, TIER_STANDARD) : "Test 1c failed (would exceed 100/min)";
+        assert gpu.useCredit("user1", 50, 10) : "Test 1a failed";
+        assert gpu.useCredit("user1", 50, 15) : "Test 1b failed";
+        assert !gpu.useCredit("user1", 1, 20) : "Test 1c failed (would exceed 100/min)";
         System.out.println("✓ Test 1: Basic rate limiting");
         
         // Test 2: Sliding window reset
-        assert gpu.useCredit("user1", 80, 71, TIER_STANDARD) : "Test 2 failed (new window)";
+        assert gpu.useCredit("user1", 80, 71) : "Test 2 failed (new window)";
         System.out.println("✓ Test 2: Sliding window reset");
         
         // Test 3: Rate limit status
         gpu = new Phase4GPUCredit();
-        gpu.addCredit("user1", "g1", 1000, 0, 1000, TIER_STANDARD);
+        gpu.addCredit("user1", "g1", 1000, 0, 1000, Tier.STANDARD);
         gpu.setRateLimit("user1", 100);
-        gpu.useCredit("user1", 30, 10, TIER_STANDARD);
+        gpu.useCredit("user1", 30, 10);
         
         RateLimitStatus status = gpu.getRateLimitStatus("user1", 15);
         assert status.limit == 100 : "Test 3a failed";
@@ -321,33 +342,51 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
         
         // Test 4: No rate limit set
         gpu = new Phase4GPUCredit();
-        gpu.addCredit("user2", "g1", 1000, 0, 1000, TIER_STANDARD);
-        assert gpu.useCredit("user2", 500, 10, TIER_STANDARD) : "Test 4 failed (no limit)";
+        gpu.addCredit("user2", "g1", 1000, 0, 1000, Tier.STANDARD);
+        assert gpu.useCredit("user2", 500, 10) : "Test 4 failed (no limit)";
         System.out.println("✓ Test 4: No rate limit set");
         
         // Test 5: Multiple users with different limits
         gpu = new Phase4GPUCredit();
-        gpu.addCredit("user1", "g1", 1000, 0, 1000, TIER_STANDARD);
-        gpu.addCredit("user2", "g2", 1000, 0, 1000, TIER_STANDARD);
+        gpu.addCredit("user1", "g1", 1000, 0, 1000, Tier.STANDARD);
+        gpu.addCredit("user2", "g2", 1000, 0, 1000, Tier.STANDARD);
         gpu.setRateLimit("user1", 50);
         gpu.setRateLimit("user2", 200);
         
-        assert gpu.useCredit("user1", 50, 10, TIER_STANDARD) : "Test 5a failed";
-        assert !gpu.useCredit("user1", 1, 15, TIER_STANDARD) : "Test 5b failed (user1 limit)";
-        assert gpu.useCredit("user2", 150, 10, TIER_STANDARD) : "Test 5c failed";
-        assert gpu.useCredit("user2", 50, 15, TIER_STANDARD) : "Test 5d failed";
+        assert gpu.useCredit("user1", 50, 10) : "Test 5a failed";
+        assert !gpu.useCredit("user1", 1, 15) : "Test 5b failed (user1 limit)";
+        assert gpu.useCredit("user2", 150, 10) : "Test 5c failed";
+        assert gpu.useCredit("user2", 50, 15) : "Test 5d failed";
         System.out.println("✓ Test 5: Multiple users with different limits");
         
         // Test 6: Gradual window slide
         gpu = new Phase4GPUCredit();
-        gpu.addCredit("user1", "g1", 1000, 0, 1000, TIER_STANDARD);
+        gpu.addCredit("user1", "g1", 1000, 0, 1000, Tier.STANDARD);
         gpu.setRateLimit("user1", 100);
         
-        gpu.useCredit("user1", 60, 10, TIER_STANDARD);
-        gpu.useCredit("user1", 40, 30, TIER_STANDARD);
+        gpu.useCredit("user1", 60, 10);
+        gpu.useCredit("user1", 40, 30);
         // At t=70, first event (t=10) is outside window
-        assert gpu.useCredit("user1", 70, 71, TIER_STANDARD) : "Test 6 failed (first event expired)";
+        assert gpu.useCredit("user1", 70, 71) : "Test 6 failed (first event expired)";
         System.out.println("✓ Test 6: Gradual window slide");
+        
+        // Test 7: OUT-OF-ORDER timestamps (why we need PriorityQueue!)
+        gpu = new Phase4GPUCredit();
+        gpu.addCredit("user1", "g1", 1000, 0, 1000, Tier.STANDARD);
+        gpu.setRateLimit("user1", 100);
+        
+        // Events arrive out of chronological order
+        gpu.useCredit("user1", 50, 100);  // t=100
+        gpu.useCredit("user1", 30, 80);   // t=80 (older event arrives later!)
+        gpu.useCredit("user1", 20, 90);   // t=90 (middle timestamp)
+        
+        // At t=141, window is [81, 141]
+        // Should count: t=90 (20) + t=100 (50) = 70
+        // t=80 should be outside window
+        RateLimitStatus status7 = gpu.getRateLimitStatus("user1", 141);
+        assert status7.used == 70 : "Test 7a failed: expected 70, got " + status7.used;
+        assert status7.remaining == 30 : "Test 7b failed: expected 30, got " + status7.remaining;
+        System.out.println("✓ Test 7: Out-of-order timestamps (PriorityQueue handles correctly)");
         
         System.out.println("\n✅ All Phase 4 tests passed!");
         
@@ -363,7 +402,7 @@ public class Phase4GPUCredit extends Phase3GPUCredit {
         System.out.println("   → Trade-off: less precise than sliding window");
         System.out.println("\n4. Production considerations:");
         System.out.println("   → Distributed rate limiting (Redis + Lua)");
-        System.out.println("   → Different limits per tier (premium vs standard)");
+        System.out.println("   → Different limits per user type");
         System.out.println("   → Burst allowance (short-term spike tolerance)");
         System.out.println("   → Grace period before enforcement");
     }
