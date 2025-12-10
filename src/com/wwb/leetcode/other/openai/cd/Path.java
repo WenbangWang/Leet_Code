@@ -7,7 +7,38 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * CD Command Implementation with Tilde Expansion and Symlink Resolution
+ * 
+ * Implements Unix-style path navigation with:
+ * - Basic path normalization (., ..)
+ * - Tilde expansion (~, ~/path)
+ * - Symlink resolution with cycle detection
+ * 
+ * Time Complexity: O(n) for basic cd, O(k × n) for symlink resolution
+ *   where n = path length, k = symlink resolution iterations
+ * Space Complexity: O(n) for path processing stack and visited set
+ */
 public class Path {
+    /**
+     * Navigate to target directory with tilde expansion.
+     * 
+     * Time Complexity: O(n) where n = path length
+     *   - Tilde expansion: O(1)
+     *   - String concatenation: O(n)
+     *   - split("/"): O(n)
+     *   - Stack operations: O(d) where d = depth
+     *   - String.join(): O(n)
+     *   Total: O(n)
+     * 
+     * Space Complexity: O(n)
+     *   - Stack: O(d) where d ≤ n
+     *   - Result string: O(n)
+     * 
+     * @param currentDir current absolute directory path
+     * @param targetDir target directory (may start with ~)
+     * @return normalized absolute path, or null if invalid
+     */
     public String cd(String currentDir, String targetDir) {
         final String HOME = "/home";
 
@@ -59,6 +90,32 @@ public class Path {
         return result.append("/").append(String.join("/", stack)).toString();
     }
 
+    /**
+     * Navigate to target directory with symlink resolution.
+     * 
+     * Time Complexity: O(S + k × n) where:
+     *   S = total characters in all symlinks (Trie build cost)
+     *   k = symlink resolution iterations (≤ m+1 where m = number of symlinks)
+     *   n = path length
+     *   
+     *   Breakdown:
+     *   - cd() without symlinks: O(n)
+     *   - buildTrie(): O(S) - one-time preprocessing
+     *   - Per iteration: O(n) for path traversal and resolution
+     *   Total: O(S + k×n)
+     * 
+     * Space Complexity: O(S + n) where:
+     *   - Trie structure: O(S)
+     *   - visited set: O(k) paths, each O(n) length → O(k×n)
+     *   - pathTokens list: O(n)
+     *   Total: O(S + k×n), typically O(S + n) as k is small
+     * 
+     * @param currentDir current absolute directory path
+     * @param targetDir target directory
+     * @param symlinks map of symlink paths to their targets
+     * @return final absolute path after resolving all symlinks
+     * @throws RuntimeException if symlink cycle detected
+     */
     public String cd(String currentDir, String targetDir, Map<String, String> symlinks) {
         String path = cd(currentDir, targetDir);
 

@@ -92,6 +92,8 @@ public class PerformanceCD {
      * CD with LRU caching.
      */
     public static class CachedCD {
+        private static final String CACHE_KEY_DELIMITER = "::";
+        
         private final LRUCache<String, String> cache;
         private long cacheHits = 0;
         private long cacheMisses = 0;
@@ -124,7 +126,7 @@ public class PerformanceCD {
          */
         public String cd(String currentDir, String targetDir) {
             // O(k): Create cache key (concatenate strings)
-            String cacheKey = currentDir + "::" + targetDir;
+            String cacheKey = currentDir + CACHE_KEY_DELIMITER + targetDir;
             
             // O(1): Check cache (LRU LinkedHashMap get)
             String cached = cache.get(cacheKey);
@@ -202,6 +204,8 @@ public class PerformanceCD {
      * 3. ConcurrentHashMap for cache
      */
     public static class ConcurrentCD {
+        private static final String CACHE_KEY_DELIMITER = "::";
+        
         private volatile Map<String, String> symlinks;
         private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
         private final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
@@ -242,7 +246,7 @@ public class PerformanceCD {
          */
         public String cd(String currentDir, String targetDir) {
             // O(k): Create cache key
-            String cacheKey = currentDir + "::" + targetDir;
+            String cacheKey = currentDir + CACHE_KEY_DELIMITER + targetDir;
             
             // Try cache first (no lock needed for ConcurrentHashMap)
             String cached = cache.get(cacheKey);

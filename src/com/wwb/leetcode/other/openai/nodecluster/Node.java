@@ -27,6 +27,15 @@ import java.util.Set;
  * 4. Idempotency is critical for production systems
  */
 public class Node {
+    // Protocol message constants
+    private static final String MSG_COUNT = "COUNT";
+    private static final String MSG_COUNT_RESP = "COUNT_RESP";
+    private static final String MSG_TOPO = "TOPO";
+    private static final String MSG_TOPO_RESP = "TOPO_RESP";
+    private static final String MSG_DELIMITER = ":";
+    private static final String OUTPUT_TOTAL_MACHINES = "Total machines = ";
+    private static final String OUTPUT_TOPOLOGY = "Topology = ";
+    
     private final int id;
     private final Integer parent;  // null for root
     
@@ -90,7 +99,7 @@ public class Node {
      * @param msg - format "TYPE:reqId[:data]"
      */
     public void receiveMessage(Integer fromNodeId, String msg) {
-        String[] parts = msg.split(":");
+        String[] parts = msg.split(MSG_DELIMITER);
 
         String type = parts[0];
         String reqId = parts[1];
@@ -105,19 +114,19 @@ public class Node {
         // 
         // EDGE CASE: What if we need multiple concurrent COUNT requests?
         // FOLLOW-UP: Could use Map<reqId, state> instead of just Set<reqId>
-        if (type.equals("COUNT") || type.equals("TOPO")) {
+        if (type.equals(MSG_COUNT) || type.equals(MSG_TOPO)) {
             if (!seenRequests.add(reqId)) {
                 return;  // Already processed this request
             }
         }
 
-        if (type.equals("COUNT")) {
+        if (type.equals(MSG_COUNT)) {
             handleCount(fromNodeId, reqId);
-        } else if (type.equals("COUNT_RESP")) {
+        } else if (type.equals(MSG_COUNT_RESP)) {
             handleCountResp(fromNodeId, reqId, Integer.parseInt(parts[2]));
-        } else if (type.equals("TOPO")) {
+        } else if (type.equals(MSG_TOPO)) {
             handleTopo(fromNodeId, reqId);
-        } else if (type.equals("TOPO_RESP")) {
+        } else if (type.equals(MSG_TOPO_RESP)) {
             handleTopoResp(fromNodeId, reqId, parts[2]);
         }
     }
@@ -161,14 +170,14 @@ public class Node {
 
         // EDGE CASE 1: Single-node tree (root with no children)
         if (parent == null && children.isEmpty()) {
-            System.out.println("Total machines = 1");
+            System.out.println(OUTPUT_TOTAL_MACHINES + "1");
             return;
         }
 
         // EDGE CASE 2: Leaf node
         // TALKING POINT: "Leaf nodes immediately respond with count=1"
         if (children.isEmpty()) {
-            sendMessage(parent, "COUNT_RESP:" + reqId + ":1");
+            sendMessage(parent, MSG_COUNT_RESP + MSG_DELIMITER + reqId + MSG_DELIMITER + "1");
             return;
         }
 
@@ -176,7 +185,7 @@ public class Node {
         // TALKING POINT: "I broadcast to all children and wait for responses.
         // This is the 'fan-out' phase. The 'fan-in' happens in handleCountResp."
         for (int child : children) {
-            sendMessage(child, "COUNT:" + reqId);
+            sendMessage(child, MSG_COUNT + MSG_DELIMITER + reqId);
         }
     }
 
@@ -215,10 +224,10 @@ public class Node {
 
             // EDGE CASE: Root node prints result
             if (parent == null) {
-                System.out.println("Total machines = " + total);
+                System.out.println(OUTPUT_TOTAL_MACHINES + total);
             } else {
                 // Propagate result up to parent
-                sendMessage(parent, "COUNT_RESP:" + reqId + ":" + total);
+                sendMessage(parent, MSG_COUNT_RESP + MSG_DELIMITER + reqId + MSG_DELIMITER + total);
             }
             
             // Optional cleanup (not critical for interview)
@@ -261,19 +270,19 @@ public class Node {
 
         // EDGE CASE 1: Single node tree
         if (parent == null && children.isEmpty()) {
-            System.out.println("Topology = " + id);
+            System.out.println(OUTPUT_TOPOLOGY + id);
             return;
         }
 
         // EDGE CASE 2: Leaf node - just return own ID
         if (children.isEmpty()) {
-            sendMessage(parent, "TOPO_RESP:" + reqId + ":" + id);
+            sendMessage(parent, MSG_TOPO_RESP + MSG_DELIMITER + reqId + MSG_DELIMITER + id);
             return;
         }
 
         // Internal node: Forward to all children
         for (int child : children) {
-            sendMessage(child, "TOPO:" + reqId);
+            sendMessage(child, MSG_TOPO + MSG_DELIMITER + reqId);
         }
     }
 
@@ -317,9 +326,9 @@ public class Node {
                 ")";
 
             if (parent == null) {
-                System.out.println("Topology = " + result);
+                System.out.println(OUTPUT_TOPOLOGY + result);
             } else {
-                sendMessage(parent, "TOPO_RESP:" + reqId + ":" + result);
+                sendMessage(parent, MSG_TOPO_RESP + MSG_DELIMITER + reqId + MSG_DELIMITER + result);
             }
             
             // Optional cleanup

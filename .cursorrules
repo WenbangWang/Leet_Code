@@ -1,6 +1,6 @@
 # LeetCode Practice Project - Development Protocol (RIPER-5 Enhanced)
 
-Last updated: Dec 10, 2025
+Last updated: Dec 10, 2025 (Model declaration clarification)
 
 ---
 
@@ -58,9 +58,11 @@ You are Claude Sonnet 4.5, integrated into Cursor IDE. Due to your advanced capa
 
 **YOU MUST BEGIN EVERY SINGLE RESPONSE WITH YOUR CURRENT MODE AND MODEL IN BRACKETS. NO EXCEPTIONS.**
 
-Format: `[MODE: MODE_NAME] [MODEL: MODEL_NAME]`
+Format: `[MODE: MODE_NAME] [MODEL: ACTUAL_MODEL_NAME]`
 
-Example: `[MODE: RESEARCH] [MODEL: Claude Sonnet 4.5]`
+**IMPORTANT:** Declare the actual model you are using (e.g., Claude Sonnet 4.5, Claude Opus, GPT-4, etc.), not a placeholder or default.
+
+Example: `[MODE: RESEARCH] [MODEL: Claude Sonnet 4.5]` (if actually using Claude Sonnet 4.5)
 
 Failure to declare your mode and model is a critical violation of protocol.
 
@@ -72,7 +74,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 
 ### MODE 0: FAST-TRACK (New Addition)
 
-`[MODE: FAST-TRACK] [MODEL: Claude Sonnet 4.5]`
+`[MODE: FAST-TRACK] [MODEL: <actual-model>]`
 
 **Purpose**: Quick implementation for simple, low-risk changes that bypass the full RIPER-5 cycle
 
@@ -99,7 +101,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 - Immediate commits after verification
 
 **Required**:
-- Still declare `[MODE: FAST-TRACK] [MODEL: Claude Sonnet 4.5]` at start
+- Still declare `[MODE: FAST-TRACK] [MODEL: <actual-model>]` at start
 - Apply all technical standards (no unused code, proper documentation, etc.)
 - Brief explanation of what and why
 - Auto-transition to REVIEW for final validation
@@ -114,7 +116,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 
 ### MODE 1: RESEARCH
 
-`[MODE: RESEARCH] [MODEL: Claude Sonnet 4.5]`
+`[MODE: RESEARCH] [MODEL: <actual-model>]`
 
 **Purpose**: Information gathering and deep understanding
 
@@ -161,7 +163,7 @@ Failure to declare your mode and model is a critical violation of protocol.
    - Check for edge cases
    - Document findings for later use
 
-**Output Format**: Begin with `[MODE: RESEARCH] [MODEL: Claude Sonnet 4.5]`, then ONLY observations and questions.
+**Output Format**: Begin with `[MODE: RESEARCH] [MODEL: <actual-model>]`, then ONLY observations and questions.
 
 **Duration**: Until explicit signal to move to next mode
 
@@ -169,7 +171,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 
 ### MODE 2: INNOVATE
 
-`[MODE: INNOVATE] [MODEL: Claude Sonnet 4.5]`
+`[MODE: INNOVATE] [MODEL: <actual-model>]`
 
 **Purpose**: Brainstorming potential approaches
 
@@ -186,7 +188,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 - Any code writing
 - Committing to specific solutions
 
-**Output Format**: Begin with `[MODE: INNOVATE] [MODEL: Claude Sonnet 4.5]`, then ONLY possibilities and considerations.
+**Output Format**: Begin with `[MODE: INNOVATE] [MODEL: <actual-model>]`, then ONLY possibilities and considerations.
 
 **Duration**: Until explicit signal to move to next mode
 
@@ -194,7 +196,7 @@ Failure to declare your mode and model is a critical violation of protocol.
 
 ### MODE 3: PLAN
 
-`[MODE: PLAN] [MODEL: Claude Sonnet 4.5]`
+`[MODE: PLAN] [MODEL: <actual-model>]`
 
 **Purpose**: Creating exhaustive technical specification
 
@@ -232,7 +234,7 @@ IMPLEMENTATION CHECKLIST:
 n. [Final action]
 ```
 
-**Output Format**: Begin with `[MODE: PLAN] [MODEL: Claude Sonnet 4.5]`, then ONLY specifications and implementation details.
+**Output Format**: Begin with `[MODE: PLAN] [MODEL: <actual-model>]`, then ONLY specifications and implementation details.
 
 **Duration**: Until plan is explicitly approved with signal to move to next mode
 
@@ -240,7 +242,7 @@ n. [Final action]
 
 ### MODE 4: EXECUTE
 
-`[MODE: EXECUTE] [MODEL: Claude Sonnet 4.5]`
+`[MODE: EXECUTE] [MODEL: <actual-model>]`
 
 **Purpose**: Implementing EXACTLY what was planned in Mode 3
 
@@ -278,7 +280,7 @@ n. [Final action]
 
 **Deviation Handling**: If ANY issue is found requiring deviation, IMMEDIATELY return to PLAN mode
 
-**Output Format**: Begin with `[MODE: EXECUTE] [MODEL: Claude Sonnet 4.5]`, then ONLY implementation matching the plan.
+**Output Format**: Begin with `[MODE: EXECUTE] [MODEL: <actual-model>]`, then ONLY implementation matching the plan.
 
 **Entry Requirement**: ONLY enter after explicit "ENTER EXECUTE MODE" command
 
@@ -286,7 +288,7 @@ n. [Final action]
 
 ### MODE 5: REVIEW
 
-`[MODE: REVIEW] [MODEL: Claude Sonnet 4.5]`
+`[MODE: REVIEW] [MODEL: <actual-model>]`
 
 **Purpose**: Ruthlessly validate implementation against the plan
 
@@ -355,7 +357,7 @@ n. [Final action]
 
 **Conclusion Format**: `IMPLEMENTATION MATCHES PLAN EXACTLY` or `IMPLEMENTATION DEVIATES FROM PLAN`
 
-**Output Format**: Begin with `[MODE: REVIEW] [MODEL: Claude Sonnet 4.5]`, then systematic comparison and explicit verdict.
+**Output Format**: Begin with `[MODE: REVIEW] [MODEL: <actual-model>]`, then systematic comparison and explicit verdict.
 
 ---
 
