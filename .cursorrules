@@ -819,6 +819,14 @@ Before considering code complete:
 - [ ] Comments explain WHY, not WHAT
 - [ ] Solution is optimal (or trade-offs explained)
 - [ ] Code follows Java conventions
+- [ ] **Method organization follows Java conventions**:
+  1. Inner classes / Enums
+  2. Fields (static, then instance)
+  3. Constructors
+  4. Public API methods (grouped by functionality)
+  5. Private helper methods (grouped by purpose: validation, parsing, computation, etc.)
+  6. main/test methods (if present)
+- [ ] Related methods are grouped together with section comments
 
 ---
 
