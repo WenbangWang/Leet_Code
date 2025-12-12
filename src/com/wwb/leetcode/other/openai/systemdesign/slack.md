@@ -41,6 +41,16 @@ Non-Functional (NFR)
 * At-least-once delivery with idempotence/dedup for senders/receivers
 * Cost-efficient storage and fan-out behavior for large channels
 
+### Specific SLOs:
+
+* **Message delivery latency**: p95 < 200ms for active users, p99 < 500ms
+* **Availability**: 99.95% uptime (22 min downtime/month allowed)
+* **Websocket health**: connection success rate > 99.9%, reconnection time p95 < 3s
+* **Message loss rate**: < 0.01% (with retry and inbox fallback mechanisms)
+* **History fetch latency**: p95 < 500ms for last 100 messages per channel
+* **Write throughput**: sustain 6k writes/sec with burst capacity to 10k writes/sec
+* **Storage SLO**: message write durability 99.999999999% (11 nines)
+
 ---
 
 # 4) Back-of-the-envelope (BoTE) calculation (example assumptions)
@@ -375,12 +385,338 @@ Preferred: **Per-channel per-user sequence numbers (cursors)** plus message DB q
 
 ---
 
-# 12) Additional operational concerns
+# 12) Edge cases & failure scenarios
+
+**1. Thundering herd on popular channel:**
+* Problem: 100k users all subscribed, one message → 100k websocket writes simultaneously
+* Solution: Use fan-out-to-inbox + rate-limited polling instead of direct push for channels >10k members
+
+**2. Clock skew / time synchronization:**
+* Problem: Multi-server deployments with clock drift → message ordering issues
+* Solution: Use sequence numbers generated from centralized counter (per channel) rather than wall clock timestamps; include both seq_no and timestamp in messages
+
+**3. Partial partition failure:**
+* Problem: Dispatcher can reach Kafka but not some websocket servers
+* Solution: Dispatcher retries with exponential backoff (1s, 2s, 4s); messages buffered in per-user inbox as fallback; alert on sustained failures
+
+**4. User in 1000+ channels:**
+* Problem: On connect, need to fetch last_read cursors for all channels → slow initial load
+* Solution: Lazy load cursors (fetch only for active channels in last 7 days); paginate channel list; cache cursor state in Redis
+
+**5. Message edit race condition:**
+* Problem: User A edits message while user B is replying to original version → inconsistent state
+* Solution: Include message_version in edit; clients show "edited" indicator; backend stores edit history; replies reference specific version
+
+**6. Duplicate message on client retry:**
+* Problem: Client sends message, timeout before receiving ack, retries with same client_msg_id
+* Solution: Dedup store keyed by (client_msg_id, user_id) with 24h TTL; server returns existing message_id on duplicate
+
+**7. Zombie websocket connections:**
+* Problem: Client network fails but TCP connection not properly closed → server thinks user online, wastes resources
+* Solution: Aggressive heartbeat timeout (3 missed pings = 90s total); client sends ping every 30s; server-initiated close on timeout
+
+**8. Cascading failure from slow channel:**
+* Problem: One channel has very high message rate → dispatcher queue backs up → affects all channels
+* Solution: Per-channel rate limiting (100 msg/sec); isolated priority queues for hot channels; circuit breaker pattern (pause channel if queue depth >10k)
+
+**9. Split brain / network partition:**
+* Problem: Websocket servers partitioned from database but clients still connected → messages accepted but not persisted
+* Solution: Health check includes DB connectivity; reject writes if DB unreachable; return 503 to trigger client retry; use distributed consensus (etcd/ZooKeeper) for cluster health
+
+**10. Message reordering on multi-device:**
+* Problem: User sends message from mobile, then desktop → desktop message arrives first due to network latency
+* Solution: Use per-user sequence numbers; backend reorders before persistence; clients display optimistically but reorder on server confirmation
+
+---
+
+# 13) Monitoring & alerting
+
+### Dashboard Hierarchy:
+
+**Page 1 (Health Overview):**
+* Messages sent/delivered per second (24h rolling average)
+* Active websocket connections (current / 1h avg / 24h max)
+* p50/p95/p99 message delivery latency
+* Message loss rate (target < 0.01%, alert at 0.05%)
+
+**Page 2 (Component Health):**
+* Dispatcher queue depth per shard (alert at 10k, page at 50k)
+* Kafka consumer lag (alert at 5k, page at 20k)
+* Per-user inbox backlog (top 10 users, alert if any >5k)
+* Database write throughput and replication lag (alert at 5s lag)
+
+**Page 3 (Per-Channel Metrics):**
+* Top 10 largest channels by member count
+* Top 10 channels by message volume (msgs/hour)
+* Channels using fan-out-to-inbox vs direct push (distribution)
+* Failed message deliveries per channel (top 10 failures)
+
+### Alerting Levels:
+
+* **Page** (immediate response required):
+  * Message loss > 0.1% over 5 min
+  * All dispatchers down or >80% unhealthy
+  * Database unavailable or write failures >10%
+  * Websocket server cluster <30% healthy capacity
+
+* **Urgent** (respond within 15 min):
+  * p95 latency > 2x baseline (>400ms) for 10 min
+  * Kafka consumer lag > 10k messages
+  * >50% of websocket servers down
+  * Dispatcher queue depth >50k for any shard
+
+* **Warn** (investigate next business day):
+  * Any user inbox backlog >1000 messages
+  * Dispatcher queue depth >10k sustained for 1 hour
+  * Slow queries detected (p95 >200ms for reads)
+  * Disk usage >70% on any database node
+
+* **Info** (visibility only):
+  * Trending toward capacity limits (80% capacity forecast in 7 days)
+  * New large channel created (>5k members)
+  * Unusual spike in messages (3x baseline, not yet impacting latency)
+
+---
+
+# 14) Additional operational concerns
 
 * **Sharding keys**: partition channels by `channel_id` hash; for DM (1:1) treat as its own channel type.
 * **Hot partitions**: detect and split hot channels (re-hash or move to special fans-out-to-inbox pipeline).
 * **Backpressure & retries**: decouple write path and fan-out via durable queue—prevents cascade failures.
-* **Monitoring & alerting**: websocket connection counts, message QPS, dispatcher lag, Kafka consumer lag (if used).
 * **Security / Auth**: token-based auth on websockets, per-channel ACL checks on writes/reads.
 * **Rate limiting & abuse controls**: per-user and per-channel QPS limits.
+
+---
+
+# 15) Interview Presentation Guide (45-minute interview)
+
+## Time Budget & Prioritization
+
+### Phase 1: Clarifications (5 min)
+
+**Must-ask questions:**
+* Scope: messaging only (channels + DMs + threads) or also file sharing, reactions, search, bots?
+* Scale: how many DAU? Peak concurrent connections? (e.g., 1M DAU with 100k concurrent vs 100M DAU)
+* Channel sizes: max members per channel? (affects fan-out strategy)
+* Delivery semantics: at-least-once or exactly-once?
+* Multi-device: must support sync across devices with read state?
+
+**Nice-to-have questions:**
+* Retention policy: messages stored indefinitely or ephemeral?
+* Latency target: <200ms for active messages?
+* Consistency model: causal consistency within channel?
+
+**Tip**: State assumptions clearly if interviewer doesn't specify. Example: "I'll assume 10M users, 1M DAU, 100k concurrent, at-least-once delivery with client dedup."
+
+---
+
+### Phase 2: Requirements & BoE (5 min)
+
+**Must-cover:**
+* **FR summary**: Create/join channels, send/receive messages, threads, offline delivery, presence, multi-device sync
+* **NFR summary**: Low latency (<200ms p95), high availability (99.95%), causal consistency, durable storage, at-least-once delivery
+* **BoE focus**: 
+  * Message throughput: 1M DAU × 50 msgs/day = 50M msgs/day ≈ 578 msg/sec avg, peak ~3-6k msg/sec
+  * Storage: 50M × 1KB = 50 GB/day raw ≈ 55 TB/year
+  * Websocket servers: 100k concurrent ÷ 10k per server = ~10 servers
+
+**Skip if time-constrained**: Detailed storage calculations (just mention order of magnitude)
+
+---
+
+### Phase 3: Simple Design (8 min)
+
+**Must-draw**: Section 7 diagram (dispatcher pattern)
+
+**Walk through message send flow:**
+1. Client sends HTTP POST `/send_message` with idempotent key
+2. API/Write server persists message to Message DB, returns message_id
+3. API forwards to Channel Dispatcher (or publishes to topic)
+4. Dispatcher looks up websocket servers subscribed to channel
+5. Websocket servers push to connected clients
+
+**Key points to emphasize:**
+* Separation of concerns: write path (HTTP) vs live connections (WebSocket)
+* Idempotency for safe retries
+* Dispatcher holds subscription mapping (channel → ws_server_ids)
+
+**Tip**: Draw on whiteboard/screen share, narrate as you go. Check: "Does this make sense so far?"
+
+---
+
+### Phase 4: Enriched Design (10 min)
+
+**Must-add components**: (use Section 8 diagram as reference)
+* Sharded Channel Dispatchers (by channel_id hash)
+* Durable Pub/Sub (Kafka) for reliability and replay
+* Per-user inbox for large channels (>10k members)
+* Message storage partitions (by channel_id)
+* Read replicas and caching for recent history
+
+**Walk through scale improvements:**
+* "For small channels (<1k members), dispatcher pushes directly to websocket servers"
+* "For large channels (>10k members), we use fan-out-to-inbox to avoid hot loops"
+* "Kafka decouples dispatcher from write path, enables replay on failures"
+
+**Failure handling to mention:**
+* DB write fails → return error, client retries with same client_msg_id
+* Dispatcher crash → replay from Kafka
+* WS server down → message buffered in inbox or retried
+* Client disconnected → fetch later by cursor
+
+**Tip**: Draw incrementally. Start with simple, then say "Now let's add for scale..." and overlay new components.
+
+---
+
+### Phase 5: Deep Dive (12 min) — Pick 2-3 based on interviewer interest
+
+**Most likely to be asked:**
+
+1. **Fan-out strategies (Section 11B — CRITICAL for Slack)**
+   * Options: Dispatcher, Pub/Sub, Fan-out-to-inbox
+   * Trade-offs: latency vs scale vs cost
+   * When to use which: small channels (dispatcher), large channels (inbox)
+   * Show hybrid approach decision logic
+
+2. **Offline delivery & multi-device sync (Section 11E)**
+   * Cursor-based approach: per-channel sequence numbers
+   * Query: `SELECT * WHERE user_id=X AND channel_id=Y AND seq_no > last_delivered`
+   * Multi-device: each device maintains own cursor, server merges read state
+   * Reconnection flow: fetch missed messages before resuming live stream
+
+3. **Large channel handling (Section 11D — >100k members)**
+   * Why direct push fails: too many write ops, hotspots
+   * Per-user inbox solution: write once per user, users pull
+   * Optimization: push to active subset, others poll inbox
+   * Cost analysis: write amplification vs network cost
+
+**Also common:**
+
+4. **Consistency & ordering (Section 9)**
+   * Causal consistency: show messages in send order within channel
+   * Use sequence numbers, not timestamps (avoids clock skew)
+   * Reconnection: fetch history before live stream to preserve order
+
+5. **Storage choices (Section 10)**
+   * Messages: Cassandra/DynamoDB (time-series, high write throughput)
+   * Metadata: MySQL/Postgres (consistent joins)
+   * Presence: Redis (in-memory, fast)
+
+6. **WebSocket vs HTTP for writes (Section 11A)**
+   * Trade-off: latency vs scalability
+   * Preferred: HTTP for writes, WS for push (Slack pattern)
+
+**Strategy**: Go deep on 1-2 topics, show breadth on others. Example: "I can also discuss storage partitioning, consistency models, or websocket connection management if you're interested."
+
+---
+
+### Phase 6: Tradeoffs & Wrap-up (5 min)
+
+**Key tradeoffs to discuss:**
+* **At-least-once (chosen) vs Exactly-once**: Simpler, lower latency, rely on client dedup. Exactly-once requires distributed transactions (complex, slow).
+* **Dispatcher (chosen) vs Pure Pub/Sub**: Dispatcher lower latency for small channels, easier subscription management. Pub/Sub better for very large scale but higher complexity.
+* **Per-user inbox (for large channels only) vs Always direct push**: Inbox prevents fan-out explosions but increases storage and complexity. Use selectively.
+* **HTTP write + WS push (chosen) vs WS for everything**: Separates concerns, easier to scale writes independently. WS-only couples write path to connection state.
+
+**Mention alternative approaches briefly:**
+* "For even larger scale (100M+ users), we could use geo-distributed dispatchers with regional failover"
+* "For stronger ordering guarantees, we could use Raft consensus per channel (high cost)"
+
+**Be ready for follow-up questions** (see Phase 6 common questions below)
+
+---
+
+### Phase 7: Q&A (5 min)
+
+**Common follow-ups to prepare:**
+
+* **"What if dispatcher crashes mid-delivery?"**
+  * Answer: Messages are already persisted in DB. Kafka retains events for replay. On recovery, dispatcher replays from last checkpoint. Clients fetch missed messages via cursor on reconnect.
+
+* **"How do you handle 100M users / 10M concurrent connections?"**
+  * Answer: Shard dispatchers by channel_id hash. Use consistent hashing for even distribution. Each dispatcher handles subset of channels. Scale horizontally (100 dispatcher servers for 10M concurrent). Use Redis cluster for subscription state with partitioning.
+
+* **"What if database becomes bottleneck?"**
+  * Answer: Partition Message table by channel_id (hot query path). Use read replicas for history fetches. Cache recent messages (last 100 per channel) in Redis. Use write-optimized storage (Cassandra/DynamoDB with partition keys).
+
+* **"How do you prevent one user/channel from impacting others?"**
+  * Answer: Per-user rate limiting (100 msg/min). Per-channel rate limiting (1k msg/min). Isolated queues for hot channels. Circuit breaker pattern (pause channel if queue depth exceeds threshold). Multi-tenancy isolation at dispatcher level.
+
+* **"What happens on network partition (split brain)?"**
+  * Answer: Use distributed consensus (etcd/ZooKeeper) for cluster health. Websocket servers check DB connectivity before accepting writes. If partitioned, reject writes with 503 (triggers client retry). Use quorum writes for critical metadata.
+
+* **"How do you test at scale?"**
+  * Answer: Load testing with simulated clients (100k bots). Shadow traffic from production. Chaos engineering (randomly kill dispatchers, partition network). Gradual rollout with feature flags. Metrics and canary analysis.
+
+---
+
+## Sections to Skip/Abbreviate if Time-Constrained
+
+**Skip entirely:**
+* Detailed BoE derivations (mention key numbers only: "~600 msg/sec avg, ~6k peak, ~50 GB/day storage")
+* Presence/typing indicators (mention briefly: "use Redis pub/sub for ephemeral state")
+* Search indexing (mention: "ElasticSearch for full-text search, async indexing")
+* Threads implementation details (unless specific question)
+* File attachments (unless specific question: "upload to S3 via presigned URL, store metadata reference")
+
+**Abbreviate:**
+* Section 5 (Data entities): Show Message, Channel, ChannelMembership, skip detailed indexes unless performance question
+* Section 6 (APIs): Mention key endpoints, skip exhaustive list
+* Section 9 (Consistency): Mention causal consistency and at-least-once, skip deep dive unless asked
+* Section 12 (Edge cases): Pick 2-3 most interesting (thundering herd, zombie connections, clock skew)
+
+---
+
+## Sections That Are MUST-COVER
+
+1. ✅ **Section 1**: Clarifications (at least 4-5 key questions with assumptions)
+2. ✅ **Section 2/3**: FR/NFR summary (concise, <2 min)
+3. ✅ **Section 4**: BoE key numbers (throughput, storage, server count)
+4. ✅ **Section 7**: Simple design diagram + message send flow
+5. ✅ **Section 8**: Enriched design diagram + scale components
+6. ✅ **Section 11B**: Fan-out strategies (dispatcher vs inbox) — CRITICAL
+7. ✅ **Section 11E**: Offline delivery & cursors
+8. ✅ **Tradeoffs**: At-least-once vs exactly-once, HTTP+WS vs WS-only
+
+---
+
+## Pro Tips for Interview Success
+
+### Signaling & Pacing
+* **Signal what you're doing**: "Let me start with clarifying questions, then I'll draw a simple design, then scale it up."
+* **Check in with interviewer**: "Should I go deeper on fan-out strategies, or move to storage design?"
+* **Manage time**: If 30 min in and haven't drawn enriched design yet, speed up. Say "Let me move to the scaled architecture."
+* **Pause for questions**: After each phase, pause 2-3 seconds. Give interviewer chance to interject.
+
+### Showing Depth
+* **Show tradeoffs**: Don't just present one solution. Example: "For fan-out, we have three options: [list]. I prefer hybrid because [reason], but if we had [different constraint], I'd choose [alternative]."
+* **Cite industry examples**: "Slack uses dispatcher pattern for this, Discord uses Pub/Sub, we'll follow Slack's approach because our channel sizes are similar."
+* **Quantify decisions**: "Direct push works for <1k members, but at 10k+ members we'd have 10k writes per message which is unsustainable, so we switch to inbox."
+
+### Handling Curveballs
+* **If stuck**: "Let me think through this systematically..." then work through options out loud
+* **If don't know**: "I'm not certain, but here's how I'd approach finding out..." or "In production, I'd benchmark these approaches..."
+* **If running out of time**: "We have 10 min left, should I focus on [X] or would you like to dive into [Y]?"
+
+### Common Mistakes to Avoid
+* ❌ Jumping straight to complex design without simple version
+* ❌ Not stating assumptions clearly upfront
+* ❌ Over-designing for scale that wasn't asked for
+* ❌ Ignoring failure scenarios and edge cases
+* ❌ Not discussing tradeoffs (just presenting "the answer")
+* ❌ Spending too long on BoE calculations (keep it quick)
+
+---
+
+## Interview Confidence Checklist
+
+Before the interview, make sure you can:
+- [ ] Draw simple dispatcher diagram from memory in <3 min
+- [ ] Draw enriched design with Kafka + inbox in <5 min
+- [ ] Explain fan-out strategies (dispatcher vs inbox) in <2 min
+- [ ] Walk through cursor-based offline sync in <2 min
+- [ ] Calculate rough BoE numbers for 1M DAU in <2 min
+- [ ] Discuss 3 edge cases (thundering herd, clock skew, zombie connections)
+- [ ] Explain at-least-once vs exactly-once tradeoff in <1 min
+- [ ] Answer "what if 100M users?" (sharding, partitioning, horizontal scale)
 
