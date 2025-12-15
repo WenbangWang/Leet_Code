@@ -73,7 +73,17 @@ Queueing:
 
 Storage:
 
-* Retain raw payloads for 7 days: daily raw bytes baseline = 833 * 5KB * 86400 ≈ 360 GB/day (this is a lot — consider compressing or storing references). *Important: fan-out does not require duplicating stored payloads; store once and reference ID for delivery attempts.*
+* **Event payloads (S3)**: Retain raw payloads for 7 days. Daily raw bytes baseline = 833 events/sec * 5KB * 86400 ≈ 360 GB/day. *Important: fan-out does not require duplicating stored payloads; store once and reference ID for delivery attempts.*
+* **DeliveryAttempt table (current state)**: One row per event-endpoint pair = 4,165 new rows/sec. Each row ~500 bytes. Daily: 4,165 * 500B * 86400 ≈ 180 GB/day. But only keeps current state (one row per delivery), so steady-state size depends on delivery completion rate. If p95 delivery time is 5 min, ~1.25M rows in table at any time ≈ 625 MB (manageable).
+* **DeliveryAttemptHistory table (audit trail)**: This is the hot write path. Assumptions:
+    * 95% of deliveries succeed on first attempt (1 history row)
+    * 4% require 2-3 attempts (avg 2.5 rows)
+    * 1% require 4-6 attempts (avg 5 rows)
+    * Average history rows per delivery = 0.95 * 1 + 0.04 * 2.5 + 0.01 * 5 = 1.1 rows/delivery
+    * History writes/sec = 4,165 deliveries/sec * 1.1 ≈ 4,582 writes/sec baseline, peak ~45,820 writes/sec
+    * Each history row ~1 KB (response_code, error_message, response_body_excerpt, timestamps). Daily: 4,582 * 1KB * 86400 ≈ 396 GB/day
+    * Retention: 30 days → ~11.8 TB total. Archive to S3 and drop old partitions. Compressed archive ~2-3 TB.
+* **Database write load**: 4,165 current-state UPDATEs/sec + 4,582 history INSERTs/sec ≈ 8,747 writes/sec baseline. Partition both tables by time to distribute load. Use write-optimized DB (e.g., Postgres with partitioning, or Cassandra).
 
 Worker sizing:
 
@@ -82,8 +92,12 @@ Worker sizing:
 Monitoring:
 
 * Track delivery queue depth, attempts/sec, p95/p99 delivery latency, % 2xx success.
+* Track DB write throughput: current-state UPDATEs/sec, history INSERTs/sec, partition lag.
+* Alert if history table write lag > 5 seconds (indicates DB bottleneck).
 
 (These numbers are illustrative; adapt based on real expected customer behavior.)
+
+**Key insight for interview**: The DeliveryAttemptHistory table is write-heavy (~4.6k writes/sec baseline, ~46k peak) but append-only, making it perfect for time-based partitioning. Old data can be archived cheaply to S3, keeping hot dataset small. The current-state table stays small because successful deliveries are effectively "deleted" from the hot query path.
 
 ---
 
@@ -408,8 +422,9 @@ X. **Possible Deep Dives (and expanded notes)**
         * **DeliveryAttempt (current state)**: holds latest status per delivery, partitioned by created_at (monthly), optimized for scheduler queries ("find all pending retries ready now")
         * **DeliveryAttemptHistory (audit trail)**: insert-only, one row per attempt, partitioned by attempt_timestamp (monthly), auto-drop old partitions after 30 days
     * **Benefits**: (1) Current state table stays small and fast (scheduler hot path), (2) History table grows linearly but old data can be archived, (3) Partial indexes on current state: `CREATE INDEX ON delivery_attempts (next_retry_at, status) WHERE status = 'pending'`, (4) Debugging: join history to see all attempts: `SELECT * FROM delivery_attempt_history WHERE delivery_attempt_id = X ORDER BY attempt_number`
-    * **Write pattern**: On each delivery attempt, INSERT into history table, UPDATE current state table (status, next_retry_at, attempt_number)
-    * **Query optimization**: Read replicas for customer UI queries, primary for scheduler writes
+    * **Write pattern & load**: On each delivery attempt, INSERT into history table (~4.6k writes/sec baseline, ~46k peak), UPDATE current state table (~4.2k writes/sec). Total: ~8.7k writes/sec baseline. History table is append-only (no UPDATE contention), making it ideal for write scaling.
+    * **Query optimization**: Read replicas for customer UI queries, primary for scheduler writes. Consider Postgres with native partitioning or Cassandra for write-heavy workloads.
+    * **Cost consideration**: At 396 GB/day for history, 30-day retention = ~12 TB. With compression + S3 archival, reduces to ~3 TB stored cost (~$70/month S3). Hot 7-day working set in DB = ~2.8 TB uncompressed.
 
 11. **Reconciliation and audit trail design**
 
