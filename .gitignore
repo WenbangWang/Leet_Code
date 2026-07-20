@@ -1,4 +1,5 @@
 .idea/
 out/
 *.iml
+*.class
 src/com/wwb/leetcode/utils/main.java
