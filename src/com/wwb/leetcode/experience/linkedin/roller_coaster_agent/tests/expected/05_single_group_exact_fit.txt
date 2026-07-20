@@ -1,0 +1,25 @@
+Ride: Single Group Exact Fit
+Total riders: 6
+Total runs: 1
+Max possible throughput: 240 riders/hour
+Actual throughput: 240 riders/hour
+
+=== Part 2: Empty Seat Analysis with Variable Lookahead ===
+
+Ride: Single Group Exact Fit
+Lookahead | Runs | Total Riders | Empty Seats | Utilization
+----------|------|--------------|-------------|------------
+     0    |    1 |            6 |           0 |   100.0%
+     1    |    1 |            6 |           0 |   100.0%
+     2    |    1 |            6 |           0 |   100.0%
+     3    |    1 |            6 |           0 |   100.0%
+     4    |    1 |            6 |           0 |   100.0%
+     5    |    1 |            6 |           0 |   100.0%
+     6    |    1 |            6 |           0 |   100.0%
+     7    |    1 |            6 |           0 |   100.0%
+     8    |    1 |            6 |           0 |   100.0%
+     9    |    1 |            6 |           0 |   100.0%
+    10    |    1 |            6 |           0 |   100.0%
+
+Best lookahead: 0 (utilization: 100.0%)
+

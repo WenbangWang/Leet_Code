@@ -1,0 +1,25 @@
+Ride: Multi Train Ceil
+Total riders: 14
+Total runs: 2
+Max possible throughput: 240 riders/hour
+Actual throughput: 187 riders/hour
+
+=== Part 2: Empty Seat Analysis with Variable Lookahead ===
+
+Ride: Multi Train Ceil
+Lookahead | Runs | Total Riders | Empty Seats | Utilization
+----------|------|--------------|-------------|------------
+     0    |    2 |           14 |           4 |    77.8%
+     1    |    2 |           14 |           4 |    77.8%
+     2    |    2 |           14 |           4 |    77.8%
+     3    |    2 |           14 |           4 |    77.8%
+     4    |    2 |           14 |           4 |    77.8%
+     5    |    2 |           14 |           4 |    77.8%
+     6    |    2 |           14 |           4 |    77.8%
+     7    |    2 |           14 |           4 |    77.8%
+     8    |    2 |           14 |           4 |    77.8%
+     9    |    2 |           14 |           4 |    77.8%
+    10    |    2 |           14 |           4 |    77.8%
+
+Best lookahead: 0 (utilization: 77.8%)
+

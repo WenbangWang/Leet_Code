@@ -1,0 +1,6 @@
+Ride: Multi Train Ceil
+Total riders: 14
+Total runs: 2
+Max possible throughput: 240 riders/hour
+Actual throughput: 187 riders/hour
+

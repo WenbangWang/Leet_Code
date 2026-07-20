@@ -1,0 +1,6 @@
+Ride: Perfect Packing
+Total riders: 12
+Total runs: 2
+Max possible throughput: 240 riders/hour
+Actual throughput: 240 riders/hour
+

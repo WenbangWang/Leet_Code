@@ -1,0 +1,25 @@
+Ride: Row Alignment
+Total riders: 10
+Total runs: 1
+Max possible throughput: 480 riders/hour
+Actual throughput: 400 riders/hour
+
+=== Part 2: Empty Seat Analysis with Variable Lookahead ===
+
+Ride: Row Alignment
+Lookahead | Runs | Total Riders | Empty Seats | Utilization
+----------|------|--------------|-------------|------------
+     0    |    1 |           10 |           2 |    83.3%
+     1    |    1 |           10 |           2 |    83.3%
+     2    |    1 |           10 |           2 |    83.3%
+     3    |    1 |           10 |           2 |    83.3%
+     4    |    1 |           10 |           2 |    83.3%
+     5    |    1 |           10 |           2 |    83.3%
+     6    |    1 |           10 |           2 |    83.3%
+     7    |    1 |           10 |           2 |    83.3%
+     8    |    1 |           10 |           2 |    83.3%
+     9    |    1 |           10 |           2 |    83.3%
+    10    |    1 |           10 |           2 |    83.3%
+
+Best lookahead: 0 (utilization: 83.3%)
+

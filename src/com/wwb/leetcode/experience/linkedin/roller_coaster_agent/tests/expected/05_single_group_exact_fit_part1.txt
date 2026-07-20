@@ -1,0 +1,6 @@
+Ride: Single Group Exact Fit
+Total riders: 6
+Total runs: 1
+Max possible throughput: 240 riders/hour
+Actual throughput: 240 riders/hour
+

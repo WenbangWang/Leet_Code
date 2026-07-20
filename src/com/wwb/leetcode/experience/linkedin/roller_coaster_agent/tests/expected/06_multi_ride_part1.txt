@@ -1,0 +1,12 @@
+Ride: Ride Alpha
+Total riders: 8
+Total runs: 2
+Max possible throughput: 160 riders/hour
+Actual throughput: 160 riders/hour
+
+Ride: Ride Beta
+Total riders: 12
+Total runs: 2
+Max possible throughput: 240 riders/hour
+Actual throughput: 160 riders/hour
+

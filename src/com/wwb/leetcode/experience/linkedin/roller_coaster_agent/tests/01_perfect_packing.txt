@@ -1,0 +1,7 @@
+Perfect Packing
+1 2 3 60 30
+3
+3
+3
+3
+EOF

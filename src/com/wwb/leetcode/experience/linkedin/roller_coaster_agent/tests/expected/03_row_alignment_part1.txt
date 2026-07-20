@@ -1,0 +1,6 @@
+Ride: Row Alignment
+Total riders: 10
+Total runs: 1
+Max possible throughput: 480 riders/hour
+Actual throughput: 400 riders/hour
+

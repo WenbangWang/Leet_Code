@@ -1,0 +1,4 @@
+Single Group Exact Fit
+1 3 2 60 30
+6
+EOF
