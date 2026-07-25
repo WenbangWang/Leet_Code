@@ -1,17 +1,16 @@
 package com.wwb.leetcode.other.anthropic.webcrawler;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionService;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +25,7 @@ public class ConcurrentScheduler {
 
     public ConcurrentScheduler() {
         this.urls = new LinkedBlockingQueue<>();
-        this.visited = new HashSet<>();
+        this.visited = ConcurrentHashMap.newKeySet();
         this.crawler = new WebCrawler(this.urls);
         this.asyncWebCrawler = new AsyncWebCrawler();
         this.executor = Executors.newFixedThreadPool(numWorkers);
@@ -38,26 +37,49 @@ public class ConcurrentScheduler {
         int tasksCompleted = 0;
 
         String seed = "https://andyljones.com";
-        this.visited.add(seed);
+        visited.add(seed);
         submitCrawl(seed);
         tasksSubmitted++;
 
         while (tasksCompleted < tasksSubmitted) {
-            Future<Void> future = completionService.take(); // wait for a task to complete
-            future.get(); // propagate exceptions if any
+            completionService.take().get(); // wait for a task to complete, propagate exceptions
             tasksCompleted++;
 
-            // TODO check max depth and max page crawled here by comparing with size of visited
-            // max depth can be done by changing the string url into a class which has url and depth
-
-            // Submit any new URLs discovered
-            while (!urls.isEmpty()) {
-                String url = urls.poll(1, TimeUnit.SECONDS);
-                if (url != null && visited.add(url)) { // add returns true if it was not already present
+            String url;
+            while ((url = urls.poll()) != null) {
+                if (visited.add(url)) { // add returns true if it was not already present
                     submitCrawl(url);
                     tasksSubmitted++;
                 }
             }
+        }
+
+        executor.shutdown();
+        executor.awaitTermination(10, TimeUnit.MINUTES);
+
+        System.out.println("Number of pages visited: " + visited.size());
+    }
+
+    public void runBfsLevelBarrier() throws InterruptedException, ExecutionException {
+        List<String> currentLevel = List.of("https://andyljones.com");
+        visited.add(currentLevel.get(0));
+
+        while (!currentLevel.isEmpty()) {
+            for (String url : currentLevel) {
+                submitCrawl(url);
+            }
+            for (int i = 0; i < currentLevel.size(); i++) {
+                completionService.take().get(); // wait out this whole level before moving on
+            }
+
+            List<String> nextLevel = new java.util.ArrayList<>();
+            String url;
+            while ((url = urls.poll()) != null) {
+                if (visited.add(url)) { // add returns true if it was not already present
+                    nextLevel.add(url);
+                }
+            }
+            currentLevel = nextLevel;
         }
 
         executor.shutdown();

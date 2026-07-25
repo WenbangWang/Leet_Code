@@ -44,6 +44,8 @@ public class WebCrawler {
 
         try {
             connection = (HttpURLConnection) u.openConnection();
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
 
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "NaiveCrawler/1.0");
@@ -56,7 +58,7 @@ public class WebCrawler {
 
             String contentType = connection.getContentType();
 
-            if (contentType == null || contentType.equalsIgnoreCase("text/html")) {
+            if (contentType == null || !contentType.contains("text/html")) {
                 return;
             }
 

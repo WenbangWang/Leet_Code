@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,11 +27,14 @@ public class AsyncWebCrawler {
             return CompletableFuture.completedFuture(Collections.emptyList());
         }
 
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(3))
+            .build();
 
         // Build an HttpRequest object
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url)) // Specify the target URI
+            .timeout(Duration.ofSeconds(5))
             .GET() // Set the request method to GET
             .build();
 
