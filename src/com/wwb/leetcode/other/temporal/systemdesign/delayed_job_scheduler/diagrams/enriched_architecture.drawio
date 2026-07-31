@@ -1,0 +1,111 @@
+<mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="640" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <mxCell id="lbl_client" value="Client layer" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="380" y="15" width="200" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="client" value="Client" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="380" y="40" width="240" height="50" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_api" value="API layer" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="380" y="120" width="200" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="schedapi" value="Scheduler API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="380" y="145" width="240" height="60" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_ingest" value="Write-path ingestion" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="40" y="260" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="inboundq" value="Inbound Buffer Queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+      <mxGeometry x="40" y="285" width="200" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_coord" value="Coordination" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="680" y="260" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="coordsvc" value="Coordination Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="680" y="285" width="200" height="55" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_ingestworkers" value="Ingestion workers" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="40" y="365" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="ingestworkers" value="Ingestion Workers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="40" y="390" width="200" height="60" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_schedworkers" value="Scheduling workers" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="680" y="365" width="220" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="schedworkers" value="Scheduler Workers&#10;(tick / claim / fire)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="680" y="390" width="220" height="60" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_recur" value="Recurrence" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="960" y="365" width="200" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="recursvc" value="Recurrence Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="960" y="390" width="200" height="60" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_storage" value="Storage layer" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="40" y="495" width="400" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="timerstore" value="Timer Store (sharded)&#10;TimerRecord, by shardKey" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="40" y="520" width="840" height="80" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="lbl_delivery" value="Delivery layer" style="text;html=1;align=left;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="960" y="495" width="200" height="20" as="geometry"/>
+    </mxCell>
+    <mxCell id="deliveryq" value="Delivery Queue&#10;(per-owner, scoped)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="960" y="520" width="200" height="80" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="client" target="schedapi">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e2" value="submit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.1;exitY=1;entryX=0.8;entryY=0;" edge="1" parent="1" source="schedapi" target="inboundq">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e3" value="cancel / reschedule&#10;(point write)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.36;entryY=0;" edge="1" parent="1" source="schedapi" target="timerstore">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="inboundq" target="ingestworkers">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e5" value="write TimerRecord" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.09;entryY=0;" edge="1" parent="1" source="ingestworkers" target="timerstore">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e6" value="shard assignment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="coordsvc" target="schedworkers">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e7" value="tick / claim / mark fired" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.86;entryY=0;" edge="1" parent="1" source="schedworkers" target="timerstore">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e8" value="notify on fire" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.35;entryX=0;entryY=0.35;" edge="1" parent="1" source="schedworkers" target="recursvc">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e9" value="publish payload" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.75;entryX=0;entryY=0.3;" edge="1" parent="1" source="schedworkers" target="deliveryq">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="930" y="435"/>
+          <mxPoint x="930" y="544"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

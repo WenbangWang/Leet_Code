@@ -48,12 +48,12 @@
 
 ## 3️⃣ Back-of-Envelope Calculation
 
-* Products: 10M per platform, 3 platforms → 30M products.
-* Checks/day: 6 per product → 180M samples/day.
-* Storage/day: 180M × 100B ≈ 18 GB → \~6.5 TB/year.
-* Active watches: 1M users × 10 watches = 10M watches.
-* Alerts/day: \~10% trigger → \~1M alerts/day.
-* Affiliate clicks/day: estimate 5% of users click → 50K clicks/day.
+- Products: 10M per platform, 3 platforms → 30M products.
+- Checks/day: 6 per product → 180M samples/day.
+- Storage/day: 180M × 100B ≈ 18 GB → \~6.5 TB/year.
+- Active watches: 1M users × 10 watches = 10M watches.
+- Alerts/day: \~10% trigger → \~1M alerts/day.
+- Affiliate clicks/day: estimate 5% of users click → 50K clicks/day.
 
 ---
 
@@ -78,7 +78,7 @@
 ```
 ================ SIMPLE DESIGN =================
 
-[Scheduler / Cron] 
+[Scheduler / Cron]
         |
    enqueue(product_id + platform)
         |
@@ -165,17 +165,17 @@ Stateful Watch Evaluator
 
 ### Pros
 
-* Horizontal scaling + real-time alerts.
-* Multi-platform support.
-* Efficient chart queries & historical analytics.
-* Affiliate revenue tracking integrated.
-* Debuggable & resilient: DLQs, raw HTML, monitoring.
+- Horizontal scaling + real-time alerts.
+- Multi-platform support.
+- Efficient chart queries & historical analytics.
+- Affiliate revenue tracking integrated.
+- Debuggable & resilient: DLQs, raw HTML, monitoring.
 
 ### Cons
 
-* More infra complexity.
-* Higher operational cost.
-* Requires partitioning & hot-key mitigation.
+- More infra complexity.
+- Higher operational cost.
+- Requires partitioning & hot-key mitigation.
 
 ---
 
@@ -183,41 +183,41 @@ Stateful Watch Evaluator
 
 ### 7.1 Watch Evaluation at Scale
 
-* Partition by `product_id + platform` → local stream state.
-* Stateful streaming (Flink/Kafka Streams).
-* Deduplication & hot product mitigation: batch alerts, shard hot products.
-* Exactly-once semantics: checkpointing + idempotent notifier.
-* Failure Handling: Stream checkpoint recovery + DLQ.
+- Partition by `product_id + platform` → local stream state.
+- Stateful streaming (Flink/Kafka Streams).
+- Deduplication & hot product mitigation: batch alerts, shard hot products.
+- Exactly-once semantics: checkpointing + idempotent notifier.
+- Failure Handling: Stream checkpoint recovery + DLQ.
 
 ### 7.2 Crawler Scaling & Anti-blocking
 
-* Stateless scraper workers (serverless/containerized).
-* Proxy pool + token bucket per IP.
-* Adaptive polling scheduler: prioritize high-watch/high-volatility products.
-* Raw HTML storage for debugging & re-parsing.
-* DLQ for failed jobs, CAPTCHA/failure detection.
+- Stateless scraper workers (serverless/containerized).
+- Proxy pool + token bucket per IP.
+- Adaptive polling scheduler: prioritize high-watch/high-volatility products.
+- Raw HTML storage for debugging & re-parsing.
+- DLQ for failed jobs, CAPTCHA/failure detection.
 
 ### 7.3 Time-Series Storage & Query Optimization
 
-* Hot TSDB (partitioned by product\_id + platform + date).
-* Cold aggregated storage (daily/weekly rollups in Parquet).
-* Latest KV store (Redis/Dynamo) for low-latency extension reads.
-* Precompute chart tiles & aggregates for caching.
+- Hot TSDB (partitioned by product\_id + platform + date).
+- Cold aggregated storage (daily/weekly rollups in Parquet).
+- Latest KV store (Redis/Dynamo) for low-latency extension reads.
+- Precompute chart tiles & aggregates for caching.
 
 ### 7.4 Notification Delivery at Scale
 
-* Event-driven Alert Queue.
-* Notifier workers: idempotent, retry, multi-channel (email/push).
-* Optional batching.
-* DLQ for failed notifications + monitoring metrics.
+- Event-driven Alert Queue.
+- Notifier workers: idempotent, retry, multi-channel (email/push).
+- Optional batching.
+- DLQ for failed notifications + monitoring metrics.
 
 ### 7.5 Affiliate Program Integration
 
-* Track user clicks via API/extension → AffiliateEvent table.
-* Monitor conversions (purchases) → associate with product\_id & platform.
-* Analytics dashboard for affiliate revenue, top products, click-through rates.
-* Ensure high performance: async logging, batching, partitioned storage.
-* Deduplicate clicks/conversions for accurate revenue reporting.
+- Track user clicks via API/extension → AffiliateEvent table.
+- Monitor conversions (purchases) → associate with product\_id & platform.
+- Analytics dashboard for affiliate revenue, top products, click-through rates.
+- Ensure high performance: async logging, batching, partitioned storage.
+- Deduplicate clicks/conversions for accurate revenue reporting.
 
 ---
 
