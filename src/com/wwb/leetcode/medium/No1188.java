@@ -85,23 +85,23 @@ import java.util.concurrent.Semaphore;
 public class No1188 {
     class BoundedBlockingQueue {
         private final Semaphore capacitySemaphore;
-        private final Semaphore spaceSemaphore;
+        private final Semaphore elementSemaphore;
         private final Queue<Integer> queue;
 
         public BoundedBlockingQueue(int capacity) {
             this.capacitySemaphore = new Semaphore(capacity);
-            this.spaceSemaphore = new Semaphore(0);
+            this.elementSemaphore = new Semaphore(0);
             this.queue = new ArrayDeque<>();
         }
 
         void enqueue(int element) throws InterruptedException {
             this.capacitySemaphore.acquire();
             this.queue.offer(element);
-            this.spaceSemaphore.release();
+            this.elementSemaphore.release();
         }
 
         int dequeue() throws InterruptedException {
-            this.spaceSemaphore.acquire();
+            this.elementSemaphore.acquire();
             int result = this.queue.poll();
             this.capacitySemaphore.release();
             return result;

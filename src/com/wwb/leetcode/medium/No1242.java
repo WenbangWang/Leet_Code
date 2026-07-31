@@ -56,32 +56,46 @@ public class No1242 {
             ExecutorService executor = Executors.newFixedThreadPool(4);
 
             visited.add(startUrl);
-            crawl(visited, startUrl, hostname, executor, htmlParser).join();
+            List<String> frontier = new ArrayList<>(List.of(startUrl));
+
+            while (!frontier.isEmpty()) {
+                List<String> discovered = fetchAll(frontier, executor, htmlParser).join();
+
+                List<String> nextFrontier = new ArrayList<>();
+                for (String next : discovered) {
+                    if (next.startsWith(hostname) && visited.add(next)) {
+                        nextFrontier.add(next);
+                    }
+                }
+                frontier = nextFrontier;
+            }
 
             executor.shutdown();
             return new ArrayList<>(visited);
         }
 
+        private CompletableFuture<List<String>> fetchAll(List<String> urls, ExecutorService executor,
+                HtmlParser htmlParser) {
+            List<CompletableFuture<List<String>>> fetches = new ArrayList<>();
+            for (String url : urls) {
+                fetches.add(CompletableFuture.supplyAsync(() -> htmlParser.getUrls(url), executor)
+                        .orTimeout(5, TimeUnit.SECONDS)
+                        .exceptionally(ex -> Collections.emptyList()));
+            }
+
+            return CompletableFuture.allOf(fetches.toArray(new CompletableFuture[0]))
+                    .thenApply(v -> {
+                        List<String> result = new ArrayList<>();
+                        for (CompletableFuture<List<String>> fetch : fetches) {
+                            result.addAll(fetch.getNow(Collections.emptyList()));
+                        }
+                        return result;
+                    });
+        }
+
         private String getHostname(String url) {
             int idx = url.indexOf('/', 7);
             return idx != -1 ? url.substring(0, idx) : url;
-        }
-
-        private CompletableFuture<Void> crawl(Set<String> visited, String url, String hostname,
-                ExecutorService executor, HtmlParser htmlParser) {
-            return CompletableFuture.supplyAsync(() -> htmlParser.getUrls(url), executor)
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .exceptionally(ex -> Collections.emptyList())
-                    .thenComposeAsync(urls -> {
-                        List<CompletableFuture<Void>> futures = new ArrayList<>();
-                        for (String next : urls) {
-                            if (next.startsWith(hostname) && visited.add(next)) {
-                                // .whenComplete( remove from infligh futures)
-                                futures.add(crawl(visited, next, hostname, executor, htmlParser));
-                            }
-                        }
-                        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-                    }, executor);
         }
     }
 }
